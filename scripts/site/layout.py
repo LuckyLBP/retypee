@@ -192,10 +192,10 @@ def header_editor(pid, lang):
     <div class="actions">
       {lang_link(pid, lang)}
       <label class="tool" id="fontBtn" title="{esc(t["add_font_title"])}">{esc(t["add_font"])}
-        <input type="file" accept=".ttf,.otf,.ttc,font/ttf,font/otf" id="fontInput" hidden>
+        <input type="file" accept=".ttf,.otf,.ttc,font/ttf,font/otf" id="fontInput" class="file-input">
       </label>
       <label class="tool" id="openBtn" hidden>{esc(t["open_another"])}
-        <input type="file" accept="application/pdf,.pdf" id="openInput" hidden>
+        <input type="file" accept="application/pdf,.pdf" id="openInput" class="file-input">
       </label>
       <button class="primary" id="downloadBtn" hidden>{esc(t["download"])}</button>
     </div>

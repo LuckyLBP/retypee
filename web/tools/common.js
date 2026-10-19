@@ -68,17 +68,19 @@
     mount(message(t("err", { msg: (e && e.message) || String(e) })), el("button", { class: "tool", type: "button", onclick: reset, text: t("start_over") }));
   }
 
+  // Library errors are in English and often cryptic ("Cannot read properties of undefined"), so a file that
+  // will not open always gets the same translated explanation; only the password case is told apart.
   function friendly(e) {
+    console.error(e);
     const m = String((e && e.message) || e);
-    if (/encrypt|password/i.test(m)) return new Error(t("err_encrypted"));
-    return new Error(m.length < 140 && !/\bat\b.*:\d+/.test(m) ? m : t("err_read"));
+    return new Error(/encrypt|password/i.test(m) ? t("err_encrypted") : t("err_read"));
   }
 
   /* ---------------------------------------------------------------- drop zone */
 
   function dropzone({ kind = "pdf", multiple = false, onFiles, compact = false }) {
     const accept = kind === "image" ? "image/*" : "application/pdf,.pdf";
-    const input = el("input", { type: "file", accept, multiple, hidden: true });
+    const input = el("input", { type: "file", accept, multiple, class: "file-input" });
     const titleKey = kind === "image" ? "drop_images" : multiple ? "drop_pdfs" : "drop_pdf";
     const chooseKey = kind === "image" ? "choose_images" : multiple ? "choose_pdfs" : "choose_pdf";
     const label = el(
@@ -231,7 +233,9 @@
     await libs();
     needLib("PDFLib");
     try {
-      return await PDFLib.PDFDocument.load(bytes, { updateMetadata: false });
+      const doc = await PDFLib.PDFDocument.load(bytes, { updateMetadata: false });
+      doc.getPageCount(); // pdf-lib accepts some junk until the page tree is asked for, so ask now
+      return doc;
     } catch (e) {
       throw friendly(e);
     }
@@ -397,7 +401,7 @@
 
   function pageGrid({ pdf, count, mode, onChange }) {
     const state = { selected: new Set(), rotation: new Array(count + 1).fill(0) };
-    const grid = el("div", { class: "grid", role: "list" });
+    const grid = el("div", mode === "rotate" ? { class: "grid", role: "list" } : { class: "grid", role: "group", "aria-label": t("pages_group") }); // toggle buttons are a group, not list items
     const cells = [];
     const io = new IntersectionObserver(
       (entries) => {
@@ -460,7 +464,7 @@
         );
         item = el("div", { class: "cell", role: "listitem", "data-page": n }, kids);
       } else {
-        item = el("button", { type: "button", class: "cell", role: "listitem", "aria-pressed": "false", "data-page": n, onclick: () => toggle(n) }, kids);
+        item = el("button", { type: "button", class: "cell", "aria-pressed": "false", "data-page": n, onclick: () => toggle(n) }, kids);
       }
       cells[n] = { item, thumb };
       grid.append(item);

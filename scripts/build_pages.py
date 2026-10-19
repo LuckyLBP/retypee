@@ -46,7 +46,7 @@ def drop_block(lang):
           <strong>{t["drop_title"]}</strong>
           <span class="drop-hint">{t["drop_hint"]}</span>
           <span class="primary as-button">{t["choose"]}</span>
-          <input type="file" accept="application/pdf,.pdf" id="fileInput" hidden>
+          <input type="file" accept="application/pdf,.pdf" id="fileInput" class="file-input">
         </label>
         <p class="engine-status idle" id="engineStatus" role="status" aria-live="polite">{t["status_idle"]}</p>
 '''

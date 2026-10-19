@@ -153,10 +153,10 @@
     <div class="actions">
       <a class="lang" href="/en/" hreflang="en" lang="en" title="English">English</a>
       <label class="tool" id="fontBtn" title="Ge redigeraren en typsnittsfil så att ändringarna matchar originalet">Lägg till typsnitt
-        <input type="file" accept=".ttf,.otf,.ttc,font/ttf,font/otf" id="fontInput" hidden>
+        <input type="file" accept=".ttf,.otf,.ttc,font/ttf,font/otf" id="fontInput" class="file-input">
       </label>
       <label class="tool" id="openBtn" hidden>Öppna en annan
-        <input type="file" accept="application/pdf,.pdf" id="openInput" hidden>
+        <input type="file" accept="application/pdf,.pdf" id="openInput" class="file-input">
       </label>
       <button class="primary" id="downloadBtn" hidden>Ladda ner PDF</button>
     </div>
@@ -204,7 +204,7 @@
           <strong>Släpp en PDF här</strong>
           <span class="drop-hint">eller välj en fil från din dator</span>
           <span class="primary as-button">Välj en PDF</span>
-          <input type="file" accept="application/pdf,.pdf" id="fileInput" hidden>
+          <input type="file" accept="application/pdf,.pdf" id="fileInput" class="file-input">
         </label>
         <p class="engine-status idle" id="engineStatus" role="status" aria-live="polite">Redigeraren (cirka 25 MB) laddas första gången du använder den och sparas sedan i webbläsaren.</p>
       </div>

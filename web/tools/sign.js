@@ -163,7 +163,7 @@ RT.run(function start() {
       async function run() {
         RT.mount(RT.busy());
         try {
-          const png = await doc.embedPng(await (await fetch(sig.url)).arrayBuffer());
+          const png = await doc.embedPng(Uint8Array.from(atob(sig.url.split(",")[1]), (c) => c.charCodeAt(0))); // decoded here: fetching a data: URL is not allowed by the CSP
           const pages = doc.getPages();
           const targets = pos.all ? pages.map((_, i) => i) : [pos.page - 1];
           for (const i of targets) {

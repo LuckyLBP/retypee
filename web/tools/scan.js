@@ -113,7 +113,7 @@ RT.run(function start() {
 
   // the drop zone, plus a camera button on phones and tablets
   function intake(compact) {
-    const cam = el("input", { type: "file", accept: "image/*", capture: "environment", hidden: true });
+    const cam = el("input", { type: "file", accept: "image/*", capture: "environment", class: "file-input" });
     cam.addEventListener("change", () => { const f = [...cam.files]; cam.value = ""; if (f.length) add(f); });
     const touch = window.matchMedia && matchMedia("(pointer: coarse)").matches;
     return el("div", { class: "intake" },

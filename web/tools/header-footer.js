@@ -30,7 +30,8 @@ RT.run(function start() {
     }
 
     const inputs = Object.fromEntries(slots.map((s) => {
-      const i = el("input", { type: "text", class: "range-input", maxlength: "80", autocomplete: "off", value: o[s] });
+      const where = { l: "hf_left", c: "hf_middle", r: "hf_right" }[s[1]];
+      const i = el("input", { type: "text", class: "range-input", maxlength: "80", autocomplete: "off", value: o[s], "aria-label": `${t(s[0] === "h" ? "hf_header" : "hf_footer")}, ${t(where)}` });
       i.addEventListener("input", () => ((o[s] = i.value), refresh()));
       return [s, i];
     }));

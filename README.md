@@ -120,27 +120,29 @@ cd web && python3 -m http.server 8799    # then open http://localhost:8799
 
 ### Tools
 
-| Tool (sv / en) | Engine |
-|---|---|
-| Redigera PDF / Edit PDF (and four landing pages for specific searches) | PyMuPDF in Pyodide |
-| Slå ihop, Dela, Radera sidor, Extrahera sidor, Rotera, Organisera / Merge, Split, Delete pages, Extract pages, Rotate, Organize | pdf-lib (page grids drawn with pdf.js) |
-| Sidnummer, Vattenstämpel, Beskär, Signera / Page numbers, Watermark, Crop, Sign | pdf-lib (previews drawn with pdf.js) |
-| JPG till PDF / JPG to PDF | pdf-lib |
-| PDF till JPG / PDF to JPG | pdf.js, fflate (ZIP) |
-| PDF till text, Jämför PDF / PDF to text, Compare PDF | pdf.js (text extraction) |
-| Komprimera, Skydda, Lås upp / Compress, Protect, Unlock | PyMuPDF in Pyodide (`/api/compress`, `/api/protect`, `/api/unlock`) |
-| Ta bort metadata, Censurera / Remove metadata, Redact | PyMuPDF in Pyodide |
-| OCR PDF / OCR PDF | tesseract.js (WebAssembly core and language data from jsDelivr, cached by the browser), pdf.js to draw pages, pdf-lib to add invisible text |
-| Ta bort tomma sidor, Ändra sidstorlek, Flera sidor per ark / Remove blank pages, Resize pages, Pages per sheet | pdf-lib (embedded pages drawn as displayed, so rotated pages stay right); blank pages are found by counting ink in a small pdf.js render |
-| Extrahera bilder, Reparera, Platta ut / Extract images, Repair, Flatten | PyMuPDF in Pyodide (`/api/images`, `/api/extract-images`, `/api/repair`, `/api/flatten`) |
-| Lägg till bild, Sidhuvud och sidfot, Markera och rita / Add image, Header and footer, Highlight and draw | pdf-lib (marks kept in displayed page points and mapped back per page, so rotated pages stay right) |
-| Text till PDF, Redigera PDF-egenskaper / Text to PDF, PDF properties | pdf-lib (standard fonts; the XMP block is dropped when properties are edited so every program shows the same values) |
-| Ta bort kommentarer / Remove comments | PyMuPDF in Pyodide (`/api/strip-annots`, annotation kinds come from `/api/pdf-info`) |
-| Vänd ordning, Tomma sidor, Skapa häfte, Beskär automatiskt / Reverse order, Add blank pages, Booklet, Auto-crop | pdf-lib (booklet and sheets reuse the displayed-page placement helper; auto-crop finds the ink in a pdf.js render and sets the crop box) |
-| Svartvit PDF / Grayscale | PyMuPDF in Pyodide (`/api/grayscale`, `Page.recolor`) |
-| PNG till PDF, PDF till PNG / PNG to PDF, PDF to PNG | the JPG tools' scripts, started with PNG (`SCRIPT_OF` in `scripts/site/registry.py`) |
-| Fyll i formulär / Fill in form | pdf-lib forms API, fields laid over pdf.js pages |
-| Skanna till PDF / Scan to PDF | canvas image clean-up (shadow removal, black and white), pdf-lib |
+Forty-one tool pages (and the editor), each with its own Swedish and English landing page.
+Everything runs in the visitor's browser; nothing is uploaded.
+
+| Group | Tools | Engine |
+|---|---|---|
+| Edit | Edit PDF (plus four landing pages for specific searches) | PyMuPDF in Pyodide |
+| | Fill in form | pdf-lib forms API, fields laid over pdf.js pages |
+| | Highlight and draw, Add image, Header and footer, Page numbers, Watermark, Sign | pdf-lib; marks are kept in displayed page points and mapped back per page, so rotated pages stay right |
+| Organize | Merge, Split, Delete pages, Extract pages, Rotate, Organize | pdf-lib (page grids drawn with pdf.js) |
+| | Remove blank pages | counts ink in a small pdf.js render, then pdf-lib |
+| | Reverse order (and collate front/back scans), Add blank pages | pdf-lib |
+| Format and print | Crop, Auto-crop | pdf-lib crop box; auto-crop finds the ink in a pdf.js render |
+| | Resize pages, Pages per sheet, Booklet | pdf-lib; embedded pages are drawn as displayed (`RT.embedAll` / `RT.drawVisible`) |
+| | Grayscale, Compress | PyMuPDF in Pyodide (`/api/grayscale`, `/api/compress`) |
+| Convert | JPG to PDF, PNG to PDF, Text to PDF, Scan to PDF | pdf-lib; scanning cleans photos on a canvas (shadow removal, black and white) |
+| | PDF to JPG, PDF to PNG | pdf.js, fflate (ZIP) |
+| | PDF to text, Extract images, OCR PDF | pdf.js text; PyMuPDF (`/api/images`, `/api/extract-images`); tesseract.js (WebAssembly core and language data from jsDelivr, cached by the browser) with invisible text added by pdf-lib |
+| Security and repair | Remove metadata, Edit properties, Redact | PyMuPDF (redact, metadata); pdf-lib (properties) |
+| | Flatten, Remove comments | PyMuPDF (`/api/flatten`, `/api/strip-annots`; kinds come from `/api/pdf-info`) |
+| | Protect, Unlock, Compare, Repair | PyMuPDF (`/api/protect`, `/api/unlock`, `/api/repair`); pdf.js text for compare |
+
+PNG to PDF and PDF to PNG are landing pages that run the JPG tools' scripts (`SCRIPT_OF` in
+`scripts/site/registry.py`); PDF to PNG starts on PNG through the page's `variant` string.
 
 The big libraries load only when someone points at a tool or chooses a file, so a page
 is about 100 KB at first. PyMuPDF is about 25 MB and comes from the jsDelivr CDN
@@ -160,9 +162,10 @@ The pages are generated, and the generated HTML is committed, so Vercel needs no
 - Each page's FAQ in the structured data is built from its visible FAQ, so they always match.
 
 **Adding a tool:** add it to `PAGES` in `registry.py` (and to `CATEGORIES`), give it a name in
-`names.py`, write its copy in `content_tools.py` (including the `ui` strings its script shows),
-write `web/tools/<id>.js` using the helpers in `web/tools/common.js`, then run
-`python3 scripts/build_pages.py`. If it needs PyMuPDF, add a route to `web/py/bridge.py`
+`names.py`, write its copy in a `content_tools*.py` file (including the `ui` strings its script
+shows; a page only sees `TOOL_UI` in `ui.py` and its own `ui` block, so strings are not shared
+between tools), write `web/tools/<id>.js` using the helpers in `web/tools/common.js`, then run
+`python3 scripts/build_pages.py` (`--check` fails when the committed pages are stale). If it needs PyMuPDF, add a route to `web/py/bridge.py`
 (and to `app.py` if the local app should have it too).
 
 ### Languages
@@ -183,6 +186,16 @@ crawlers always get Swedish. Messages in the editor are in `STRINGS` in `web/app
   The live domain is `retypee.se`.
 - The privacy statements on the pages (no cookies, no tracking scripts) are true today.
   If analytics is added, update them.
+- Security headers are in `vercel.json`, including a Content-Security-Policy: scripts only
+  from the site and `cdn.jsdelivr.net` (plus `wasm-unsafe-eval` for Pyodide and Tesseract),
+  no inline scripts, no `eval`. Keep it in mind when adding code: no inline handlers, and do
+  not `fetch` `data:` URLs (`connect-src` does not allow them).
+- Accessibility: file inputs are visually hidden but stay in the tab order (a `hidden`
+  attribute would make them unreachable by keyboard), and the tool pages pass an axe-core
+  audit (WCAG 2 A/AA) in their empty and loaded states, in light and dark mode.
+- Errors from libraries are never shown as they come: a file that will not open gets one
+  translated message (`RT.friendly`), and tools were checked against empty, corrupt and
+  zero-page files.
 
 ### Going live checklist
 
@@ -199,12 +212,13 @@ crawlers always get Swedish. Messages in the editor are in `STRINGS` in `web/app
 - Text doesn't reflow. If new text is longer it runs further right; use
   *Squeeze to fit* or shorten it. Paragraphs are edited line by line.
 - Find and replace matches within one line and one style.
-- Scanned pages have no text to edit. Run OCR first (for example `ocrmypdf`).
+- Scanned pages have no text to edit. Run OCR first (the OCR PDF tool on the site, or `ocrmypdf` locally).
 - Rotated or vertical text can't be edited yet (rotated pages are fine).
 - Some PDFs (often from Chrome with variable fonts) embed fonts without
   names. Those edits use the standard fallback; use the font menu or `fonts/`
   to pick the right one.
-- Password protected PDFs need their password removed first.
+- Password protected PDFs need their password removed first (the Unlock PDF tool does it).
+- The tools handle large files well (a 300-page PDF takes a few seconds), but everything lives in the browser's memory, so very large files are limited by the device.
 
 ## Files
 

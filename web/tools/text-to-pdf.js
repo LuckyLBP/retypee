@@ -24,7 +24,7 @@ RT.run(function start() {
   }
   RT.setDropHandler(take);
 
-  const pick = el("input", { type: "file", accept: ".txt,.md,.csv,.log,text/plain", hidden: true, onchange: () => { take([...pick.files]); pick.value = ""; } });
+  const pick = el("input", { type: "file", accept: ".txt,.md,.csv,.log,text/plain", class: "file-input", onchange: () => { take([...pick.files]); pick.value = ""; } });
   RT.mount(
     el("p", { class: "hint", text: t("ttp_hint") }),
     area,

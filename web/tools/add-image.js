@@ -98,7 +98,7 @@ RT.run(function start() {
               el("button", { type: "button", class: "icon", "aria-label": t("prev_page"), onclick: () => pos.page > 1 && show(pos.page - 1), text: "‹" }), label,
               el("button", { type: "button", class: "icon", "aria-label": t("next_page"), onclick: () => pos.page < count && show(pos.page + 1), text: "›" })) : null,
             count > 1 ? el("label", { class: "check" }, all, el("span", { text: t("ai_all") })) : null,
-            el("label", { class: "tool as-label" }, t("ai_other"), el("input", { type: "file", accept: "image/*", hidden: true, onchange: (e) => e.target.files[0] && take([e.target.files[0]]) })))),
+            el("label", { class: "tool as-label" }, t("ai_other"), el("input", { type: "file", accept: "image/*", class: "file-input", onchange: (e) => e.target.files[0] && take([e.target.files[0]]) })))),
         RT.actionsRow(go, RT.restartButton())
       );
       await show(pos.page);

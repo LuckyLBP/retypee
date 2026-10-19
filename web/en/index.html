@@ -153,10 +153,10 @@
     <div class="actions">
       <a class="lang" href="/?lang=sv" hreflang="sv" lang="sv" title="Svenska">Svenska</a>
       <label class="tool" id="fontBtn" title="Give the editor a font file so edits match the original">Add font
-        <input type="file" accept=".ttf,.otf,.ttc,font/ttf,font/otf" id="fontInput" hidden>
+        <input type="file" accept=".ttf,.otf,.ttc,font/ttf,font/otf" id="fontInput" class="file-input">
       </label>
       <label class="tool" id="openBtn" hidden>Open another
-        <input type="file" accept="application/pdf,.pdf" id="openInput" hidden>
+        <input type="file" accept="application/pdf,.pdf" id="openInput" class="file-input">
       </label>
       <button class="primary" id="downloadBtn" hidden>Download PDF</button>
     </div>
@@ -204,7 +204,7 @@
           <strong>Drop a PDF here</strong>
           <span class="drop-hint">or choose a file from your computer</span>
           <span class="primary as-button">Choose a PDF</span>
-          <input type="file" accept="application/pdf,.pdf" id="fileInput" hidden>
+          <input type="file" accept="application/pdf,.pdf" id="fileInput" class="file-input">
         </label>
         <p class="engine-status idle" id="engineStatus" role="status" aria-live="polite">The editor (about 25 MB) loads the first time you use it, then it is cached.</p>
       </div>

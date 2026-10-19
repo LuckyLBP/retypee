@@ -43,6 +43,10 @@ body {
 button, input, select { font: inherit; color: inherit; }
 [hidden] { display: none !important; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+/* File inputs stay in the tab order (a hidden one cannot be reached by keyboard); the label shows the focus. */
+.file-input { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
+label.drop, label.tool { position: relative; }
+label.drop:focus-within, label.tool:focus-within { outline: 2px solid var(--blue); outline-offset: 2px; }
 
 /* ---------- top bar ---------- */
 .bar {
