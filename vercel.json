@@ -5,6 +5,15 @@
   "installCommand": null,
   "outputDirectory": "web",
   "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/",
+      "has": [{ "type": "header", "key": "accept-language", "value": "^en.*" }],
+      "missing": [{ "type": "query", "key": "lang" }],
+      "destination": "/en/",
+      "permanent": false
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -13,6 +22,10 @@
         { "key": "Referrer-Policy", "value": "no-referrer" },
         { "key": "Permissions-Policy", "value": "camera=(), microphone=(), geolocation=()" }
       ]
+    },
+    {
+      "source": "/",
+      "headers": [{ "key": "Vary", "value": "Accept-Language" }]
     },
     {
       "source": "/py/(.*)",

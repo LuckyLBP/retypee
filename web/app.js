@@ -4,12 +4,77 @@
    worker.js. Everything happens in this browser tab; nothing is uploaded. */
 
 const $ = (sel) => document.querySelector(sel);
-const ZOOM_STEPS = [0.5, 0.75, 1, 1.25, 1.5, 2, 2.5, 3];
-const FONT_SOURCE = {
-  embedded: "taken from the PDF",
-  local: "a font you added",
-  standard: "standard fallback",
+
+/* ---------------------------------------------------------------- language */
+
+/* Swedish is the main language. The English page (/en/) sets <html lang="en">. */
+const LANG = document.documentElement.lang === "en" ? "en" : "sv";
+const STRINGS = {
+  match_original: ["Match original", "Matcha originalet"],
+  ready: ["Ready. Your PDF stays on this device.", "Redo. Din PDF stannar på den här enheten."],
+  start_fail: ["The editor could not start: {text}. Reload the page to try again.", "Redigeraren kunde inte starta: {text}. Ladda om sidan och försök igen."],
+  start_fail_short: ["The editor could not start: {text}", "Redigeraren kunde inte starta: {text}"],
+  not_available: ["The editor is not available.", "Redigeraren är inte tillgänglig."],
+  generic_error: ["Something went wrong.", "Något gick fel."],
+  not_pdf: ['"{name}" is not a PDF. Choose a file that ends in .pdf.', '"{name}" är ingen PDF. Välj en fil som slutar på .pdf.'],
+  confirm_open: ["Open a new file? Changes you have not downloaded will be lost.", "Öppna en ny fil? Ändringar du inte laddat ner går förlorade."],
+  loading_open: ["Loading the editor, then opening your PDF…", "Laddar redigeraren och öppnar sedan din PDF…"],
+  page_alt: ["Page {n}", "Sida {n}"],
+  no_text: ["No editable text on this page. It is probably a scanned image.", "Ingen redigerbar text på den här sidan. Det är troligen en skannad bild."],
+  aria_edit: ["Edit text: {text}", "Redigera text: {text}"],
+  aria_rotated: ["Rotated text, cannot be edited: {text}", "Roterad text, kan inte redigeras: {text}"],
+  rotated: ["Rotated or vertical text cannot be edited yet.", "Roterad eller lodrät text kan inte redigeras ännu."],
+  ph_type: ["Type text", "Skriv text"],
+  aria_newtext: ["New text", "Ny text"],
+  aria_addtext: ["Text to add", "Text att lägga till"],
+  unnamed_font: ["unnamed font", "namnlöst typsnitt"],
+  orig_meta: ["Original: <b>{font}</b>, {size} pt", "Original: <b>{font}</b>, {size} pt"],
+  add_hint: ["Enter adds the text, Esc cancels", "Enter lägger till texten, Esc avbryter"],
+  font: ["Font", "Typsnitt"],
+  size_aria: ["Font size in points", "Teckenstorlek i punkter"],
+  size_title: ["Size (pt)", "Storlek (pt)"],
+  color_aria: ["Text colour", "Textfärg"],
+  color_title: ["Colour", "Färg"],
+  bold: ["Bold", "Fet"],
+  italic: ["Italic", "Kursiv"],
+  fit: ["Squeeze to fit", "Pressa ihop så den ryms"],
+  delete: ["Delete", "Ta bort"],
+  cancel: ["Cancel", "Avbryt"],
+  apply: ["Apply", "Verkställ"],
+  add_text: ["Add text", "Lägg till text"],
+  text_added: ["Text added.", "Text tillagd."],
+  font_detail: ["Font: {label}", "Typsnitt: {label}"],
+  text_deleted: ["Text deleted.", "Text borttagen."],
+  fs_embedded: ["taken from the PDF", "hämtat från PDF-filen"],
+  fs_local: ["a font you added", "ett typsnitt du lagt till"],
+  fs_standard: ["standard fallback", "standardreserv"],
+  std_detail: ["The original font was not found. Use Add font to give the editor its .ttf or .otf file for an exact match.", "Originaltypsnittet hittades inte. Använd Lägg till typsnitt för att ge redigeraren dess .ttf- eller .otf-fil för en exakt matchning."],
+  saved_with: ["Saved with {label} ({where}).", "Sparad med {label} ({where})."],
+  undone: ["Undone.", "Ångrat."],
+  redone: ["Redone.", "Gjort om."],
+  find_hint: ["Type something to find.", "Skriv något att söka efter."],
+  replace_all: ["Replace all", "Ersätt alla"],
+  replace_all_n: ["Replace all {n}", "Ersätt alla {n}"],
+  no_matches: ["No matches.", "Inga träffar."],
+  match_one: ["<b>{n}</b> match on {where}.", "<b>{n}</b> träff på {where}."],
+  match_many: ["<b>{n}</b> matches on {where}.", "<b>{n}</b> träffar på {where}."],
+  where_page: ["page {p}", "sida {p}"],
+  where_pages: ["pages {p}", "sidorna {p}"],
+  replaced_one: ["Replaced 1 time.", "Ersatte 1 gång."],
+  replaced_many: ["Replaced {n} times.", "Ersatte {n} gånger."],
+  none_to_replace: ["No matches to replace.", "Inga träffar att ersätta."],
+  downloading: ["Downloading your PDF.", "Laddar ner din PDF."],
+  downloading_detail: ["Metadata (author, app, dates) has been removed.", "Metadata (författare, program, datum) har tagits bort."],
+  font_added: ["Font added: {name}", "Typsnitt tillagt: {name}"],
+  font_added_detail: ["It is used when a PDF asks for it, and appears in the font menu. It is forgotten when you close this tab.", "Det används när en PDF ber om det och finns i typsnittsmenyn. Det glöms när du stänger fliken."],
 };
+function t(key, vars = {}) {
+  const entry = STRINGS[key];
+  const text = entry ? entry[LANG === "en" ? 0 : 1] : key;
+  return text.replace(/\{(\w+)\}/g, (_, name) => (name in vars ? vars[name] : `{${name}}`));
+}
+const ZOOM_STEPS = [0.5, 0.75, 1, 1.25, 1.5, 2, 2.5, 3];
+const FONT_SOURCE = { embedded: t("fs_embedded"), local: t("fs_local"), standard: t("fs_standard") };
 
 const state = {
   id: null,
@@ -17,7 +82,7 @@ const state = {
   zoom: 1,
   mode: "edit",
   pages: [],
-  fonts: [{ value: "auto", label: "Match original" }],
+  fonts: [{ value: "auto", label: t("match_original") }],
   editor: null,
   flash: null,
   busy: 0,
@@ -66,17 +131,17 @@ const els = {
 const engine = { worker: null, pending: new Map(), nextId: 1, ready: false };
 
 function startEngine() {
-  const worker = new Worker("worker.js");
+  const worker = new Worker("/worker.js");
   engine.worker = worker;
   worker.onmessage = ({ data }) => {
     if (data.type === "progress") return setEngineStatus(data.text);
     if (data.type === "ready") {
       engine.ready = true;
-      return setEngineStatus("Ready. Your PDF stays on this device.");
+      return setEngineStatus(t("ready"));
     }
     if (data.type === "fatal") {
-      setEngineStatus(`The editor could not start: ${data.text}. Reload the page to try again.`, true);
-      for (const { reject } of engine.pending.values()) reject(new Error("The editor is not available."));
+      setEngineStatus(t("start_fail", { text: data.text }), true);
+      for (const { reject } of engine.pending.values()) reject(new Error(t("not_available")));
       engine.pending.clear();
       return;
     }
@@ -91,7 +156,7 @@ function startEngine() {
       entry.resolve(data);
     }
   };
-  worker.onerror = (e) => setEngineStatus(`The editor could not start: ${e.message}`, true);
+  worker.onerror = (e) => setEngineStatus(t("start_fail_short", { text: e.message }), true);
 }
 
 function setEngineStatus(text, error = false) {
@@ -104,7 +169,7 @@ function callEngine(path, { method = "GET", json, file } = {}) {
   return new Promise((resolve, reject) => {
     const id = engine.nextId++;
     engine.pending.set(id, { resolve, reject });
-    const message = { id, method, url: path };
+    const message = { id, method, url: path, lang: LANG };
     if (json !== undefined) message.json = JSON.stringify(json);
     if (file) {
       message.file = file;
@@ -151,7 +216,7 @@ function toast(message, { error = false, detail = "" } = {}) {
 
 function fail(err) {
   console.error(err);
-  toast(err.message || "Something went wrong.", { error: true });
+  toast(err.message || t("generic_error"), { error: true });
   if (err.status === 409) refreshPages(state.pages.map((_, i) => i));
 }
 
@@ -183,12 +248,12 @@ function renderZoom() {
 async function openFile(file) {
   if (!file) return;
   if (!/\.pdf$/i.test(file.name) && file.type !== "application/pdf") {
-    toast(`"${file.name}" is not a PDF. Choose a file that ends in .pdf.`, { error: true });
+    toast(t("not_pdf", { name: file.name }), { error: true });
     return;
   }
-  if (state.meta?.canUndo && !confirm("Open a new file? Changes you have not downloaded will be lost.")) return;
+  if (state.meta?.canUndo && !confirm(t("confirm_open"))) return;
   try {
-    if (!engine.ready) setEngineStatus("Loading the editor, then opening your PDF…");
+    if (!engine.ready) setEngineStatus(t("loading_open"));
     const bytes = await file.arrayBuffer();
     const data = await api("/api/docs", { method: "POST", file: { name: file.name, bytes } });
     if (state.id) api(`/api/docs/${state.id}`, { method: "DELETE" }).catch(() => {});
@@ -261,7 +326,7 @@ function buildPages() {
     num.className = "page-num";
     num.textContent = i + 1;
     const img = document.createElement("img");
-    img.alt = `Page ${i + 1}`;
+    img.alt = t("page_alt", { n: i + 1 });
     img.draggable = false;
     const overlay = document.createElement("div");
     overlay.className = "overlay";
@@ -325,7 +390,7 @@ function renderUnits(i) {
   if (page.units.length === 0) {
     const note = document.createElement("div");
     note.className = "page-note";
-    note.textContent = "No editable text on this page. It is probably a scanned image.";
+    note.textContent = t("no_text");
     page.el.appendChild(note);
     return;
   }
@@ -339,13 +404,13 @@ function renderUnits(i) {
     b.style.top = `${y0 * z}px`;
     b.style.width = `${(x1 - x0 + 2) * z}px`;
     b.style.height = `${(y1 - y0) * z}px`;
-    b.setAttribute("aria-label", u.editable ? `Edit text: ${u.text}` : `Rotated text, cannot be edited: ${u.text}`);
-    if (!u.editable) b.title = "Rotated or vertical text cannot be edited yet.";
+    b.setAttribute("aria-label", u.editable ? t("aria_edit", { text: u.text }) : t("aria_rotated", { text: u.text }));
+    if (!u.editable) b.title = t("rotated");
     b.addEventListener("click", (e) => {
       e.stopPropagation();
       if (state.mode !== "edit") return;
       if (!u.editable) {
-        toast("Rotated or vertical text cannot be edited yet.", { error: true });
+        toast(t("rotated"), { error: true });
         return;
       }
       openEditor(i, u);
@@ -429,8 +494,8 @@ function buildEditor(spec) {
   input.type = "text";
   input.spellcheck = false;
   input.value = isEdit ? u.text : "";
-  input.placeholder = isEdit ? "" : "Type text";
-  input.setAttribute("aria-label", isEdit ? "New text" : "Text to add");
+  input.placeholder = isEdit ? "" : t("ph_type");
+  input.setAttribute("aria-label", isEdit ? t("aria_newtext") : t("aria_addtext"));
   input.style.height = `${height * z}px`;
   input.style.fontSize = `${size * z}px`;
   input.style.fontFamily = cssFamily(isEdit ? u.font : "Helvetica");
@@ -440,22 +505,22 @@ function buildEditor(spec) {
   panel.className = "editor-panel";
   const fontValue = isEdit ? "auto" : state.addDefaults.font;
   const meta = isEdit
-    ? `Original: <b>${escapeHtml(u.font.startsWith("Type3") ? "unnamed font" : u.font.replace(/^[A-Z]{6}\+/, ""))}</b>, ${Math.round(u.size * 10) / 10} pt`
-    : "Enter adds the text, Esc cancels";
+    ? t("orig_meta", { font: escapeHtml(u.font.startsWith("Type3") ? t("unnamed_font") : u.font.replace(/^[A-Z]{6}\+/, "")), size: Math.round(u.size * 10) / 10 })
+    : t("add_hint");
   panel.innerHTML = `
     <div class="editor-row">
-      <select data-k="font" aria-label="Font">${fontOptions(fontValue)}</select>
-      <input data-k="size" type="number" min="2" max="400" step="0.5" value="${Math.round(size * 10) / 10}" aria-label="Font size in points" title="Size (pt)">
-      <input data-k="color" type="color" value="${color}" aria-label="Text colour" title="Colour">
-      <button type="button" class="toggle" data-k="bold" aria-pressed="${isEdit ? u.bold : state.addDefaults.bold}" title="Bold" aria-label="Bold"><b>B</b></button>
-      <button type="button" class="toggle" data-k="italic" aria-pressed="${isEdit ? u.italic : state.addDefaults.italic}" title="Italic" aria-label="Italic"><i>I</i></button>
-      ${isEdit ? `<label class="inline-check"><input data-k="fit" type="checkbox"> Squeeze to fit</label>` : ""}
+      <select data-k="font" aria-label="${t("font")}">${fontOptions(fontValue)}</select>
+      <input data-k="size" type="number" min="2" max="400" step="0.5" value="${Math.round(size * 10) / 10}" aria-label="${t("size_aria")}" title="${t("size_title")}">
+      <input data-k="color" type="color" value="${color}" aria-label="${t("color_aria")}" title="${t("color_title")}">
+      <button type="button" class="toggle" data-k="bold" aria-pressed="${isEdit ? u.bold : state.addDefaults.bold}" title="${t("bold")}" aria-label="${t("bold")}"><b>B</b></button>
+      <button type="button" class="toggle" data-k="italic" aria-pressed="${isEdit ? u.italic : state.addDefaults.italic}" title="${t("italic")}" aria-label="${t("italic")}"><i>I</i></button>
+      ${isEdit ? `<label class="inline-check"><input data-k="fit" type="checkbox"> ${t("fit")}</label>` : ""}
     </div>
     <div class="editor-row">
       <span class="editor-meta">${meta}</span>
-      ${isEdit ? `<button type="button" class="ghost danger" data-a="delete">Delete</button>` : ""}
-      <button type="button" class="ghost" data-a="cancel">Cancel</button>
-      <button type="button" class="primary" data-a="apply">${isEdit ? "Apply" : "Add text"}</button>
+      ${isEdit ? `<button type="button" class="ghost danger" data-a="delete">${t("delete")}</button>` : ""}
+      <button type="button" class="ghost" data-a="cancel">${t("cancel")}</button>
+      <button type="button" class="primary" data-a="apply">${isEdit ? t("apply") : t("add_text")}</button>
     </div>
   `;
   el.append(input, panel);
@@ -581,7 +646,7 @@ async function commitEditor({ deleteText = false } = {}) {
       const data = await api(`/api/docs/${state.id}/add-text`, { method: "POST", json: body });
       closeEditor();
       applyChange(data, { page: spec.page, x: spec.x + 1, y: spec.y + (size || 12) / 2 });
-      toast("Text added.", { detail: `Font: ${data.font.label}` });
+      toast(t("text_added"), { detail: t("font_detail", { label: data.font.label }) });
     }
   } catch (err) {
     fail(err);
@@ -589,14 +654,14 @@ async function commitEditor({ deleteText = false } = {}) {
 }
 
 function announceFont(font, deleted) {
-  if (deleted) return toast("Text deleted.");
+  if (deleted) return toast(t("text_deleted"));
   if (!font || font.source === "unchanged") return;
   const where = FONT_SOURCE[font.source] || font.source;
   const detail =
     font.source === "standard"
-      ? "The original font was not found. Use Add font to give the editor its .ttf or .otf file for an exact match."
+      ? t("std_detail")
       : "";
-  toast(`Saved with ${font.label} (${where}).`, { detail });
+  toast(t("saved_with", { label: font.label, where }), { detail });
 }
 
 function onPageClick(e, i) {
@@ -646,7 +711,7 @@ async function history(kind) {
   try {
     const data = await api(`/api/docs/${state.id}/${kind}`, { method: "POST" });
     applyChange(data);
-    toast(kind === "undo" ? "Undone." : "Redone.");
+    toast(kind === "undo" ? t("undone") : t("redone"));
   } catch (err) {
     if (err.status !== 400) fail(err);
   }
@@ -679,9 +744,9 @@ function countMatches() {
     const find = els.findInput.value;
     const seq = ++countSeq;
     if (!find) {
-      els.matchCount.textContent = "Type something to find.";
+      els.matchCount.textContent = t("find_hint");
       els.replaceAllBtn.disabled = true;
-      els.replaceAllBtn.textContent = "Replace all";
+      els.replaceAllBtn.textContent = t("replace_all");
       return;
     }
     try {
@@ -691,14 +756,14 @@ function countMatches() {
       });
       if (seq !== countSeq) return;
       if (data.count === 0) {
-        els.matchCount.textContent = "No matches.";
+        els.matchCount.textContent = t("no_matches");
       } else {
         const pages = data.pages.map((p) => p + 1);
-        const where = pages.length === 1 ? `page ${pages[0]}` : `pages ${pages.slice(0, 8).join(", ")}${pages.length > 8 ? "…" : ""}`;
-        els.matchCount.innerHTML = `<b>${data.count}</b> ${data.count === 1 ? "match" : "matches"} on ${where}.`;
+        const where = pages.length === 1 ? t("where_page", { p: pages[0] }) : t("where_pages", { p: `${pages.slice(0, 8).join(", ")}${pages.length > 8 ? "…" : ""}` });
+        els.matchCount.innerHTML = t(data.count === 1 ? "match_one" : "match_many", { n: data.count, where });
       }
       els.replaceAllBtn.disabled = data.count === 0;
-      els.replaceAllBtn.textContent = data.count ? `Replace all ${data.count}` : "Replace all";
+      els.replaceAllBtn.textContent = data.count ? t("replace_all_n", { n: data.count }) : t("replace_all");
     } catch (err) {
       fail(err);
     }
@@ -722,7 +787,7 @@ async function replaceAll(e) {
       },
     });
     applyChange(data);
-    toast(data.count ? `Replaced ${data.count} ${data.count === 1 ? "time" : "times"}.` : "No matches to replace.");
+    toast(data.count ? (data.count === 1 ? t("replaced_one") : t("replaced_many", { n: data.count })) : t("none_to_replace"));
   } catch (err) {
     fail(err);
   }
@@ -751,7 +816,7 @@ els.downloadBtn.addEventListener("click", async () => {
     a.click();
     a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 10000);
-    toast("Downloading your PDF.", { detail: "Metadata (author, app, dates) has been removed." });
+    toast(t("downloading"), { detail: t("downloading_detail") });
   } catch (err) {
     fail(err);
   } finally {
@@ -766,7 +831,7 @@ els.fontInput.addEventListener("change", async () => {
     const bytes = await font.arrayBuffer();
     const data = await api("/api/fonts", { method: "POST", file: { name: font.name, bytes } });
     state.fonts = data.fonts;
-    toast(`Font added: ${font.name}`, { detail: "It is used when a PDF asks for it, and appears in the font menu. It is forgotten when you close this tab." });
+    toast(t("font_added", { name: font.name }), { detail: t("font_added_detail") });
   } catch (err) {
     fail(err);
   }

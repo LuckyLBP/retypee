@@ -122,8 +122,14 @@ cd web && python3 -m http.server 8799   # then open http://localhost:8799
   `app.py`, add it to `bridge.py` too.
 - Fonts installed on the visitor's computer can't be read by a web page, so
   the *Add font* button lets them hand the editor a `.ttf`/`.otf` for the tab.
+- Languages: Swedish is the main language (`/`), English lives at `/en/`.
+  `vercel.json` sends browsers whose language is English from `/` to `/en/`
+  (add `?lang=sv` to stay on Swedish); crawlers always get Swedish. The two
+  pages are plain HTML (`web/index.html`, `web/en/index.html`), so a text change
+  has to be made in both. Messages in the app are in `STRINGS` in `web/app.js`
+  and `MESSAGES` in `web/py/bridge.py`.
 - Deploy: `vercel.json` serves `web/` as is. Before going live, replace
-  `https://retype.example` (index.html, sitemap.xml, robots.txt) with the real
+  `https://retype.example` (both index.html files, sitemap.xml, robots.txt) with the real
   domain.
 
 ## Limits worth knowing

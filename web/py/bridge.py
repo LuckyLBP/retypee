@@ -19,6 +19,64 @@ from pdfedit.fonts import FONT_EXTS, FONT_INDEX, USER_FONT_DIR, font_choices
 DOCS: dict[str, EditorDocument] = {}
 
 
+# --------------------------------------------------------------------------
+# Messages. Swedish is the main language; the page sends lang="en" for /en/.
+# --------------------------------------------------------------------------
+
+LANG = "sv"
+
+MESSAGES = {
+    "doc_closed": ("This document is no longer open. Open it again.", "Dokumentet är inte längre öppet. Öppna det igen."),
+    "no_page": ("Page {n} does not exist.", "Sida {n} finns inte."),
+    "version": ("The document changed in the meantime. Reload the page view and try again.", "Dokumentet ändrades under tiden. Ladda om sidvyn och försök igen."),
+    "no_file": ("No file received.", "Ingen fil mottogs."),
+    "open_fail": ("This file could not be opened as a PDF.", "Filen kunde inte öppnas som PDF."),
+    "text_gone": ("That text is no longer on the page. Reload and try again.", "Texten finns inte längre på sidan. Ladda om och försök igen."),
+    "rotated": ("Rotated or vertical text cannot be edited yet.", "Roterad eller lodrät text kan inte redigeras ännu."),
+    "find_empty": ("Type the text you want to find.", "Skriv texten du vill hitta."),
+    "add_empty": ("Type some text to add.", "Skriv den text du vill lägga till."),
+    "nothing_undo": ("Nothing to undo.", "Inget att ångra."),
+    "nothing_redo": ("Nothing to redo.", "Inget att göra om."),
+    "no_font": ("No font file received.", "Ingen typsnittsfil mottogs."),
+    "bad_ext": ("Add a .ttf, .otf or .ttc font file.", "Lägg till en .ttf-, .otf- eller .ttc-fil."),
+    "bad_font": ("That file does not look like a usable font.", "Filen verkar inte vara ett fungerande typsnitt."),
+    "route": ("Unknown route {method} {path}", "Okänd adress {method} {path}"),
+}
+
+# Messages raised by the shared engine (pdfedit/core.py), which stays English-only.
+ENGINE_SV = {
+    "Rotated or vertical text cannot be edited yet.": "Roterad eller lodrät text kan inte redigeras ännu.",
+    "This PDF is password protected. Remove the password first.": "PDF-filen är lösenordsskyddad. Ta bort lösenordet först.",
+    "This file is not a PDF.": "Filen är ingen PDF.",
+}
+
+
+def M(key: str, **fmt) -> str:
+    en, sv = MESSAGES[key]
+    return (en if LANG == "en" else sv).format(**fmt)
+
+
+def tr(text: str) -> str:
+    """Translate a message from the shared engine."""
+    return text if LANG == "en" else ENGINE_SV.get(text, text)
+
+
+def font_label(label: str) -> str:
+    """Swedish names for the style words in font labels such as 'Times Bold Italic'."""
+    if LANG == "en":
+        return label
+    return label.replace(" Bold", " Fet").replace(" Italic", " Kursiv")
+
+
+def font_list() -> list[dict]:
+    fonts = font_choices()
+    if LANG != "en":
+        for f in fonts:
+            if f["value"] == "auto":
+                f["label"] = "Matcha originalet"
+    return fonts
+
+
 class ApiError(Exception):
     def __init__(self, status: int, detail: str) -> None:
         super().__init__(detail)
@@ -29,18 +87,18 @@ class ApiError(Exception):
 def get_doc(doc_id: str) -> EditorDocument:
     ed = DOCS.get(doc_id)
     if ed is None:
-        raise ApiError(404, "This document is no longer open. Open it again.")
+        raise ApiError(404, M("doc_closed"))
     return ed
 
 
 def check_page(ed: EditorDocument, page: int) -> None:
     if not 0 <= page < ed.doc.page_count:
-        raise ApiError(400, f"Page {page + 1} does not exist.")
+        raise ApiError(400, M("no_page", n=page + 1))
 
 
 def check_version(ed: EditorDocument, version) -> None:
     if version is not None and version != ed.version:
-        raise ApiError(409, "The document changed in the meantime. Reload the page view and try again.")
+        raise ApiError(409, M("version"))
 
 
 def run_edit(ed: EditorDocument, fn):
@@ -56,7 +114,7 @@ def run_edit(ed: EditorDocument, fn):
         raise
     except Exception as exc:
         ed.rollback()
-        raise ApiError(422, str(exc)) from exc
+        raise ApiError(422, tr(str(exc))) from exc
     ed.commit()
     return result
 
@@ -73,13 +131,13 @@ def edited_name(name: str) -> str:
 
 def open_document(query, body, upload, upload_name):
     if upload is None:
-        raise ApiError(400, "No file received.")
+        raise ApiError(400, M("no_file"))
     try:
         ed = EditorDocument(upload, upload_name or "document.pdf")
     except ValueError as exc:
-        raise ApiError(400, str(exc)) from exc
+        raise ApiError(400, tr(str(exc))) from exc
     except Exception as exc:
-        raise ApiError(400, "This file could not be opened as a PDF.") from exc
+        raise ApiError(400, M("open_fail")) from exc
     doc_id = uuid.uuid4().hex[:12]
     DOCS[doc_id] = ed
     return {"id": doc_id, **ed.meta()}
@@ -114,23 +172,23 @@ def edit(doc_id, body):
     check_page(ed, page)
     units = ed.units(page)
     if not 0 <= body["unit"] < len(units):
-        raise ApiError(400, "That text is no longer on the page. Reload and try again.")
+        raise ApiError(400, M("text_gone"))
     unit = units[body["unit"]]
     if not unit.horizontal:
-        raise ApiError(422, "Rotated or vertical text cannot be edited yet.")
+        raise ApiError(422, M("rotated"))
     result = run_edit(ed, lambda: edit_unit(
         ed.doc, ed.doc[page], unit, body["text"], ed.resolver,
         font=body.get("font"), size=body.get("size"), color=body.get("color"),
         fit=bool(body.get("fit")), bold=body.get("bold"), italic=body.get("italic")))
     return {**ed.meta(), "changedPages": [page],
-            "font": {"label": result.font_label, "source": result.font_source}}
+            "font": {"label": font_label(result.font_label), "source": result.font_source}}
 
 
 def replace(doc_id, body):
     ed = get_doc(doc_id)
     check_version(ed, body.get("version"))
     if not body.get("find"):
-        raise ApiError(400, "Type the text you want to find.")
+        raise ApiError(400, M("find_empty"))
     ed.checkpoint()
     try:
         count, pages = replace_text(ed.doc, body["find"], body.get("replace", ""), ed.resolver,
@@ -139,7 +197,7 @@ def replace(doc_id, body):
                                     fit=bool(body.get("fit")))
     except Exception as exc:
         ed.rollback()
-        raise ApiError(422, str(exc)) from exc
+        raise ApiError(422, tr(str(exc))) from exc
     if count:
         ed.commit()
     else:
@@ -171,26 +229,26 @@ def add(doc_id, body):
     page = body["page"]
     check_page(ed, page)
     if not body.get("text", "").strip():
-        raise ApiError(400, "Type some text to add.")
+        raise ApiError(400, M("add_empty"))
     result = run_edit(ed, lambda: add_text(
         ed.doc, ed.doc[page], body["x"], body["y"], body["text"],
         body.get("size", 12), body.get("color", "#000000"), body.get("font"), ed.resolver,
         bold=bool(body.get("bold")), italic=bool(body.get("italic"))))
     return {**ed.meta(), "changedPages": [page],
-            "font": {"label": result.font_label, "source": result.font_source}}
+            "font": {"label": font_label(result.font_label), "source": result.font_source}}
 
 
 def undo(doc_id):
     ed = get_doc(doc_id)
     if not ed.undo():
-        raise ApiError(400, "Nothing to undo.")
+        raise ApiError(400, M("nothing_undo"))
     return {**ed.meta(), "changedPages": list(range(ed.doc.page_count))}
 
 
 def redo(doc_id):
     ed = get_doc(doc_id)
     if not ed.redo():
-        raise ApiError(400, "Nothing to redo.")
+        raise ApiError(400, M("nothing_redo"))
     return {**ed.meta(), "changedPages": list(range(ed.doc.page_count))}
 
 
@@ -201,16 +259,16 @@ def download(doc_id, query):
 
 
 def list_fonts():
-    return {"fonts": font_choices()}
+    return {"fonts": font_list()}
 
 
 def add_font(query, body, upload, upload_name):
     """Keep a font file in this tab's memory so it can be matched and offered."""
     if upload is None:
-        raise ApiError(400, "No font file received.")
+        raise ApiError(400, M("no_font"))
     name = re.sub(r"[^A-Za-z0-9._-]", "_", Path(upload_name or "font.ttf").name)
     if Path(name).suffix.lower() not in FONT_EXTS:
-        raise ApiError(400, "Add a .ttf, .otf or .ttc font file.")
+        raise ApiError(400, M("bad_ext"))
     USER_FONT_DIR.mkdir(parents=True, exist_ok=True)
     path = USER_FONT_DIR / name
     path.write_bytes(upload)
@@ -218,8 +276,8 @@ def add_font(query, body, upload, upload_name):
     if not any(f["path"] == str(path) for f in FONT_INDEX.user_fonts()):
         path.unlink(missing_ok=True)
         FONT_INDEX.refresh()
-        raise ApiError(400, "That file does not look like a usable font.")
-    return {"fonts": font_choices()}
+        raise ApiError(400, M("bad_font"))
+    return {"fonts": font_list()}
 
 
 # --------------------------------------------------------------------------
@@ -245,12 +303,14 @@ ROUTES = [
 ROUTES = [(method, re.compile(pattern + "$"), fn) for method, pattern, fn in ROUTES]
 
 
-def dispatch(method, url, body_json, upload, upload_name):
+def dispatch(method, url, body_json, upload, upload_name, lang=None):
     """Returns (status, kind, payload, filename).
 
     kind is "json" (payload is a JSON string), "bytes" (payload is bytes, the
     filename is the download name) or "error" (payload is the message).
     """
+    global LANG
+    LANG = "en" if lang == "en" else "sv"
     parts = urlsplit(url)
     query = {k: v[0] for k, v in parse_qs(parts.query).items()}
     # JS null arrives as a JsNull object rather than None, so treat both as absent.
@@ -266,8 +326,8 @@ def dispatch(method, url, body_json, upload, upload_name):
                     mime, data, filename = result
                     return (200, mime, data, filename)
                 return (200, "json", json.dumps(result), None)
-        raise ApiError(404, f"Unknown route {method} {parts.path}")
+        raise ApiError(404, M("route", method=method, path=parts.path))
     except ApiError as exc:
         return (exc.status, "error", exc.detail, None)
     except Exception as exc:  # engine errors should reach the UI as readable text
-        return (500, "error", str(exc) or exc.__class__.__name__, None)
+        return (500, "error", tr(str(exc)) or exc.__class__.__name__, None)

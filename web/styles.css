@@ -43,6 +43,8 @@ button, input, select { font: inherit; color: inherit; }
 
 .tools { display: flex; align-items: center; gap: 4px; flex: none; }
 .actions { display: flex; align-items: center; gap: 8px; flex: 1 1 0; justify-content: flex-end; }
+.lang { color: var(--ink-soft); font-size: 14px; font-weight: 500; text-decoration: none; padding: 6px 10px; border-radius: 8px; }
+.lang:hover { background: rgba(27, 23, 19, .06); color: var(--ink); }
 .sep { width: 1px; height: 20px; background: var(--line); margin: 0 6px; }
 
 /* ---------- buttons ---------- */
@@ -215,31 +217,38 @@ input[type="checkbox"] { accent-color: var(--ink); width: 16px; height: 16px; ma
   *, *::before, *::after { animation-duration: 1ms !important; animation-iteration-count: 1 !important; transition: none !important; }
 }
 
-@media (max-width: 1100px) { .file-name { display: none; } }
-@media (max-width: 900px) {
-  .sep, .zoom { display: none; }
-  body.with-drawer .desk { right: 0; }
-  .drawer { width: 100%; }
+/* The header gives things up in steps as the window narrows, so nothing collides
+   (Swedish labels are longer than English ones). */
+@media (max-width: 1300px) {
+  .file-name, .zoom, .tools span.sep:nth-of-type(2) { display: none; }
 }
-@media (max-width: 640px) {
-  .bar { gap: 8px; padding: 0 12px; }
-  .wordmark { height: 24px; }
-  .actions .tool { display: none; }
-  .hero { padding: 40px 16px 48px; }
+@media (max-width: 1200px) { #openBtn { display: none !important; } }
 
-  /* The tools sit in a dock at the bottom, like a native app. */
+/* Tablet and phone: the tools sit in a dock at the bottom, like a native app. */
+@media (max-width: 1020px) {
+  .sep, .zoom { display: none; }
   .tools {
     position: fixed; left: 50%; bottom: max(14px, env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 25;
     padding: 3px; font-size: 13px; background: var(--card); border: 1px solid var(--line); border-radius: 12px;
     box-shadow: var(--shadow-m); max-width: calc(100vw - 16px);
   }
-  .tools .tool, .seg { padding: 0 9px; }
+  .tools .tool, .seg { padding: 0 10px; }
   .pages { padding-bottom: 160px; }
   .toast { bottom: 84px; }
+  .drawer { bottom: 80px; border-radius: 0 0 12px 12px; }
+}
+@media (max-width: 900px) {
+  body.with-drawer .desk { right: 0; }
+  .drawer { width: 100%; }
+}
+@media (max-width: 700px) { .actions .tool { display: none !important; } }
+@media (max-width: 640px) {
+  .bar { gap: 8px; padding: 0 12px; }
+  .wordmark { height: 24px; }
+  .hero { padding: 40px 16px 48px; }
 
   /* The text editor panel becomes a bottom sheet. */
   .editor-panel { position: fixed !important; left: 10px !important; right: 10px !important; top: auto !important; bottom: 80px; width: auto; max-width: none; }
   .editor-row { flex-wrap: wrap; }
   .editor-meta { flex: 1 1 100%; margin: 0; }
-  .drawer { bottom: 80px; border-radius: 0 0 12px 12px; }
 }

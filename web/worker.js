@@ -36,11 +36,11 @@ function post(message, transfer = []) {
   self.postMessage(message, transfer);
 }
 
-async function handle({ id, method, url, json, file }) {
+async function handle({ id, method, url, json, file, lang }) {
   await ready;
   // undefined (not null) reaches Python as None.
   const upload = file ? new Uint8Array(file.bytes) : undefined;
-  const proxy = dispatch(method, url, json, upload, file?.name);
+  const proxy = dispatch(method, url, json, upload, file?.name, lang);
   let status, kind, payload, filename;
   try {
     [status, kind, payload, filename] = proxy.toJs();

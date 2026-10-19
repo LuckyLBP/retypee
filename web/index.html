@@ -1,18 +1,23 @@
 <!doctype html>
-<html lang="en">
+<html lang="sv">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Edit PDF Text Online – Free, Private, No Upload | Retypee</title>
-  <meta name="description" content="Edit text in a PDF right in your browser. Click a line, type, download. Find and replace across the whole file. Free, and your PDF is never uploaded.">
+  <title>Redigera text i PDF online – gratis, privat, ingen uppladdning | Retypee</title>
+  <meta name="description" content="Redigera text i en PDF direkt i webbläsaren. Klicka på en rad, skriv, ladda ner. Sök och ersätt i hela filen. Gratis, och din PDF laddas aldrig upp.">
   <link rel="canonical" href="https://retype.example/">
+  <link rel="alternate" hreflang="sv" href="https://retype.example/">
+  <link rel="alternate" hreflang="en" href="https://retype.example/en/">
+  <link rel="alternate" hreflang="x-default" href="https://retype.example/">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#f6f5f1">
 
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Retypee">
-  <meta property="og:title" content="Edit PDF Text Online – Free, Private, No Upload">
-  <meta property="og:description" content="Click a line in your PDF, type, download. It all happens in your browser, so your file never leaves your device.">
+  <meta property="og:locale" content="sv_SE">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:title" content="Redigera text i PDF online – gratis, privat, ingen uppladdning">
+  <meta property="og:description" content="Klicka på en rad i din PDF, skriv och ladda ner. Allt sker i webbläsaren, så din fil lämnar aldrig din enhet.">
   <meta property="og:url" content="https://retype.example/">
   <meta property="og:image" content="https://retype.example/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -20,12 +25,12 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://retype.example/og-image.png">
 
-  <link rel="icon" href="favicon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="/styles.css">
 
   <script type="application/ld+json">
   {
@@ -33,10 +38,10 @@
     "@type": "WebApplication",
     "name": "Retypee",
     "url": "https://retype.example/",
-    "description": "Free online PDF text editor that runs entirely in your browser. Edit, add and replace text in a PDF without uploading it.",
+    "description": "Gratis PDF-redigerare online som körs helt i din webbläsare. Redigera, lägg till och ersätt text i en PDF utan att ladda upp den.",
     "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Any modern web browser",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+    "operatingSystem": "Valfri modern webbläsare",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "SEK" }
   }
   </script>
   <script type="application/ld+json">
@@ -46,28 +51,28 @@
     "mainEntity": [
       {
         "@type": "Question",
-        "name": "Is my PDF uploaded anywhere?",
-        "acceptedAnswer": { "@type": "Answer", "text": "No. Retypee runs inside your browser tab. Your PDF is opened and edited in your device's memory, and nothing is sent to a server or stored. Closing the tab forgets it." }
+        "name": "Laddas min PDF upp någonstans?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Nej. Retypee körs i din webbläsarflik. Din PDF öppnas och redigeras i enhetens minne, och inget skickas till en server eller sparas. När du stänger fliken är den glömd." }
       },
       {
         "@type": "Question",
-        "name": "Can I edit a scanned PDF?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Not directly. A scanned PDF is a picture of text, so there is no text to edit. Run it through OCR first (for example with ocrmypdf) and then open the result in Retypee." }
+        "name": "Kan jag redigera en skannad PDF?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Inte direkt. En skannad PDF är en bild av text, så det finns ingen text att redigera. Kör den genom OCR först (till exempel med ocrmypdf) och öppna sedan resultatet i Retypee." }
       },
       {
         "@type": "Question",
-        "name": "Why does my edited text look slightly different?",
-        "acceptedAnswer": { "@type": "Answer", "text": "PDFs usually embed only the letters they use. If the original font does not contain a letter you typed, Retypee looks for the same font among the fonts you added, and otherwise falls back to Helvetica, Times or Courier in the closest style. Use Add font to give it the original font file for an exact match." }
+        "name": "Varför ser min redigerade text lite annorlunda ut?",
+        "acceptedAnswer": { "@type": "Answer", "text": "PDF-filer bäddar oftast bara in de bokstäver som används. Om originaltypsnittet saknar en bokstav du skrivit letar Retypee efter samma typsnitt bland dem du lagt till, och använder annars Helvetica, Times eller Courier i närmaste stil. Använd Lägg till typsnitt för att ge den originalfilen för en exakt matchning." }
       },
       {
         "@type": "Question",
-        "name": "Does the edited PDF keep its metadata?",
-        "acceptedAnswer": { "@type": "Answer", "text": "No. The downloaded file has its metadata removed: title, author, creator app, dates, XMP data and the file ID. The visible content, images, links and form fields are not touched." }
+        "name": "Behåller den redigerade PDF-filen sina metadata?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Nej. Den nedladdade filen har sina metadata borttagna: titel, författare, skapande program, datum, XMP-data och fil-ID. Det synliga innehållet, bilder, länkar och formulärfält påverkas inte." }
       },
       {
         "@type": "Question",
-        "name": "Will longer text reflow the paragraph?",
-        "acceptedAnswer": { "@type": "Answer", "text": "No. PDFs store text at fixed positions, not as paragraphs, so lines are edited one at a time. If new text is longer it runs further right; use Squeeze to fit or shorten it." }
+        "name": "Flödar längre text om i stycket?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Nej. PDF-filer lagrar text på fasta positioner, inte som stycken, så rader redigeras en i taget. Om ny text är längre fortsätter den längre åt höger; använd Pressa ihop så den ryms eller korta ner den." }
       }
     ]
   }
@@ -76,120 +81,121 @@
 <body>
   <header class="bar">
     <div class="brand">
-      <img class="wordmark" src="wordmark.svg" alt="Retypee" width="103" height="26">
+      <img class="wordmark" src="/wordmark.svg" alt="Retypee" width="103" height="26">
       <span class="file-name" id="fileName"></span>
     </div>
 
     <div class="tools" id="tools" hidden>
-      <div class="segmented" role="radiogroup" aria-label="Tool">
-        <button class="seg" role="radio" aria-checked="true" data-mode="edit" title="Click text to change it (E)">Edit text</button>
-        <button class="seg" role="radio" aria-checked="false" data-mode="add" title="Click anywhere to add text (T)">Add text</button>
+      <div class="segmented" role="radiogroup" aria-label="Verktyg">
+        <button class="seg" role="radio" aria-checked="true" data-mode="edit" title="Klicka på text för att ändra den (E)">Redigera text</button>
+        <button class="seg" role="radio" aria-checked="false" data-mode="add" title="Klicka var som helst för att lägga till text (T)">Lägg till text</button>
       </div>
-      <button class="tool" id="findBtn" title="Find and replace (Ctrl+F)">Find and replace</button>
+      <button class="tool" id="findBtn" title="Sök och ersätt (Ctrl+F)">Sök och ersätt</button>
       <span class="sep" aria-hidden="true"></span>
-      <button class="icon" id="undoBtn" title="Undo (Ctrl+Z)" aria-label="Undo" disabled>
+      <button class="icon" id="undoBtn" title="Ångra (Ctrl+Z)" aria-label="Ångra" disabled>
         <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4 4 7.5 7.5 11M4.5 7.5h7a4.5 4.5 0 0 1 0 9H9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
-      <button class="icon" id="redoBtn" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" disabled>
+      <button class="icon" id="redoBtn" title="Gör om (Ctrl+Skift+Z)" aria-label="Gör om" disabled>
         <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 16 7.5 12.5 11M15.5 7.5h-7a4.5 4.5 0 0 0 0 9H11" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <span class="sep" aria-hidden="true"></span>
       <div class="zoom">
-        <button class="icon" id="zoomOut" aria-label="Zoom out">
+        <button class="icon" id="zoomOut" aria-label="Zooma ut">
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         </button>
         <span id="zoomLabel" class="zoom-label">100%</span>
-        <button class="icon" id="zoomIn" aria-label="Zoom in">
+        <button class="icon" id="zoomIn" aria-label="Zooma in">
           <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10h10M10 5v10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
         </button>
       </div>
     </div>
 
     <div class="actions">
-      <label class="tool" id="fontBtn" title="Give the editor a font file so edits match the original">Add font
+      <a class="lang" href="/en/" hreflang="en" lang="en" title="English">English</a>
+      <label class="tool" id="fontBtn" title="Ge redigeraren en typsnittsfil så att ändringarna matchar originalet">Lägg till typsnitt
         <input type="file" accept=".ttf,.otf,.ttc,font/ttf,font/otf" id="fontInput" hidden>
       </label>
-      <label class="tool" id="openBtn" hidden>Open another
+      <label class="tool" id="openBtn" hidden>Öppna en annan
         <input type="file" accept="application/pdf,.pdf" id="openInput" hidden>
       </label>
-      <button class="primary" id="downloadBtn" hidden>Download PDF</button>
+      <button class="primary" id="downloadBtn" hidden>Ladda ner PDF</button>
     </div>
   </header>
 
   <main class="desk" id="desk">
     <section class="empty" id="empty">
       <div class="hero">
-        <h1>Edit any PDF, right in your <span class="mark">browser</span>.</h1>
-        <p class="lede">The free PDF text editor that never uploads your file. Click a line, type, download.</p>
+        <h1>Redigera valfri PDF, direkt i <span class="mark">webbläsaren</span>.</h1>
+        <p class="lede">PDF-redigeraren som aldrig laddar upp din fil. Klicka på en rad, skriv, ladda ner.</p>
 
         <label class="drop" id="drop">
-          <strong>Drop a PDF here</strong>
-          <span class="drop-hint">or choose a file from your computer</span>
-          <span class="primary as-button">Choose a PDF</span>
+          <strong>Släpp en PDF här</strong>
+          <span class="drop-hint">eller välj en fil från din dator</span>
+          <span class="primary as-button">Välj en PDF</span>
           <input type="file" accept="application/pdf,.pdf" id="fileInput" hidden>
         </label>
-        <p class="engine-status" id="engineStatus" role="status" aria-live="polite">Loading the editor (about 25 MB the first time, then cached)…</p>
+        <p class="engine-status" id="engineStatus" role="status" aria-live="polite">Laddar redigeraren (cirka 25 MB första gången, sedan sparas den i webbläsaren)…</p>
       </div>
 
       <div class="info">
         <section>
-          <h2>How it works</h2>
+          <h2>Så fungerar det</h2>
           <ol class="steps">
-            <li><strong>Open your PDF.</strong><p>Drop it on this page. Every line of text becomes clickable.</p></li>
-            <li><strong>Click a line and type.</strong><p>Change the text, font, size or colour. Use Add text to put new text anywhere.</p></li>
-            <li><strong>Download.</strong><p>You get a normal PDF with your changes. Images, links and form fields stay as they were.</p></li>
+            <li><strong>Öppna din PDF.</strong><p>Släpp den på sidan. Varje textrad blir klickbar.</p></li>
+            <li><strong>Klicka på en rad och skriv.</strong><p>Ändra text, typsnitt, storlek eller färg. Använd Lägg till text för att placera ny text var som helst.</p></li>
+            <li><strong>Ladda ner.</strong><p>Du får en vanlig PDF med dina ändringar. Bilder, länkar och formulärfält förblir som de var.</p></li>
           </ol>
         </section>
 
         <section>
-          <h2>Find and replace</h2>
-          <p>Need to change a date, a name or an invoice number that appears on every page? Press Ctrl/Cmd+F, type what to find and what to replace it with, and Retypee changes every match in one go. A live counter shows how many matches there are before you commit, and Undo brings everything back.</p>
+          <h2>Sök och ersätt</h2>
+          <p>Behöver du ändra ett datum, ett namn eller ett fakturanummer som finns på varje sida? Tryck Ctrl/Cmd+F, skriv vad du vill hitta och vad det ska bytas mot, så ändrar Retypee alla träffar på en gång. En räknare visar hur många träffar det finns innan du bekräftar, och Ångra tar tillbaka allt.</p>
         </section>
 
         <section>
-          <h2>Private by design</h2>
-          <p>Retypee is a web page, but the editing does not happen on a server. The PDF engine (<a href="https://pymupdf.readthedocs.io">PyMuPDF</a>) is downloaded into your browser, and your file is opened and edited in your device's memory. Nothing is uploaded or stored, and closing the tab forgets it. You can check this in your browser's network tab.</p>
-          <p>The downloaded PDF also has its metadata removed: title, author, creator app, dates, and the file ID.</p>
+          <h2>Privat från grunden</h2>
+          <p>Retypee är en webbsida, men redigeringen sker inte på en server. PDF-motorn (<a href="https://pymupdf.readthedocs.io">PyMuPDF</a>) laddas ner till din webbläsare, och din fil öppnas och redigeras i enhetens minne. Ingenting laddas upp eller sparas, och när du stänger fliken är filen borta. Du kan kontrollera det i webbläsarens nätverksflik.</p>
+          <p>Den nedladdade PDF-filen har dessutom sina metadata borttagna: titel, författare, skapande program, datum och fil-ID.</p>
         </section>
 
         <section>
-          <h2>Good to know</h2>
+          <h2>Bra att veta</h2>
           <ul>
-            <li><strong>Text does not reflow.</strong> PDFs store text at fixed positions, so lines are edited one at a time. Longer text runs further right; use <em>Squeeze to fit</em> or shorten it.</li>
-            <li><strong>Scanned PDFs have no text.</strong> Run OCR first (for example with <code>ocrmypdf</code>), then open the result.</li>
-            <li><strong>Fonts may differ slightly.</strong> PDFs usually embed only the letters they use. If a letter you type is missing, Retypee uses a fitting built-in font. Use <em>Add font</em> to give it the original <code>.ttf</code> or <code>.otf</code> for an exact match.</li>
-            <li>Rotated or vertical text and password-protected PDFs are not supported yet.</li>
+            <li><strong>Texten flödar inte om.</strong> PDF-filer lagrar text på fasta positioner, så rader redigeras en i taget. Längre text fortsätter längre åt höger; använd <em>Pressa ihop så den ryms</em> eller korta ner den.</li>
+            <li><strong>Skannade PDF-filer saknar text.</strong> Kör OCR först (till exempel med <code>ocrmypdf</code>) och öppna sedan resultatet.</li>
+            <li><strong>Typsnitt kan skilja sig något.</strong> PDF-filer bäddar oftast bara in de bokstäver som används. Saknas en bokstav du skriver använder Retypee ett passande inbyggt typsnitt. Använd <em>Lägg till typsnitt</em> och ge den originalfilen (<code>.ttf</code> eller <code>.otf</code>) för en exakt matchning.</li>
+            <li>Roterad eller lodrät text och lösenordsskyddade PDF-filer stöds inte ännu.</li>
           </ul>
         </section>
 
         <section class="faq">
-          <h2>Questions</h2>
+          <h2>Vanliga frågor</h2>
           <details>
-            <summary>Is my PDF uploaded anywhere?</summary>
-            <p>No. Retypee runs inside your browser tab. Your PDF is opened and edited in your device's memory, and nothing is sent to a server or stored. Closing the tab forgets it.</p>
+            <summary>Laddas min PDF upp någonstans?</summary>
+            <p>Nej. Retypee körs i din webbläsarflik. Din PDF öppnas och redigeras i enhetens minne, och inget skickas till en server eller sparas. När du stänger fliken är den glömd.</p>
           </details>
           <details>
-            <summary>Can I edit a scanned PDF?</summary>
-            <p>Not directly. A scanned PDF is a picture of text, so there is no text to edit. Run it through OCR first (for example with ocrmypdf) and then open the result in Retypee.</p>
+            <summary>Kan jag redigera en skannad PDF?</summary>
+            <p>Inte direkt. En skannad PDF är en bild av text, så det finns ingen text att redigera. Kör den genom OCR först (till exempel med ocrmypdf) och öppna sedan resultatet i Retypee.</p>
           </details>
           <details>
-            <summary>Why does my edited text look slightly different?</summary>
-            <p>PDFs usually embed only the letters they use. If the original font does not contain a letter you typed, Retypee looks for the same font among the fonts you added, and otherwise falls back to Helvetica, Times or Courier in the closest style. Use Add font to give it the original font file for an exact match.</p>
+            <summary>Varför ser min redigerade text lite annorlunda ut?</summary>
+            <p>PDF-filer bäddar oftast bara in de bokstäver som används. Om originaltypsnittet saknar en bokstav du skrivit letar Retypee efter samma typsnitt bland dem du lagt till, och använder annars Helvetica, Times eller Courier i närmaste stil. Använd Lägg till typsnitt för att ge den originalfilen för en exakt matchning.</p>
           </details>
           <details>
-            <summary>Does the edited PDF keep its metadata?</summary>
-            <p>No. The downloaded file has its metadata removed: title, author, creator app, dates, XMP data and the file ID. The visible content, images, links and form fields are not touched.</p>
+            <summary>Behåller den redigerade PDF-filen sina metadata?</summary>
+            <p>Nej. Den nedladdade filen har sina metadata borttagna: titel, författare, skapande program, datum, XMP-data och fil-ID. Det synliga innehållet, bilder, länkar och formulärfält påverkas inte.</p>
           </details>
           <details>
-            <summary>Will longer text reflow the paragraph?</summary>
-            <p>No. PDFs store text at fixed positions, not as paragraphs, so lines are edited one at a time. If new text is longer it runs further right; use Squeeze to fit or shorten it.</p>
+            <summary>Flödar längre text om i stycket?</summary>
+            <p>Nej. PDF-filer lagrar text på fasta positioner, inte som stycken, så rader redigeras en i taget. Om ny text är längre fortsätter den längre åt höger; använd Pressa ihop så den ryms eller korta ner den.</p>
           </details>
         </section>
 
         <footer class="site-foot">
-          <img class="wordmark" src="wordmark.svg" alt="Retypee" width="83" height="21">
-          <span>Free and open source (AGPL-3.0)</span>
-          <a href="https://github.com/LuckyLBP/retypee">Source code</a>
+          <img class="wordmark" src="/wordmark.svg" alt="Retypee" width="83" height="21">
+          <span>Gratis och öppen källkod (AGPL-3.0)</span>
+          <a href="https://github.com/LuckyLBP/retypee">Källkod</a>
         </footer>
       </div>
     </section>
@@ -199,34 +205,34 @@
 
   <aside class="drawer" id="drawer" aria-labelledby="drawerTitle" hidden>
     <div class="drawer-head">
-      <h2 id="drawerTitle">Find and replace</h2>
-      <button class="icon" id="drawerClose" aria-label="Close">
+      <h2 id="drawerTitle">Sök och ersätt</h2>
+      <button class="icon" id="drawerClose" aria-label="Stäng">
         <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 5.5 9 9m0-9-9 9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
       </button>
     </div>
     <form id="replaceForm" class="drawer-body" autocomplete="off">
       <label class="field">
-        <span>Find</span>
+        <span>Sök</span>
         <input id="findInput" type="text" spellcheck="false">
       </label>
       <label class="field">
-        <span>Replace with</span>
+        <span>Ersätt med</span>
         <input id="replaceInput" type="text" spellcheck="false">
       </label>
       <div class="checks">
-        <label><input type="checkbox" id="caseCheck"> Match case</label>
-        <label><input type="checkbox" id="wordCheck"> Whole words</label>
-        <label><input type="checkbox" id="fitCheck"> Squeeze longer text to fit</label>
+        <label><input type="checkbox" id="caseCheck"> Matcha versaler</label>
+        <label><input type="checkbox" id="wordCheck"> Hela ord</label>
+        <label><input type="checkbox" id="fitCheck"> Pressa ihop längre text så den ryms</label>
       </div>
-      <p class="match-count" id="matchCount" aria-live="polite">Type something to find.</p>
-      <button class="primary wide" id="replaceAllBtn" type="submit" disabled>Replace all</button>
-      <p class="note">A match has to sit on one line in one text style. Text split across lines or styles is skipped.</p>
+      <p class="match-count" id="matchCount" aria-live="polite">Skriv något att söka efter.</p>
+      <button class="primary wide" id="replaceAllBtn" type="submit" disabled>Ersätt alla</button>
+      <p class="note">En träff måste ligga på en rad och i en och samma textstil. Text som är uppdelad på flera rader eller stilar hoppas över.</p>
     </form>
   </aside>
 
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <div class="busy" id="busy" hidden><span></span></div>
 
-  <script src="app.js"></script>
+  <script src="/app.js"></script>
 </body>
 </html>
