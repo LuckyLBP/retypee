@@ -308,6 +308,20 @@ def open_pdf(data, password=None):
     return doc
 
 
+NOT_COMMENTS = ("Link", "Widget", "Popup")   # links and form fields are not comments
+
+
+def annot_types(doc):
+    """How many annotations of each kind the file has, e.g. {"Highlight": 3, "Text": 1}."""
+    counts = {}
+    for page in doc:
+        for a in (page.annots() or []):
+            name = a.type[1]
+            if name not in NOT_COMMENTS:
+                counts[name] = counts.get(name, 0) + 1
+    return counts
+
+
 def pdf_info(q, body, upload, upload_name):
     if upload is None:
         raise ApiError(400, M("no_file"))
@@ -317,14 +331,15 @@ def pdf_info(q, body, upload, upload_name):
         raise ApiError(400, M("open_fail")) from exc
     wanted = pymupdf.PDF_PERM_PRINT | pymupdf.PDF_PERM_COPY | pymupdf.PDF_PERM_MODIFY
     limited = (not doc.needs_pass) and doc.permissions != -1 and (doc.permissions & wanted) != wanted
-    annots = widgets = 0
+    types, widgets = {}, 0
     if not doc.needs_pass:
+        types = annot_types(doc)
         for page in doc:
-            annots += sum(1 for a in (page.annots() or []) if a.type[0] not in (pymupdf.PDF_ANNOT_LINK, pymupdf.PDF_ANNOT_WIDGET))
             widgets += sum(1 for _ in (page.widgets() or []))
+    annots = sum(types.values())
     return {"needsPass": bool(doc.needs_pass), "encrypted": bool(doc.is_encrypted), "limited": bool(limited),
             "pages": 0 if doc.needs_pass else doc.page_count, "repaired": bool(doc.is_repaired),
-            "annots": annots, "widgets": widgets}
+            "annots": annots, "annotTypes": types, "widgets": widgets}
 
 
 def compress(q, body, upload, upload_name):
@@ -421,6 +436,20 @@ def add_font(query, body, upload, upload_name):
 # --------------------------------------------------------------------------
 
 DOC = r"/api/docs/(?P<id>[0-9a-f]+)"
+def strip_annots(q, body, upload, upload_name):
+    """Delete comments, highlights, drawings and stamps (all of them, or just the listed kinds)."""
+    if upload is None:
+        raise ApiError(400, M("no_file"))
+    doc = open_pdf(upload, body.get("password"))
+    kinds = body.get("types")
+    for page in doc:
+        for a in list(page.annots() or []):
+            name = a.type[1]
+            if name not in NOT_COMMENTS and (not kinds or name in kinds):
+                page.delete_annot(a)
+    return ("application/pdf", doc.tobytes(garbage=3, deflate=True), None)
+
+
 def repair(q, body, upload, upload_name):
     """Open the file the lenient way (MuPDF rebuilds a broken structure) and write it out clean."""
     if upload is None:
@@ -515,6 +544,7 @@ ROUTES = [
     ("POST", r"/api/unlock", lambda m, q, b, u, n: unlock(q, b, u, n)),
     ("POST", r"/api/repair", lambda m, q, b, u, n: repair(q, b, u, n)),
     ("POST", r"/api/flatten", lambda m, q, b, u, n: flatten(q, b, u, n)),
+    ("POST", r"/api/strip-annots", lambda m, q, b, u, n: strip_annots(q, b, u, n)),
     ("POST", r"/api/images", lambda m, q, b, u, n: images_list(q, b, u, n)),
     ("POST", r"/api/extract-images", lambda m, q, b, u, n: extract_images(q, b, u, n)),
     ("POST", DOC + r"/search-rects", lambda m, q, b, u, n: search_rects(m["id"], b)),

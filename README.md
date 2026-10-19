@@ -133,6 +133,9 @@ cd web && python3 -m http.server 8799    # then open http://localhost:8799
 | OCR PDF / OCR PDF | tesseract.js (WebAssembly core and language data from jsDelivr, cached by the browser), pdf.js to draw pages, pdf-lib to add invisible text |
 | Ta bort tomma sidor, Ändra sidstorlek, Flera sidor per ark / Remove blank pages, Resize pages, Pages per sheet | pdf-lib (embedded pages drawn as displayed, so rotated pages stay right); blank pages are found by counting ink in a small pdf.js render |
 | Extrahera bilder, Reparera, Platta ut / Extract images, Repair, Flatten | PyMuPDF in Pyodide (`/api/images`, `/api/extract-images`, `/api/repair`, `/api/flatten`) |
+| Lägg till bild, Sidhuvud och sidfot, Markera och rita / Add image, Header and footer, Highlight and draw | pdf-lib (marks kept in displayed page points and mapped back per page, so rotated pages stay right) |
+| Text till PDF, Redigera PDF-egenskaper / Text to PDF, PDF properties | pdf-lib (standard fonts; the XMP block is dropped when properties are edited so every program shows the same values) |
+| Ta bort kommentarer / Remove comments | PyMuPDF in Pyodide (`/api/strip-annots`, annotation kinds come from `/api/pdf-info`) |
 | Fyll i formulär / Fill in form | pdf-lib forms API, fields laid over pdf.js pages |
 | Skanna till PDF / Scan to PDF | canvas image clean-up (shadow removal, black and white), pdf-lib |
 

@@ -602,6 +602,114 @@
       "permanent": false
     },
     {
+      "source": "/lagg-till-bild-i-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/add-image-to-pdf/",
+      "permanent": false
+    },
+    {
+      "source": "/sidhuvud-och-sidfot-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/add-header-and-footer-to-pdf/",
+      "permanent": false
+    },
+    {
+      "source": "/text-till-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/text-to-pdf/",
+      "permanent": false
+    },
+    {
+      "source": "/ta-bort-kommentarer-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/remove-comments-from-pdf/",
+      "permanent": false
+    },
+    {
+      "source": "/markera-och-rita-i-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/highlight-and-draw-on-pdf/",
+      "permanent": false
+    },
+    {
+      "source": "/redigera-pdf-egenskaper/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/edit-pdf-properties/",
+      "permanent": false
+    },
+    {
       "source": "/verktyg/",
       "has": [
         {

@@ -208,3 +208,30 @@ textarea.ff-input { padding: 3px; resize: none; line-height: 1.25; }
 /* ---- Wave 4: pages per sheet */
 .nup-sketch { display: grid; gap: 4px; width: min(100%, 240px); max-height: 320px; margin: 0 auto 8px; padding: 8px; background: #fff; border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
 .nup-sketch span { display: grid; place-items: center; background: var(--paper); border: 1px solid var(--line); border-radius: 3px; font-size: 12px; color: var(--ink-soft); }
+
+/* ---- Wave 5: header and footer, text to PDF, annotate */
+.hf-mark { position: absolute; white-space: nowrap; line-height: 1; font-family: Helvetica, Arial, sans-serif; pointer-events: none; }
+.hf-row { display: grid; grid-template-columns: 5.5rem repeat(3, minmax(0, 1fr)); gap: 6px; align-items: center; }
+.hf-cols { display: grid; grid-template-columns: 5.5rem repeat(3, minmax(0, 1fr)); gap: 6px; font-size: 12px; color: var(--ink-soft); }
+.hf-label { font-size: 13px; font-weight: 500; }
+.hf-row .range-input { width: 100%; min-width: 0; }
+@media (max-width: 640px) { .hf-row, .hf-cols { grid-template-columns: 1fr; } .hf-cols { display: none; } }
+.ttp-area { width: 100%; box-sizing: border-box; min-height: 260px; padding: 12px; font: 14px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 12px; resize: vertical; }
+.props .range-input.wide { width: min(440px, 100%); }
+.as-label { cursor: pointer; display: inline-flex; align-items: center; }
+.apages { display: flex; flex-direction: column; gap: 18px; align-items: center; margin: 12px 0; }
+.apage { position: relative; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.15), 0 8px 24px rgba(0,0,0,.08); max-width: 100%; }
+.a-svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.apages[data-tool="hl"] .a-svg, .apages[data-tool="pen"] .a-svg { touch-action: none; cursor: crosshair; }
+.apages[data-tool="text"] .a-svg { cursor: text; }
+.apages[data-tool="erase"] .a-svg { cursor: not-allowed; }
+.apages[data-tool="erase"] .a-hl, .apages[data-tool="erase"] .a-pen { cursor: pointer; }
+.a-hl { mix-blend-mode: multiply; }
+.a-layer { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.a-note, .a-edit { position: absolute; margin: 0; padding: 0; font-family: Helvetica, Arial, sans-serif; line-height: 1.25; white-space: pre; }
+.apages[data-tool="erase"] .a-note { pointer-events: auto; cursor: pointer; }
+.a-edit { pointer-events: auto; min-width: 8em; background: rgba(255, 251, 230, .9); border: 1px dashed var(--ink-soft); outline: none; resize: none; overflow: hidden; }
+.swatches { display: inline-flex; gap: 6px; align-items: center; }
+.swatch { width: 26px; height: 26px; padding: 0; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--line); cursor: pointer; }
+.swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ink); }
+.sticky-tools { position: sticky; top: 64px; z-index: 5; background: var(--bg, #faf9f6); padding: 8px 0; flex-wrap: wrap; }

@@ -67,6 +67,18 @@ NAMES = {
                       "en": ("Repair PDF", "Rescue a PDF that will not open.")},
     "flatten":       {"sv": ("Platta ut PDF", "Gör kommentarer och formulärfält till fast innehåll."),
                       "en": ("Flatten PDF", "Make comments and form fields part of the page.")},
+    "add-image":     {"sv": ("Lägg till bild", "Lägg en logotyp eller bild på sidorna."),
+                      "en": ("Add image", "Put a logo or picture on the pages.")},
+    "header-footer": {"sv": ("Sidhuvud och sidfot", "Text högst upp och längst ner på varje sida."),
+                      "en": ("Header and footer", "Text at the top and bottom of every page.")},
+    "text-to-pdf":   {"sv": ("Text till PDF", "Gör skriven eller inklistrad text till en PDF."),
+                      "en": ("Text to PDF", "Turn typed or pasted text into a PDF.")},
+    "remove-annots": {"sv": ("Ta bort kommentarer", "Rensa anteckningar, markeringar och ritningar."),
+                      "en": ("Remove comments", "Clear notes, highlights and drawings.")},
+    "annotate":      {"sv": ("Markera och rita", "Markera text, rita och skriv anteckningar."),
+                      "en": ("Highlight and draw", "Highlight text, draw and write notes.")},
+    "properties":    {"sv": ("PDF-egenskaper", "Ändra titel, författare och nyckelord."),
+                      "en": ("PDF properties", "Change title, author and keywords.")},
     "tools":         {"sv": ("Alla verktyg", ""), "en": ("All tools", "")},
 }
 
