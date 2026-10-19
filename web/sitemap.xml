@@ -1,18 +1,272 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://retype.example/</loc>
-    <xhtml:link rel="alternate" hreflang="sv" href="https://retype.example/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://retype.example/en/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://retype.example/"/>
+    <loc>https://retypee.se/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/"/>
+    <lastmod>2026-10-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://retype.example/en/</loc>
-    <xhtml:link rel="alternate" hreflang="sv" href="https://retype.example/"/>
-    <xhtml:link rel="alternate" hreflang="en" href="https://retype.example/en/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://retype.example/"/>
+    <loc>https://retypee.se/en/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/andra-text-i-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/andra-text-i-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/change-text-in-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/andra-text-i-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/en/change-text-in-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/andra-text-i-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/change-text-in-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/andra-text-i-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/ersatt-text-i-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/ersatt-text-i-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/replace-text-in-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/ersatt-text-i-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/en/replace-text-in-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/ersatt-text-i-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/replace-text-in-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/ersatt-text-i-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/redigera-pdf-utan-uppladdning/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/redigera-pdf-utan-uppladdning/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/edit-pdf-without-uploading/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/redigera-pdf-utan-uppladdning/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/en/edit-pdf-without-uploading/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/redigera-pdf-utan-uppladdning/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/edit-pdf-without-uploading/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/redigera-pdf-utan-uppladdning/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/redigera-faktura-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/redigera-faktura-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/edit-invoice-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/redigera-faktura-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/en/edit-invoice-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/redigera-faktura-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/edit-invoice-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/redigera-faktura-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/sla-ihop-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/sla-ihop-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/merge-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/sla-ihop-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/en/merge-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/sla-ihop-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/merge-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/sla-ihop-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/dela-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/dela-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/split-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/dela-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/en/split-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/dela-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/split-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/dela-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/radera-sidor-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/radera-sidor-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/delete-pdf-pages/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/radera-sidor-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/en/delete-pdf-pages/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/radera-sidor-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/delete-pdf-pages/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/radera-sidor-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/extrahera-sidor-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/extrahera-sidor-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/extract-pdf-pages/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/extrahera-sidor-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/en/extract-pdf-pages/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/extrahera-sidor-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/extract-pdf-pages/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/extrahera-sidor-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/rotera-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/rotera-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/rotate-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/rotera-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/en/rotate-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/rotera-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/rotate-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/rotera-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/jpg-till-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/jpg-till-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/jpg-to-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/jpg-till-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/en/jpg-to-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/jpg-till-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/jpg-to-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/jpg-till-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/pdf-till-jpg/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/pdf-till-jpg/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/pdf-to-jpg/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/pdf-till-jpg/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/en/pdf-to-jpg/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/pdf-till-jpg/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/pdf-to-jpg/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/pdf-till-jpg/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/ta-bort-metadata-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/ta-bort-metadata-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/remove-pdf-metadata/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/ta-bort-metadata-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/en/remove-pdf-metadata/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/ta-bort-metadata-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/remove-pdf-metadata/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/ta-bort-metadata-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/censurera-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/censurera-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/redact-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/censurera-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/en/redact-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/censurera-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/redact-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/censurera-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/verktyg/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/verktyg/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/tools/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/verktyg/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/en/tools/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/verktyg/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/tools/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/verktyg/"/>
+    <lastmod>2026-10-19</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

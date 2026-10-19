@@ -107,30 +107,78 @@ PDFs don't store paragraphs, only glyphs at fixed positions. So an edit:
 
 ## Web version (static site, no server)
 
-`web/` is the same editor running entirely in the browser: the Python engine
-(PyMuPDF) runs under [Pyodide](https://pyodide.org) in a Web Worker, so a PDF
-is never uploaded and Vercel only serves static files. The first visit
-downloads about 25 MB (cached afterwards).
+`web/` is Retypee running entirely in the browser, so files are never uploaded and
+Vercel only serves static files. It has the editor plus a set of single-purpose PDF
+tools, each with its own Swedish and English landing page.
 
 ```bash
-scripts/sync-web.sh                  # after editing pdfedit/: copy it into web/py/
-cd web && python3 -m http.server 8799   # then open http://localhost:8799
+scripts/sync-web.sh                      # after editing pdfedit/: copy it into web/py/
+python3 scripts/build_pages.py           # after editing page copy or layout: regenerate web/
+python3 scripts/build_pages.py --check   # exit 1 if the generated pages are out of date
+cd web && python3 -m http.server 8799    # then open http://localhost:8799
 ```
 
-- `web/py/bridge.py` mirrors the routes in `app.py`; `web/worker.js` loads
-  Pyodide and answers requests from `web/app.js`. If you add a route to
-  `app.py`, add it to `bridge.py` too.
-- Fonts installed on the visitor's computer can't be read by a web page, so
-  the *Add font* button lets them hand the editor a `.ttf`/`.otf` for the tab.
-- Languages: Swedish is the main language (`/`), English lives at `/en/`.
-  `vercel.json` sends browsers whose language is English from `/` to `/en/`
-  (add `?lang=sv` to stay on Swedish); crawlers always get Swedish. The two
-  pages are plain HTML (`web/index.html`, `web/en/index.html`), so a text change
-  has to be made in both. Messages in the app are in `STRINGS` in `web/app.js`
-  and `MESSAGES` in `web/py/bridge.py`.
-- Deploy: `vercel.json` serves `web/` as is. Before going live, replace
-  `https://retype.example` (both index.html files, sitemap.xml, robots.txt) with the real
-  domain.
+### Tools
+
+| Tool (sv / en) | Engine |
+|---|---|
+| Redigera PDF / Edit PDF (and four landing pages for specific searches) | PyMuPDF in Pyodide |
+| Slå ihop, Dela, Radera sidor, Extrahera sidor, Rotera / Merge, Split, Delete pages, Extract pages, Rotate | pdf-lib |
+| JPG till PDF / JPG to PDF | pdf-lib |
+| PDF till JPG / PDF to JPG | pdf.js, fflate (ZIP) |
+| Ta bort metadata / Remove metadata, Censurera PDF / Redact PDF | PyMuPDF in Pyodide |
+
+The big libraries load only when someone points at a tool or chooses a file, so a page
+is about 100 KB at first. PyMuPDF is about 25 MB and comes from the jsDelivr CDN
+(pinned in `web/worker.js`); pdf-lib, pdf.js and fflate are served from `web/vendor/`
+(MIT and Apache-2.0, see `web/vendor/LICENSES.txt`). Fonts (Inter) are in `web/fonts/`.
+
+### How the pages are made
+
+The pages are generated, and the generated HTML is committed, so Vercel needs no build step.
+
+- `scripts/site/registry.py`: every page, its Swedish and English URL, and its menu group.
+- `scripts/site/content_*.py`: all copy (title, description, headings, steps, FAQ) in both
+  languages. `{{link:page-id}}` in a string becomes a link to that page.
+- `scripts/site/layout.py` and `scripts/build_pages.py`: head, structured data, header
+  with the tools menu, footer, and the page bodies. The script also writes `web/sitemap.xml`
+  and the language redirects in `vercel.json`.
+- Each page's FAQ in the structured data is built from its visible FAQ, so they always match.
+
+**Adding a tool:** add it to `PAGES` in `registry.py` (and to `CATEGORIES`), give it a name in
+`names.py`, write its copy in `content_tools.py` (including the `ui` strings its script shows),
+write `web/tools/<id>.js` using the helpers in `web/tools/common.js`, then run
+`python3 scripts/build_pages.py`. If it needs PyMuPDF, add a route to `web/py/bridge.py`
+(and to `app.py` if the local app should have it too).
+
+### Languages
+
+Swedish is the main language (`/`), English lives at `/en/`. Every page has a twin in the
+other language, linked with `hreflang`. `vercel.json` sends browsers whose language is
+English from a Swedish page to its English twin (add `?lang=sv` to stay on Swedish);
+crawlers always get Swedish. Messages in the editor are in `STRINGS` in `web/app.js` and
+`MESSAGES` in `web/py/bridge.py`; messages in the tools come from each page's `ui` block.
+
+### Notes
+
+- `web/py/bridge.py` mirrors the routes in `app.py`; `web/worker.js` loads Pyodide and
+  answers requests from `web/app.js` and `web/tools/engine.js`.
+- Fonts installed on the visitor's computer can't be read by a web page, so the editor's
+  *Add font* button lets them hand it a `.ttf`/`.otf` for the tab.
+- Deploy: `vercel.json` serves `web/` as is (output directory `web`, no build step).
+  The live domain is `retypee.se`.
+- The privacy statements on the pages (no cookies, no tracking scripts) are true today.
+  If analytics is added, update them.
+
+### Going live checklist
+
+1. Google Search Console: add the **Domain property** (DNS TXT record), submit
+   `https://retypee.se/sitemap.xml`, request indexing for the home pages and the tools hub.
+2. Bing Webmaster Tools: import the site from Search Console.
+3. On GitHub, set the repo website to `https://retypee.se` and add topics.
+4. After deploying, check on the live site: a Swedish page with an English browser
+   language redirects to its `/en/` twin, a crawler without a language header gets Swedish,
+   and every page is served with the trailing slash its canonical URL uses.
 
 ## Limits worth knowing
 
@@ -151,8 +199,10 @@ app.py            web server + API (FastAPI)
 cli.py            command line automation
 pdfedit/core.py   editing engine (extract, redact, rewrite, undo)
 pdfedit/fonts.py  font matching (embedded, local, fallback)
-static/           the web interface
-fonts/            put extra font files here
+static/           the local app's web interface
+fonts/            put extra font files here (local app)
+web/              the static site (generated pages, tools, vendored libraries)
+scripts/          page generator (build_pages.py, site/) and sync-web.sh
 ```
 
 ## Licence

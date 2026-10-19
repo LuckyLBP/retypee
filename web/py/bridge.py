@@ -13,6 +13,8 @@ import uuid
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
+import pymupdf
+
 from pdfedit.core import EditorDocument, add_text, edit_unit, replace_text
 from pdfedit.fonts import FONT_EXTS, FONT_INDEX, USER_FONT_DIR, font_choices
 
@@ -40,6 +42,7 @@ MESSAGES = {
     "no_font": ("No font file received.", "Ingen typsnittsfil mottogs."),
     "bad_ext": ("Add a .ttf, .otf or .ttc font file.", "Lägg till en .ttf-, .otf- eller .ttc-fil."),
     "bad_font": ("That file does not look like a usable font.", "Filen verkar inte vara ett fungerande typsnitt."),
+    "redact_empty": ("Draw a box or search for text to redact first.", "Rita en ruta eller sök efter text som ska censureras först."),
     "route": ("Unknown route {method} {path}", "Okänd adress {method} {path}"),
 }
 
@@ -238,6 +241,46 @@ def add(doc_id, body):
             "font": {"label": font_label(result.font_label), "source": result.font_source}}
 
 
+def search_rects(doc_id, body):
+    """Where does this text appear? Rectangles are in displayed page coordinates, like the units."""
+    ed = get_doc(doc_id)
+    text = (body.get("text") or "").strip()
+    if not text:
+        raise ApiError(400, M("find_empty"))
+    out = []
+    for pno in range(ed.doc.page_count):
+        page = ed.doc[pno]
+        matrix = page.rotation_matrix
+        for hit in page.search_for(text):
+            r = hit * matrix
+            out.append({"page": pno, "rect": [round(r.x0, 2), round(r.y0, 2), round(r.x1, 2), round(r.y1, 2)]})
+    return {"rects": out}
+
+
+def redact(doc_id, body):
+    """Remove the text and image pixels under each rectangle (true redaction, not a cover-up)."""
+    ed = get_doc(doc_id)
+    check_version(ed, body.get("version"))
+    items = body.get("rects") or []
+    if not items:
+        raise ApiError(400, M("redact_empty"))
+
+    def work():
+        touched = set()
+        for item in items:
+            check_page(ed, item["page"])
+            page = ed.doc[item["page"]]
+            rect = pymupdf.Rect(*item["rect"]) * page.derotation_matrix
+            rect.normalize()
+            page.add_redact_annot(rect, fill=(0, 0, 0))
+            touched.add(item["page"])
+        for pno in touched:
+            ed.doc[pno].apply_redactions()
+
+    run_edit(ed, work)
+    return {**ed.meta(), "count": len(items)}
+
+
 def undo(doc_id):
     ed = get_doc(doc_id)
     if not ed.undo():
@@ -294,6 +337,8 @@ ROUTES = [
     ("POST", DOC + r"/replace", lambda m, q, b, u, n: replace(m["id"], b)),
     ("POST", DOC + r"/find", lambda m, q, b, u, n: find(m["id"], b)),
     ("POST", DOC + r"/add-text", lambda m, q, b, u, n: add(m["id"], b)),
+    ("POST", DOC + r"/search-rects", lambda m, q, b, u, n: search_rects(m["id"], b)),
+    ("POST", DOC + r"/redact", lambda m, q, b, u, n: redact(m["id"], b)),
     ("POST", DOC + r"/undo", lambda m, q, b, u, n: undo(m["id"])),
     ("POST", DOC + r"/redo", lambda m, q, b, u, n: redo(m["id"])),
     ("GET", DOC + r"/download", lambda m, q, b, u, n: download(m["id"], q)),

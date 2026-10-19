@@ -12,6 +12,8 @@ const LANG = document.documentElement.lang === "en" ? "en" : "sv";
 const STRINGS = {
   match_original: ["Match original", "Matcha originalet"],
   ready: ["Ready. Your PDF stays on this device.", "Redo. Din PDF stannar på den här enheten."],
+  p_download: ["Downloading the editor engine…", "Hämtar redigeringsmotorn…"],
+  p_tools: ["Loading PDF tools…", "Laddar PDF-verktyg…"],
   start_fail: ["The editor could not start: {text}. Reload the page to try again.", "Redigeraren kunde inte starta: {text}. Ladda om sidan och försök igen."],
   start_fail_short: ["The editor could not start: {text}", "Redigeraren kunde inte starta: {text}"],
   not_available: ["The editor is not available.", "Redigeraren är inte tillgänglig."],
@@ -86,6 +88,8 @@ const state = {
   editor: null,
   flash: null,
   busy: 0,
+  railOpen: true,
+  current: -1,
   addDefaults: { size: 12, color: "#000000", font: "sans", bold: false, italic: false },
 };
 
@@ -121,6 +125,13 @@ const els = {
   engineStatus: $("#engineStatus"),
   fontInput: $("#fontInput"),
   fontBtn: $("#fontBtn"),
+  rail: $("#rail"),
+  railList: $("#railList"),
+  railBtn: $("#railBtn"),
+  prevPage: $("#prevPage"),
+  nextPage: $("#nextPage"),
+  pageLabel: $("#pageLabel"),
+  zoomFit: $("#zoomFit"),
 };
 
 /* ---------------------------------------------------------------- helpers */
@@ -134,7 +145,7 @@ function startEngine() {
   const worker = new Worker("/worker.js");
   engine.worker = worker;
   worker.onmessage = ({ data }) => {
-    if (data.type === "progress") return setEngineStatus(data.text);
+    if (data.type === "progress") return setEngineStatus(t(data.key));
     if (data.type === "ready") {
       engine.ready = true;
       return setEngineStatus(t("ready"));
@@ -161,11 +172,13 @@ function startEngine() {
 
 function setEngineStatus(text, error = false) {
   els.engineStatus.textContent = text;
+  els.engineStatus.classList.remove("idle");
   els.engineStatus.classList.toggle("error", error);
   els.engineStatus.classList.toggle("ready", engine.ready && !error);
 }
 
 function callEngine(path, { method = "GET", json, file } = {}) {
+  ensureEngine();
   return new Promise((resolve, reject) => {
     const id = engine.nextId++;
     engine.pending.set(id, { resolve, reject });
@@ -277,9 +290,12 @@ async function loadFonts() {
 }
 
 function showEditor() {
+  document.body.classList.add("has-doc");
   els.empty.hidden = true;
   els.pages.hidden = false;
   els.tools.hidden = false;
+  state.railOpen = window.innerWidth >= 1100;
+  applyRail();
   els.openBtn.hidden = false;
   els.downloadBtn.hidden = false;
   els.fileName.textContent = state.meta.name;
@@ -289,6 +305,8 @@ function showEditor() {
   buildPages();
   updateMeta(state.meta);
   els.desk.scrollTo(0, 0);
+  state.current = -1;
+  updateCurrent();
 }
 
 function fitZoom() {
@@ -316,8 +334,13 @@ const observer = new IntersectionObserver(
 
 function buildPages() {
   observer.disconnect();
-  for (const old of state.pages) if (old.imageUrl) URL.revokeObjectURL(old.imageUrl);
+  railObserver.disconnect();
+  for (const old of state.pages) {
+    if (old.imageUrl) URL.revokeObjectURL(old.imageUrl);
+    if (old.rail?.url) URL.revokeObjectURL(old.rail.url);
+  }
   els.pages.innerHTML = "";
+  els.railList.innerHTML = "";
   state.pages = state.meta.pages.map((size, i) => {
     const el = document.createElement("div");
     el.className = "page";
@@ -333,9 +356,10 @@ function buildPages() {
     overlay.addEventListener("click", (e) => onPageClick(e, i));
     el.append(num, img, overlay);
     els.pages.appendChild(el);
-    const page = { el, img, overlay, size, units: null, rev: 0, imageKey: "", imageUrl: "", visible: false, loadingUnits: false };
+    const page = { el, img, overlay, size, units: null, rev: 0, imageKey: "", imageUrl: "", visible: false, loadingUnits: false, rail: null };
     layoutPage(page);
     observer.observe(el);
+    page.rail = buildRailItem(i, size);
     return page;
   });
 }
@@ -424,6 +448,93 @@ function renderUnits(i) {
   page.overlay.appendChild(frag);
 }
 
+/* ---------------------------------------------------------------- page rail and navigation */
+
+const railObserver = new IntersectionObserver(
+  (entries) => {
+    for (const entry of entries) if (entry.isIntersecting) loadThumb(Number(entry.target.dataset.index));
+  },
+  { root: els.rail, rootMargin: "400px 0px" }
+);
+
+function buildRailItem(i, size) {
+  const item = document.createElement("button");
+  item.type = "button";
+  item.className = "rail-item";
+  item.dataset.index = i;
+  item.setAttribute("aria-label", t("page_alt", { n: i + 1 }));
+  const thumb = document.createElement("span");
+  thumb.className = "rail-thumb";
+  thumb.style.aspectRatio = `${size.w} / ${size.h}`;
+  const img = document.createElement("img");
+  img.alt = "";
+  img.draggable = false;
+  thumb.appendChild(img);
+  const num = document.createElement("span");
+  num.className = "rail-num";
+  num.textContent = i + 1;
+  item.append(thumb, num);
+  item.addEventListener("click", () => goToPage(i));
+  els.railList.appendChild(item);
+  railObserver.observe(item);
+  return { item, img, key: "", url: "" };
+}
+
+function loadThumb(i) {
+  const page = state.pages[i];
+  if (!page?.rail || els.rail.hidden) return;
+  const key = `${page.rev}-${state.meta.version}`;
+  if (page.rail.key === key) return;
+  page.rail.key = key;
+  const zoom = Math.min(1, (160 * (window.devicePixelRatio || 1)) / page.size.w).toFixed(2);
+  apiBytes(`/api/docs/${state.id}/pages/${i}/image?zoom=${zoom}`)
+    .then(({ blob }) => {
+      if (page.rail.key !== key) return;
+      const url = URL.createObjectURL(blob);
+      page.rail.img.src = url;
+      if (page.rail.url) URL.revokeObjectURL(page.rail.url);
+      page.rail.url = url;
+    })
+    .catch(() => {
+      if (page.rail.key === key) page.rail.key = "";
+    });
+}
+
+function applyRail() {
+  els.rail.hidden = !state.railOpen;
+  els.railBtn.setAttribute("aria-pressed", String(state.railOpen));
+  if (state.railOpen) for (let i = 0; i < state.pages.length; i++) if (state.pages[i].rail) loadThumb(i);
+}
+
+// Which page is in view? The first one that still has a good part below the toolbar.
+function updateCurrent() {
+  if (!state.pages.length) return;
+  const line = els.desk.getBoundingClientRect().top + 96;
+  let current = state.pages.length - 1;
+  for (let i = 0; i < state.pages.length; i++) {
+    if (state.pages[i].el.getBoundingClientRect().bottom > line + 40) {
+      current = i;
+      break;
+    }
+  }
+  setCurrent(current);
+}
+
+function setCurrent(i) {
+  if (state.current === i) return;
+  state.current = i;
+  els.pageLabel.textContent = `${i + 1} / ${state.pages.length}`;
+  state.pages.forEach((p, j) => p.rail?.item.classList.toggle("active", j === i));
+  els.prevPage.disabled = i <= 0;
+  els.nextPage.disabled = i >= state.pages.length - 1;
+  if (!els.rail.hidden) state.pages[i].rail.item.scrollIntoView({ block: "nearest" });
+}
+
+function goToPage(i) {
+  const page = state.pages[Math.max(0, Math.min(state.pages.length - 1, i))];
+  if (page) page.el.scrollIntoView({ block: "start", behavior: "smooth" });
+}
+
 function refreshPages(indices) {
   for (const i of indices) {
     const page = state.pages[i];
@@ -431,6 +542,11 @@ function refreshPages(indices) {
     page.rev += 1;
     page.units = null;
     if (page.visible) ensurePage(i);
+    if (page.rail) {
+      page.rail.key = "";
+      railObserver.unobserve(page.rail.item);
+      railObserver.observe(page.rail.item); // fires again with the current visibility
+    }
   }
 }
 
@@ -697,6 +813,7 @@ function setZoom(z) {
     if (state.pages[i].visible) ensurePage(i);
   }
   desk.scrollTop = ratioY * desk.scrollHeight;
+  updateCurrent();
 }
 
 function stepZoom(dir) {
@@ -840,6 +957,27 @@ els.undoBtn.addEventListener("click", () => history("undo"));
 els.redoBtn.addEventListener("click", () => history("redo"));
 els.zoomIn.addEventListener("click", () => stepZoom(+1));
 els.zoomOut.addEventListener("click", () => stepZoom(-1));
+els.zoomFit.addEventListener("click", () => state.meta && setZoom(fitZoom()));
+els.railBtn.addEventListener("click", () => {
+  state.railOpen = !state.railOpen;
+  applyRail();
+  updateCurrent();
+});
+els.prevPage.addEventListener("click", () => goToPage(state.current - 1));
+els.nextPage.addEventListener("click", () => goToPage(state.current + 1));
+let scrollTick = false;
+els.desk.addEventListener(
+  "scroll",
+  () => {
+    if (scrollTick) return;
+    scrollTick = true;
+    requestAnimationFrame(() => {
+      scrollTick = false;
+      updateCurrent();
+    });
+  },
+  { passive: true }
+);
 els.findBtn.addEventListener("click", () => (els.drawer.hidden ? openDrawer() : closeDrawer()));
 els.drawerClose.addEventListener("click", closeDrawer);
 els.replaceForm.addEventListener("submit", replaceAll);
@@ -910,4 +1048,17 @@ window.addEventListener("resize", () => {
   }, 150);
 });
 
-startEngine();
+/* The engine is about 25 MB, so it starts when the visitor shows intent, not on
+   page load. That keeps the first view light for people and for crawlers. */
+let engineStarted = false;
+function ensureEngine() {
+  if (engineStarted) return;
+  engineStarted = true;
+  setEngineStatus(t("p_download"));
+  startEngine();
+}
+for (const type of ["pointerover", "pointerdown", "focusin", "touchstart"]) {
+  els.drop.addEventListener(type, ensureEngine, { once: true, passive: true });
+}
+els.fontBtn.addEventListener("pointerdown", ensureEngine, { once: true });
+window.addEventListener("dragenter", ensureEngine, { once: true });

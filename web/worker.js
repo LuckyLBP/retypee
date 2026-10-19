@@ -13,9 +13,9 @@ importScripts(`${PYODIDE_BASE}pyodide.js`);
 let dispatch = null;
 
 async function boot() {
-  post({ type: "progress", text: "Downloading the editor engine…" });
+  post({ type: "progress", key: "p_download" });
   const pyodide = await loadPyodide({ indexURL: PYODIDE_BASE });
-  post({ type: "progress", text: "Loading PDF tools…" });
+  post({ type: "progress", key: "p_tools" });
   await pyodide.loadPackage(["pymupdf", "fonttools"]);
 
   const home = pyodide.FS.cwd();

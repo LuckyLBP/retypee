@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://retype.example/sitemap.xml
+Sitemap: https://retypee.se/sitemap.xml

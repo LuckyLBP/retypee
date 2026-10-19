@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Redigera text i PDF online – gratis, privat, ingen uppladdning | Retypee</title>
-  <meta name="description" content="Redigera text i en PDF direkt i webbläsaren. Klicka på en rad, skriv, ladda ner. Sök och ersätt i hela filen. Gratis, och din PDF laddas aldrig upp.">
-  <link rel="canonical" href="https://retype.example/">
-  <link rel="alternate" hreflang="sv" href="https://retype.example/">
-  <link rel="alternate" hreflang="en" href="https://retype.example/en/">
-  <link rel="alternate" hreflang="x-default" href="https://retype.example/">
+  <title>Redigera PDF gratis – ändra text utan uppladdning | Retypee</title>
+  <meta name="description" content="Ändra text i en PDF direkt i webbläsaren: klicka på en rad, skriv och ladda ner. Sök och ersätt i hela filen. Gratis, och din PDF laddas aldrig upp.">
+  <link rel="canonical" href="https://retypee.se/">
+  <link rel="alternate" hreflang="sv" href="https://retypee.se/">
+  <link rel="alternate" hreflang="en" href="https://retypee.se/en/">
+  <link rel="alternate" hreflang="x-default" href="https://retypee.se/">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#f6f5f1">
 
@@ -16,100 +16,140 @@
   <meta property="og:site_name" content="Retypee">
   <meta property="og:locale" content="sv_SE">
   <meta property="og:locale:alternate" content="en_US">
-  <meta property="og:title" content="Redigera text i PDF online – gratis, privat, ingen uppladdning">
+  <meta property="og:title" content="Redigera PDF gratis – ändra text utan uppladdning">
   <meta property="og:description" content="Klicka på en rad i din PDF, skriv och ladda ner. Allt sker i webbläsaren, så din fil lämnar aldrig din enhet.">
-  <meta property="og:url" content="https://retype.example/">
-  <meta property="og:image" content="https://retype.example/og-image.png">
+  <meta property="og:url" content="https://retypee.se/">
+  <meta property="og:image" content="https://retypee.se/og-image.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:image" content="https://retype.example/og-image.png">
+  <meta name="twitter:image" content="https://retypee.se/og-image.png">
 
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/styles.css">
 
   <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "Retypee",
-    "url": "https://retype.example/",
-    "description": "Gratis PDF-redigerare online som körs helt i din webbläsare. Redigera, lägg till och ersätt text i en PDF utan att ladda upp den.",
-    "applicationCategory": "BusinessApplication",
-    "operatingSystem": "Valfri modern webbläsare",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "SEK" }
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": [
-      {
-        "@type": "Question",
-        "name": "Laddas min PDF upp någonstans?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Nej. Retypee körs i din webbläsarflik. Din PDF öppnas och redigeras i enhetens minne, och inget skickas till en server eller sparas. När du stänger fliken är den glömd." }
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://retypee.se/#org",
+      "name": "Retypee",
+      "url": "https://retypee.se/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://retypee.se/apple-touch-icon.png",
+        "width": 180,
+        "height": 180
       },
-      {
-        "@type": "Question",
-        "name": "Kan jag redigera en skannad PDF?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Inte direkt. En skannad PDF är en bild av text, så det finns ingen text att redigera. Kör den genom OCR först (till exempel med ocrmypdf) och öppna sedan resultatet i Retypee." }
-      },
-      {
-        "@type": "Question",
-        "name": "Varför ser min redigerade text lite annorlunda ut?",
-        "acceptedAnswer": { "@type": "Answer", "text": "PDF-filer bäddar oftast bara in de bokstäver som används. Om originaltypsnittet saknar en bokstav du skrivit letar Retypee efter samma typsnitt bland dem du lagt till, och använder annars Helvetica, Times eller Courier i närmaste stil. Använd Lägg till typsnitt för att ge den originalfilen för en exakt matchning." }
-      },
-      {
-        "@type": "Question",
-        "name": "Behåller den redigerade PDF-filen sina metadata?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Nej. Den nedladdade filen har sina metadata borttagna: titel, författare, skapande program, datum, XMP-data och fil-ID. Det synliga innehållet, bilder, länkar och formulärfält påverkas inte." }
-      },
-      {
-        "@type": "Question",
-        "name": "Flödar längre text om i stycket?",
-        "acceptedAnswer": { "@type": "Answer", "text": "Nej. PDF-filer lagrar text på fasta positioner, inte som stycken, så rader redigeras en i taget. Om ny text är längre fortsätter den längre åt höger; använd Pressa ihop så den ryms eller korta ner den." }
+      "sameAs": [
+        "https://github.com/LuckyLBP/retypee"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://retypee.se/#site",
+      "url": "https://retypee.se/",
+      "name": "Retypee",
+      "inLanguage": [
+        "sv",
+        "en"
+      ],
+      "publisher": {
+        "@id": "https://retypee.se/#org"
       }
-    ]
-  }
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://retypee.se/#app",
+      "name": "Retypee",
+      "url": "https://retypee.se/",
+      "description": "Ändra text i en PDF direkt i webbläsaren: klicka på en rad, skriv och ladda ner. Sök och ersätt i hela filen. Gratis, och din PDF laddas aldrig upp.",
+      "inLanguage": "sv",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Valfri modern webbläsare",
+      "isAccessibleForFree": true,
+      "publisher": {
+        "@id": "https://retypee.se/#org"
+      },
+      "isPartOf": {
+        "@id": "https://retypee.se/#site"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "SEK"
+      },
+      "featureList": [
+        "Redigera text i PDF",
+        "Lägg till text",
+        "Sök och ersätt",
+        "Ångra och gör om",
+        "Egna typsnitt",
+        "Tar bort metadata vid nedladdning"
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://retypee.se/#faq",
+      "inLanguage": "sv",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Laddas min PDF upp någonstans?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nej. Retypee körs i din webbläsarflik. Din PDF öppnas och redigeras i enhetens minne, och inget skickas till en server eller sparas. Det enda som hämtas är själva redigeringsmotorn (från ett CDN), aldrig din fil. När du stänger fliken är den glömd."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Kan jag redigera en skannad PDF?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Inte direkt. En skannad PDF är en bild av text, så det finns ingen text att redigera. Kör den genom OCR först (till exempel med ocrmypdf) och öppna sedan resultatet i Retypee."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Varför ser min redigerade text lite annorlunda ut?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "PDF-filer bäddar oftast bara in de bokstäver som används. Om originaltypsnittet saknar en bokstav du skrivit letar Retypee efter samma typsnitt bland dem du lagt till, och använder annars Helvetica, Times eller Courier i närmaste stil. Använd Lägg till typsnitt för att ge den originalfilen för en exakt matchning."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Behåller den redigerade PDF-filen sina metadata?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nej. Den nedladdade filen har sina metadata borttagna: titel, författare, skapande program, datum, XMP-data och fil-ID. Det synliga innehållet, bilder, länkar och formulärfält påverkas inte."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Flödar längre text om i stycket?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nej. PDF-filer lagrar text på fasta positioner, inte som stycken, så rader redigeras en i taget. Om ny text är längre fortsätter den längre åt höger; använd Pressa ihop så den ryms eller korta ner den."
+          }
+        }
+      ]
+    }
+  ]
+}
   </script>
 </head>
 <body>
   <header class="bar">
     <div class="brand">
-      <img class="wordmark" src="/wordmark.svg" alt="Retypee" width="103" height="26">
+      <a class="brand-link" href="/"><img class="wordmark" src="/wordmark.svg" alt="Retypee" width="103" height="26"></a>
+      <details class="menu" id="menu"><summary>Verktyg</summary><div class="menu-panel"><div class="menu-col"><p class="menu-h">Redigera PDF</p><a href="/">Redigera PDF</a><a href="/andra-text-i-pdf/">Ändra text i PDF</a><a href="/ersatt-text-i-pdf/">Ersätt text i PDF</a><a href="/redigera-pdf-utan-uppladdning/">Redigera utan uppladdning</a><a href="/redigera-faktura-pdf/">Redigera faktura-PDF</a></div><div class="menu-col"><p class="menu-h">Organisera PDF</p><a href="/sla-ihop-pdf/">Slå ihop PDF</a><a href="/dela-pdf/">Dela PDF</a><a href="/radera-sidor-pdf/">Radera sidor</a><a href="/extrahera-sidor-pdf/">Extrahera sidor</a><a href="/rotera-pdf/">Rotera PDF</a></div><div class="menu-col"><p class="menu-h">Omvandla PDF</p><a href="/jpg-till-pdf/">JPG till PDF</a><a href="/pdf-till-jpg/">PDF till JPG</a></div><div class="menu-col"><p class="menu-h">PDF-säkerhet</p><a href="/ta-bort-metadata-pdf/">Ta bort metadata</a><a href="/censurera-pdf/">Censurera PDF</a></div><a class="menu-all" href="/verktyg/">Alla verktyg →</a></div></details>
       <span class="file-name" id="fileName"></span>
     </div>
-
-    <div class="tools" id="tools" hidden>
-      <div class="segmented" role="radiogroup" aria-label="Verktyg">
-        <button class="seg" role="radio" aria-checked="true" data-mode="edit" title="Klicka på text för att ändra den (E)">Redigera text</button>
-        <button class="seg" role="radio" aria-checked="false" data-mode="add" title="Klicka var som helst för att lägga till text (T)">Lägg till text</button>
-      </div>
-      <button class="tool" id="findBtn" title="Sök och ersätt (Ctrl+F)">Sök och ersätt</button>
-      <span class="sep" aria-hidden="true"></span>
-      <button class="icon" id="undoBtn" title="Ångra (Ctrl+Z)" aria-label="Ångra" disabled>
-        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4 4 7.5 7.5 11M4.5 7.5h7a4.5 4.5 0 0 1 0 9H9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-      <button class="icon" id="redoBtn" title="Gör om (Ctrl+Skift+Z)" aria-label="Gör om" disabled>
-        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 16 7.5 12.5 11M15.5 7.5h-7a4.5 4.5 0 0 0 0 9H11" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-      <span class="sep" aria-hidden="true"></span>
-      <div class="zoom">
-        <button class="icon" id="zoomOut" aria-label="Zooma ut">
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-        </button>
-        <span id="zoomLabel" class="zoom-label">100%</span>
-        <button class="icon" id="zoomIn" aria-label="Zooma in">
-          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10h10M10 5v10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-        </button>
-      </div>
-    </div>
-
     <div class="actions">
       <a class="lang" href="/en/" hreflang="en" lang="en" title="English">English</a>
       <label class="tool" id="fontBtn" title="Ge redigeraren en typsnittsfil så att ändringarna matchar originalet">Lägg till typsnitt
@@ -122,11 +162,43 @@
     </div>
   </header>
 
-  <main class="desk" id="desk">
+  <div class="workspace" id="workspace">
+    <aside class="rail" id="rail" aria-label="Sidor" hidden>
+      <div class="rail-list" id="railList"></div>
+    </aside>
+    <main class="desk" id="desk">
+      <div class="toolbar-wrap">
+        <div class="tools" id="tools" role="toolbar" aria-label="Verktyg" hidden>
+          <button class="icon" id="railBtn" aria-pressed="true" title="Visa eller dölj sidorna" aria-label="Visa eller dölj sidorna"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h9A1.5 1.5 0 0 1 16 5.5v9a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 4 14.5zM8.5 4v12"/></svg></button>
+          <span class="sep" aria-hidden="true"></span>
+          <div class="segmented" role="radiogroup" aria-label="Verktyg">
+            <button class="seg" role="radio" aria-checked="true" data-mode="edit" title="Klicka på text för att ändra den (E)"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h6M10 4v12M7 16h6"/></svg><span class="label">Redigera text</span></button>
+            <button class="seg" role="radio" aria-checked="false" data-mode="add" title="Klicka var som helst för att lägga till text (T)"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 5h9M8 5v9M13.5 14h4M15.5 12v4"/></svg><span class="label">Lägg till text</span></button>
+          </div>
+          <button class="tool" id="findBtn" title="Sök och ersätt (Ctrl+F)"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="9" r="4.8"/><path d="m12.6 12.6 4 4"/></svg><span class="label">Sök och ersätt</span></button>
+          <span class="sep" aria-hidden="true"></span>
+          <button class="icon" id="undoBtn" title="Ångra (Ctrl+Z)" aria-label="Ångra" disabled><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7.5 4 4 7.5 7.5 11M4.5 7.5h7a4.5 4.5 0 0 1 0 9H9"/></svg></button>
+          <button class="icon" id="redoBtn" title="Gör om (Ctrl+Skift+Z)" aria-label="Gör om" disabled><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12.5 4 16 7.5 12.5 11M15.5 7.5h-7a4.5 4.5 0 0 0 0 9H11"/></svg></button>
+          <span class="sep sep-zoom" aria-hidden="true"></span>
+          <div class="zoom">
+            <button class="icon" id="zoomOut" aria-label="Zooma ut"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10h10"/></svg></button>
+            <span id="zoomLabel" class="zoom-label">100%</span>
+            <button class="icon" id="zoomIn" aria-label="Zooma in"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10h10M10 5v10"/></svg></button>
+            <button class="icon" id="zoomFit" title="Anpassa till bredd" aria-label="Anpassa till bredd"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 10h13M6.5 7 3.5 10l3 3M13.5 7l3 3-3 3"/></svg></button>
+          </div>
+          <span class="sep sep-pager" aria-hidden="true"></span>
+          <div class="pager">
+            <button class="icon" id="prevPage" title="Föregående sida" aria-label="Föregående sida"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 5-5 5 5 5"/></svg></button>
+            <span id="pageLabel" class="page-label" aria-live="polite"></span>
+            <button class="icon" id="nextPage" title="Nästa sida" aria-label="Nästa sida"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m8 5 5 5-5 5"/></svg></button>
+          </div>
+        </div>
+      </div>
+
     <section class="empty" id="empty">
       <div class="hero">
-        <h1>Redigera valfri PDF, direkt i <span class="mark">webbläsaren</span>.</h1>
-        <p class="lede">PDF-redigeraren som aldrig laddar upp din fil. Klicka på en rad, skriv, ladda ner.</p>
+        <h1>Redigera text i valfri PDF, direkt i <span class="mark">webbläsaren</span>.</h1>
+        <p class="lede">Gratis PDF-redigerare som aldrig laddar upp din fil. Klicka på en rad, skriv, ladda ner.</p>
 
         <label class="drop" id="drop">
           <strong>Släpp en PDF här</strong>
@@ -134,7 +206,7 @@
           <span class="primary as-button">Välj en PDF</span>
           <input type="file" accept="application/pdf,.pdf" id="fileInput" hidden>
         </label>
-        <p class="engine-status" id="engineStatus" role="status" aria-live="polite">Laddar redigeraren (cirka 25 MB första gången, sedan sparas den i webbläsaren)…</p>
+        <p class="engine-status idle" id="engineStatus" role="status" aria-live="polite">Redigeraren (cirka 25 MB) laddas första gången du använder den och sparas sedan i webbläsaren.</p>
       </div>
 
       <div class="info">
@@ -154,7 +226,7 @@
 
         <section>
           <h2>Privat från grunden</h2>
-          <p>Retypee är en webbsida, men redigeringen sker inte på en server. PDF-motorn (<a href="https://pymupdf.readthedocs.io">PyMuPDF</a>) laddas ner till din webbläsare, och din fil öppnas och redigeras i enhetens minne. Ingenting laddas upp eller sparas, och när du stänger fliken är filen borta. Du kan kontrollera det i webbläsarens nätverksflik.</p>
+          <p>Retypee är en webbsida, men redigeringen sker inte på en server. PDF-motorn (<a href="https://pymupdf.readthedocs.io">PyMuPDF</a>) laddas ner till din webbläsare från ett CDN (jsDelivr) – bara motorn, aldrig din fil – och din fil öppnas och redigeras i enhetens minne. Ingenting laddas upp eller sparas, och när du stänger fliken är filen borta. Du kan kontrollera det i webbläsarens nätverksflik.</p>
           <p>Den nedladdade PDF-filen har dessutom sina metadata borttagna: titel, författare, skapande program, datum och fil-ID.</p>
         </section>
 
@@ -168,11 +240,22 @@
           </ul>
         </section>
 
+        <section class="related">
+          <h2>Fler PDF-verktyg</h2>
+          <p>Fortsätt med ett av de andra verktygen.</p>
+          <div class="cards">
+            <a class="card" href="/sla-ihop-pdf/"><strong>Slå ihop PDF</strong><span>Sätt ihop flera PDF-filer till en.</span></a>
+            <a class="card" href="/dela-pdf/"><strong>Dela PDF</strong><span>Dela upp en PDF i flera filer.</span></a>
+            <a class="card" href="/ta-bort-metadata-pdf/"><strong>Ta bort metadata</strong><span>Rensa författare, program och datum ur en PDF.</span></a>
+            <a class="card" href="/jpg-till-pdf/"><strong>JPG till PDF</strong><span>Gör en PDF av dina bilder.</span></a>
+          </div>
+        </section>
+
         <section class="faq">
           <h2>Vanliga frågor</h2>
           <details>
             <summary>Laddas min PDF upp någonstans?</summary>
-            <p>Nej. Retypee körs i din webbläsarflik. Din PDF öppnas och redigeras i enhetens minne, och inget skickas till en server eller sparas. När du stänger fliken är den glömd.</p>
+            <p>Nej. Retypee körs i din webbläsarflik. Din PDF öppnas och redigeras i enhetens minne, och inget skickas till en server eller sparas. Det enda som hämtas är själva redigeringsmotorn (från ett CDN), aldrig din fil. När du stänger fliken är den glömd.</p>
           </details>
           <details>
             <summary>Kan jag redigera en skannad PDF?</summary>
@@ -193,22 +276,30 @@
         </section>
 
         <footer class="site-foot">
-          <img class="wordmark" src="/wordmark.svg" alt="Retypee" width="83" height="21">
-          <span>Gratis och öppen källkod (AGPL-3.0)</span>
-          <a href="https://github.com/LuckyLBP/retypee">Källkod</a>
+          <div class="foot-top">
+            <div class="foot-brand">
+              <a href="/"><img class="wordmark" src="/wordmark.svg" alt="Retypee" width="83" height="21"></a>
+              <p>PDF-verktyg som körs i din webbläsare. Dina filer laddas aldrig upp.</p>
+            </div>
+            <nav class="foot-cols" aria-label="Verktyg"><div class="foot-col"><p class="foot-h">Redigera PDF</p><ul><li><a href="/">Redigera PDF</a></li><li><a href="/andra-text-i-pdf/">Ändra text i PDF</a></li><li><a href="/ersatt-text-i-pdf/">Ersätt text i PDF</a></li><li><a href="/redigera-pdf-utan-uppladdning/">Redigera utan uppladdning</a></li><li><a href="/redigera-faktura-pdf/">Redigera faktura-PDF</a></li></ul></div><div class="foot-col"><p class="foot-h">Organisera PDF</p><ul><li><a href="/sla-ihop-pdf/">Slå ihop PDF</a></li><li><a href="/dela-pdf/">Dela PDF</a></li><li><a href="/radera-sidor-pdf/">Radera sidor</a></li><li><a href="/extrahera-sidor-pdf/">Extrahera sidor</a></li><li><a href="/rotera-pdf/">Rotera PDF</a></li></ul></div><div class="foot-col"><p class="foot-h">Omvandla PDF</p><ul><li><a href="/jpg-till-pdf/">JPG till PDF</a></li><li><a href="/pdf-till-jpg/">PDF till JPG</a></li></ul></div><div class="foot-col"><p class="foot-h">PDF-säkerhet</p><ul><li><a href="/ta-bort-metadata-pdf/">Ta bort metadata</a></li><li><a href="/censurera-pdf/">Censurera PDF</a></li></ul></div></nav>
+          </div>
+          <div class="foot-line">
+            <span>Gratis och öppen källkod (AGPL-3.0)</span>
+            <a href="https://github.com/LuckyLBP/retypee">Källkod</a>
+            <a class="lang" href="/en/" hreflang="en" lang="en" title="English">English</a>
+          </div>
         </footer>
       </div>
     </section>
 
     <div class="pages" id="pages" hidden></div>
-  </main>
+    </main>
+  </div>
 
   <aside class="drawer" id="drawer" aria-labelledby="drawerTitle" hidden>
     <div class="drawer-head">
       <h2 id="drawerTitle">Sök och ersätt</h2>
-      <button class="icon" id="drawerClose" aria-label="Stäng">
-        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 5.5 9 9m0-9-9 9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
-      </button>
+      <button class="icon" id="drawerClose" aria-label="Stäng"><svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m5.5 5.5 9 9m0-9-9 9"/></svg></button>
     </div>
     <form id="replaceForm" class="drawer-body" autocomplete="off">
       <label class="field">
@@ -233,6 +324,7 @@
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <div class="busy" id="busy" hidden><span></span></div>
 
+  <script src="/site.js" defer></script>
   <script src="/app.js"></script>
 </body>
 </html>
