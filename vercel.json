@@ -260,6 +260,186 @@
       "permanent": false
     },
     {
+      "source": "/lagg-till-sidnummer-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/add-page-numbers-to-pdf/",
+      "permanent": false
+    },
+    {
+      "source": "/vattenstampel-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/watermark-pdf/",
+      "permanent": false
+    },
+    {
+      "source": "/beskar-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/crop-pdf/",
+      "permanent": false
+    },
+    {
+      "source": "/signera-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/sign-pdf/",
+      "permanent": false
+    },
+    {
+      "source": "/organisera-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/organize-pdf/",
+      "permanent": false
+    },
+    {
+      "source": "/komprimera-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/compress-pdf/",
+      "permanent": false
+    },
+    {
+      "source": "/pdf-till-text/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/pdf-to-text/",
+      "permanent": false
+    },
+    {
+      "source": "/skydda-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/protect-pdf/",
+      "permanent": false
+    },
+    {
+      "source": "/las-upp-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/unlock-pdf/",
+      "permanent": false
+    },
+    {
+      "source": "/jamfor-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/compare-pdf/",
+      "permanent": false
+    },
+    {
       "source": "/verktyg/",
       "has": [
         {

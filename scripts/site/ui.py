@@ -65,6 +65,7 @@ TOOL_UI = {
         size_kb="{n} kB", size_mb="{n} MB", continue_with="Fortsätt med:",
         rotate_left="Rotera åt vänster", rotate_right="Rotera åt höger",
         p_download="Hämtar PDF-motorn…", p_tools="Laddar PDF-verktyg…",
+        prev_page="Föregående sida", next_page="Nästa sida", move_left="Flytta åt vänster", move_right="Flytta åt höger",
     ),
     "en": dict(
         drop_pdf="Drop a PDF here", drop_pdfs="Drop PDF files here", drop_images="Drop images here",
@@ -80,6 +81,7 @@ TOOL_UI = {
         size_kb="{n} kB", size_mb="{n} MB", continue_with="Continue with:",
         rotate_left="Rotate left", rotate_right="Rotate right",
         p_download="Downloading the PDF engine…", p_tools="Loading PDF tools…",
+        prev_page="Previous page", next_page="Next page", move_left="Move left", move_right="Move right",
     ),
 }
 

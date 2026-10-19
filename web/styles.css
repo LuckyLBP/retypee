@@ -190,7 +190,7 @@ body.mode-add .unit { pointer-events: none; }
 .foot-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 28px 48px; }
 .foot-brand p { margin: 10px 0 0; max-width: 30ch; font-size: 14px; line-height: 1.5; }
 .site-foot .wordmark { height: 20px; }
-.foot-cols { display: grid; grid-template-columns: repeat(4, minmax(120px, auto)); gap: 24px 36px; }
+.foot-cols { display: grid; grid-template-columns: repeat(5, minmax(110px, auto)); gap: 24px 32px; }
 .foot-h { margin: 0 0 8px; font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--ink); }
 .foot-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .foot-col a { color: var(--ink-soft); text-decoration: none; }

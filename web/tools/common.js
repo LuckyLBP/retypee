@@ -274,6 +274,58 @@
     return canvas;
   }
 
+  /* ---------------------------------------------------------------- placing things on a page */
+
+  // pdf-lib draws in the page's own (unrotated) space. This turns a point on the page as it is
+  // DISPLAYED (origin bottom-left) into that space, so text and images land right on rotated pages.
+  function pageSpace(page) {
+    const box = page.getCropBox();
+    const rot = ((page.getRotation().angle % 360) + 360) % 360;
+    const W = box.width, H = box.height;
+    const sideways = rot % 180 !== 0;
+    const map = (vx, vy) => {
+      const [x, y] = rot === 0 ? [vx, vy] : rot === 90 ? [W - vy, vx] : rot === 180 ? [W - vx, H - vy] : [vy, H - vx];
+      return { x: box.x + x, y: box.y + y };
+    };
+    return { vw: sideways ? H : W, vh: sideways ? W : H, rot, map, box };
+  }
+
+  const hexColor = (hex) => {
+    const n = parseInt(hex.replace("#", ""), 16);
+    return PDFLib.rgb(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255);
+  };
+
+  // A page drawn at a given CSS width, ready for things to be laid on top of it.
+  async function previewStage(pdf, number, width) {
+    width = Math.min(width, Math.max(240, (root.clientWidth || 400) - 40)); // never wider than the workbench
+    const page = await pdf.getPage(number);
+    const pts = page.getViewport({ scale: 1 });
+    const canvas = await renderPage(pdf, number, width * Math.min(2, window.devicePixelRatio || 1));
+    const height = Math.round((width * pts.height) / pts.width);
+    canvas.style.cssText = `display:block;width:${width}px;height:${height}px`;
+    const stage = el("div", { class: "stage", style: `width:${width}px;height:${height}px` }, canvas);
+    return { el: stage, width, height, scale: width / pts.width, vw: pts.width, vh: pts.height };
+  }
+
+  function field(label, input, extra) {
+    return el("label", { class: "field inline" }, el("span", { text: label }), input, extra || null);
+  }
+
+  function selectField(label, choices, value, onChange) {
+    const input = el("select", { onchange: () => onChange(input.value) }, choices.map(([v, text]) => el("option", { value: v, selected: v === value, text })));
+    return field(label, input);
+  }
+
+  function rangeField(label, { min, max, step = 1, value }, onInput, format = (v) => v) {
+    const out = el("output", { class: "range-out", text: format(value) });
+    const input = el("input", { type: "range", min, max, step, value, class: "slider" });
+    input.addEventListener("input", () => {
+      out.textContent = format(+input.value);
+      onInput(+input.value);
+    });
+    return field(label, input, out);
+  }
+
   /* ---------------------------------------------------------------- page ranges: "1-3, 5, 8-" */
 
   function parseRanges(text, count) {
@@ -475,12 +527,36 @@
     return { el: list, repaint: paint, items };
   }
 
+  /* ---------------------------------------------------------------- open one PDF, then hand over */
+
+  // Reads the file, loads it for editing (pdf-lib) and for drawing (pdf.js), and calls onReady.
+  function pdfFlow(onReady) {
+    async function open(selected) {
+      const file = selected[0];
+      if (!isPdf(file)) return mount(message(t("err_not_pdf", { name: file.name })), dropzone({ onFiles: open }));
+      mount(busy());
+      try {
+        const bytes = await readBytes(file);
+        const doc = await loadDoc(bytes);
+        const pdf = await openForRender(bytes);
+        await onReady({ file, bytes, doc, pdf, count: doc.getPageCount() });
+      } catch (e) {
+        mount(message(e.message), dropzone({ onFiles: open }));
+      }
+    }
+    dropHandler = open;
+    mount(dropzone({ onFiles: open }));
+  }
+
+  const actionsRow = (...kids) => el("div", { class: "actions-row" }, ...kids);
+  const restartButton = () => el("button", { class: "tool", type: "button", onclick: () => reset(), text: t("start_over") });
+
   /* ---------------------------------------------------------------- public API */
 
   window.RT = {
     t, el, S, root, mount, reset, message, busy, fail, friendly, formatSize, isPdf, baseName, pagesLabel,
     dropzone, showResult, fileCard, fileThumb, saveBlob, readBytes, loadDoc, newDoc, pdfjs, openForRender, renderPage,
-    parseRanges, expand, compact, pageGrid, rangeInput, reorderList, libs,
+    parseRanges, expand, compact, pageGrid, rangeInput, reorderList, libs, pageSpace, hexColor, previewStage, field, selectField, rangeField, pdfFlow, actionsRow, restartButton,
     setDropHandler: (fn) => (dropHandler = fn),
     run(fn) {
       startFn = fn;

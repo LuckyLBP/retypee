@@ -23,16 +23,30 @@ PAGES = {
     "pdf-to-jpg":    ("tool",   "pdf-till-jpg",                  "pdf-to-jpg",                 ["pdfjs", "fflate"]),
     "metadata":      ("tool",   "ta-bort-metadata-pdf",          "remove-pdf-metadata",        ["pdf-lib", "pdfjs", "engine"]),
     "redact":        ("tool",   "censurera-pdf",                 "redact-pdf",                 ["pdfjs", "engine"]),
+    "page-numbers":  ("tool",   "lagg-till-sidnummer-pdf",       "add-page-numbers-to-pdf",    ["pdf-lib", "pdfjs"]),
+    "watermark":     ("tool",   "vattenstampel-pdf",             "watermark-pdf",              ["pdf-lib", "pdfjs"]),
+    "crop":          ("tool",   "beskar-pdf",                    "crop-pdf",                   ["pdf-lib", "pdfjs"]),
+    "sign":          ("tool",   "signera-pdf",                   "sign-pdf",                   ["pdf-lib", "pdfjs"]),
+    "organize":      ("tool",   "organisera-pdf",                "organize-pdf",               ["pdf-lib", "pdfjs"]),
+    "compress":      ("tool",   "komprimera-pdf",                "compress-pdf",               ["pdfjs", "engine"]),
+    "pdf-to-text":   ("tool",   "pdf-till-text",                 "pdf-to-text",                ["pdfjs"]),
+    "protect":       ("tool",   "skydda-pdf",                    "protect-pdf",                ["pdfjs", "engine"]),
+    "unlock":        ("tool",   "las-upp-pdf",                   "unlock-pdf",                 ["pdfjs", "engine"]),
+    "compare":       ("tool",   "jamfor-pdf",                    "compare-pdf",                ["pdfjs"]),
     "tools":         ("hub",    "verktyg",                       "tools",                      []),
 }
 
 # Menu and hub grouping (mirrors the usual PDF-tool menu).
 CATEGORIES = [
-    ("edit",     {"sv": "Redigera PDF",  "en": "Edit PDF"},     ["home", "change-text", "replace-text", "no-upload", "invoice"]),
-    ("organize", {"sv": "Organisera PDF", "en": "Organize PDF"}, ["merge", "split", "delete-pages", "extract-pages", "rotate"]),
-    ("convert",  {"sv": "Omvandla PDF",  "en": "Convert PDF"},  ["jpg-to-pdf", "pdf-to-jpg"]),
-    ("security", {"sv": "PDF-säkerhet",  "en": "PDF security"}, ["metadata", "redact"]),
+    ("edit",     {"sv": "Redigera PDF",  "en": "Edit PDF"},     ["home", "page-numbers", "watermark", "crop", "sign"]),
+    ("common",   {"sv": "Vanliga redigeringar", "en": "Common edits"}, ["change-text", "replace-text", "no-upload", "invoice"]),
+    ("organize", {"sv": "Organisera PDF", "en": "Organize PDF"}, ["merge", "split", "delete-pages", "extract-pages", "rotate", "organize"]),
+    ("convert",  {"sv": "Optimera och omvandla", "en": "Optimize and convert"}, ["compress", "jpg-to-pdf", "pdf-to-jpg", "pdf-to-text"]),
+    ("security", {"sv": "PDF-säkerhet",  "en": "PDF security"}, ["metadata", "redact", "protect", "unlock", "compare"]),
 ]
+
+# Groups that are listed on the hub and in the footer but kept out of the header menu.
+MENU_HIDDEN = {"common"}
 
 OUTPUT_ORDER = list(PAGES)
 

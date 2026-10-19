@@ -123,10 +123,13 @@ cd web && python3 -m http.server 8799    # then open http://localhost:8799
 | Tool (sv / en) | Engine |
 |---|---|
 | Redigera PDF / Edit PDF (and four landing pages for specific searches) | PyMuPDF in Pyodide |
-| Slå ihop, Dela, Radera sidor, Extrahera sidor, Rotera / Merge, Split, Delete pages, Extract pages, Rotate | pdf-lib |
+| Slå ihop, Dela, Radera sidor, Extrahera sidor, Rotera, Organisera / Merge, Split, Delete pages, Extract pages, Rotate, Organize | pdf-lib (page grids drawn with pdf.js) |
+| Sidnummer, Vattenstämpel, Beskär, Signera / Page numbers, Watermark, Crop, Sign | pdf-lib (previews drawn with pdf.js) |
 | JPG till PDF / JPG to PDF | pdf-lib |
 | PDF till JPG / PDF to JPG | pdf.js, fflate (ZIP) |
-| Ta bort metadata / Remove metadata, Censurera PDF / Redact PDF | PyMuPDF in Pyodide |
+| PDF till text, Jämför PDF / PDF to text, Compare PDF | pdf.js (text extraction) |
+| Komprimera, Skydda, Lås upp / Compress, Protect, Unlock | PyMuPDF in Pyodide (`/api/compress`, `/api/protect`, `/api/unlock`) |
+| Ta bort metadata, Censurera / Remove metadata, Redact | PyMuPDF in Pyodide |
 
 The big libraries load only when someone points at a tool or chooses a file, so a page
 is about 100 KB at first. PyMuPDF is about 25 MB and comes from the jsDelivr CDN

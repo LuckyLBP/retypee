@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import re
+import secrets
 import uuid
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
@@ -42,6 +43,9 @@ MESSAGES = {
     "no_font": ("No font file received.", "Ingen typsnittsfil mottogs."),
     "bad_ext": ("Add a .ttf, .otf or .ttc font file.", "Lägg till en .ttf-, .otf- eller .ttc-fil."),
     "bad_font": ("That file does not look like a usable font.", "Filen verkar inte vara ett fungerande typsnitt."),
+    "needs_password": ("This PDF needs a password.", "Den här PDF-filen kräver ett lösenord."),
+    "wrong_password": ("That password is not correct.", "Lösenordet stämmer inte."),
+    "pw_empty": ("Type a password first.", "Skriv ett lösenord först."),
     "redact_empty": ("Draw a box or search for text to redact first.", "Rita en ruta eller sök efter text som ska censureras först."),
     "route": ("Unknown route {method} {path}", "Okänd adress {method} {path}"),
 }
@@ -281,6 +285,85 @@ def redact(doc_id, body):
     return {**ed.meta(), "count": len(items)}
 
 
+# ---- one-shot tools: a PDF goes in with the request, a new PDF comes out ---------------
+
+COMPRESS_LEVELS = {"low": (150, 72), "medium": (110, 65), "high": (72, 50)}   # (target dpi, JPEG quality)
+
+
+def open_pdf(data, password=None):
+    """Open a PDF from bytes. A password-protected file needs the right password."""
+    try:
+        doc = pymupdf.open(stream=data, filetype="pdf")
+    except Exception as exc:
+        raise ApiError(400, M("open_fail")) from exc
+    if doc.needs_pass:
+        if password is None:
+            raise ApiError(403, M("needs_password"))
+        if not doc.authenticate(password):
+            raise ApiError(403, M("wrong_password"))
+    return doc
+
+
+def pdf_info(q, body, upload, upload_name):
+    if upload is None:
+        raise ApiError(400, M("no_file"))
+    try:
+        doc = pymupdf.open(stream=upload, filetype="pdf")
+    except Exception as exc:
+        raise ApiError(400, M("open_fail")) from exc
+    wanted = pymupdf.PDF_PERM_PRINT | pymupdf.PDF_PERM_COPY | pymupdf.PDF_PERM_MODIFY
+    limited = (not doc.needs_pass) and doc.permissions != -1 and (doc.permissions & wanted) != wanted
+    return {"needsPass": bool(doc.needs_pass), "encrypted": bool(doc.is_encrypted), "limited": bool(limited),
+            "pages": 0 if doc.needs_pass else doc.page_count}
+
+
+def compress(q, body, upload, upload_name):
+    """Smaller file: lower the resolution of large images, subset fonts and tidy the structure."""
+    if upload is None:
+        raise ApiError(400, M("no_file"))
+    dpi, quality = COMPRESS_LEVELS.get(body.get("level"), COMPRESS_LEVELS["medium"])
+    doc = open_pdf(upload)
+    try:
+        doc.rewrite_images(dpi_threshold=dpi + 20, dpi_target=dpi, quality=quality)
+    except Exception:
+        pass  # an engine without this feature, or an odd image: the structural savings still apply
+    try:
+        doc.subset_fonts()
+    except Exception:
+        pass
+    data = doc.tobytes(garbage=4, deflate=True, deflate_images=True, deflate_fonts=True, clean=True, use_objstms=1)
+    return ("application/pdf", data, None)
+
+
+def protect(q, body, upload, upload_name):
+    """AES-256 password to open. The owner password is random, so nobody can lift the limits."""
+    if upload is None:
+        raise ApiError(400, M("no_file"))
+    password = body.get("password") or ""
+    if not password:
+        raise ApiError(400, M("pw_empty"))
+    doc = open_pdf(upload)
+    perm = pymupdf.PDF_PERM_ACCESSIBILITY
+    if body.get("print", True):
+        perm |= pymupdf.PDF_PERM_PRINT | pymupdf.PDF_PERM_PRINT_HQ
+    if body.get("copy", True):
+        perm |= pymupdf.PDF_PERM_COPY
+    if body.get("edit", False):
+        perm |= pymupdf.PDF_PERM_MODIFY | pymupdf.PDF_PERM_ANNOTATE | pymupdf.PDF_PERM_FORM | pymupdf.PDF_PERM_ASSEMBLE
+    data = doc.tobytes(encryption=pymupdf.PDF_ENCRYPT_AES_256, user_pw=password, owner_pw=secrets.token_urlsafe(18),
+                       permissions=perm, garbage=3, deflate=True)
+    return ("application/pdf", data, None)
+
+
+def unlock(q, body, upload, upload_name):
+    """Remove the password and the limits from a file the user can open."""
+    if upload is None:
+        raise ApiError(400, M("no_file"))
+    doc = open_pdf(upload, body.get("password"))
+    data = doc.tobytes(encryption=pymupdf.PDF_ENCRYPT_NONE, garbage=3, deflate=True)
+    return ("application/pdf", data, None)
+
+
 def undo(doc_id):
     ed = get_doc(doc_id)
     if not ed.undo():
@@ -337,6 +420,10 @@ ROUTES = [
     ("POST", DOC + r"/replace", lambda m, q, b, u, n: replace(m["id"], b)),
     ("POST", DOC + r"/find", lambda m, q, b, u, n: find(m["id"], b)),
     ("POST", DOC + r"/add-text", lambda m, q, b, u, n: add(m["id"], b)),
+    ("POST", r"/api/pdf-info", lambda m, q, b, u, n: pdf_info(q, b, u, n)),
+    ("POST", r"/api/compress", lambda m, q, b, u, n: compress(q, b, u, n)),
+    ("POST", r"/api/protect", lambda m, q, b, u, n: protect(q, b, u, n)),
+    ("POST", r"/api/unlock", lambda m, q, b, u, n: unlock(q, b, u, n)),
     ("POST", DOC + r"/search-rects", lambda m, q, b, u, n: search_rects(m["id"], b)),
     ("POST", DOC + r"/redact", lambda m, q, b, u, n: redact(m["id"], b)),
     ("POST", DOC + r"/undo", lambda m, q, b, u, n: undo(m["id"])),

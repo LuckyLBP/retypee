@@ -141,6 +141,8 @@ def menu_html(lang):
     t = SHELL[lang]
     cols = []
     for _cid, label, ids in R.CATEGORIES:
+        if _cid in R.MENU_HIDDEN:
+            continue
         links = "".join(f'<a href="{R.path(i, lang)}">{esc(short(i, lang))}</a>' for i in ids)
         cols.append(f'<div class="menu-col"><p class="menu-h">{esc(label[lang])}</p>{links}</div>')
     return (f'<details class="menu" id="menu"><summary>{esc(t["menu"])}</summary>'

@@ -3,5 +3,6 @@ from content_home import HOME
 from content_hub import HUB
 from content_editor import EDITOR
 from content_tools import TOOLS
+from content_tools2 import TOOLS2
 
-CONTENT = {"home": HOME, "tools": HUB, **EDITOR, **TOOLS}
+CONTENT = {"home": HOME, "tools": HUB, **EDITOR, **TOOLS, **TOOLS2}
