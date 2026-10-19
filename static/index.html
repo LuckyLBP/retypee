@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Retypee</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="bar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">Retypee</span>
+      <span class="file-name" id="fileName"></span>
+    </div>
+
+    <div class="tools" id="tools" hidden>
+      <div class="segmented" role="radiogroup" aria-label="Tool">
+        <button class="seg" role="radio" aria-checked="true" data-mode="edit" title="Click text to change it (E)">Edit text</button>
+        <button class="seg" role="radio" aria-checked="false" data-mode="add" title="Click anywhere to add text (T)">Add text</button>
+      </div>
+      <button class="tool" id="findBtn" title="Find and replace (Ctrl+F)">Find and replace</button>
+      <span class="sep" aria-hidden="true"></span>
+      <button class="icon" id="undoBtn" title="Undo (Ctrl+Z)" aria-label="Undo" disabled>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M7.5 4 4 7.5 7.5 11M4.5 7.5h7a4.5 4.5 0 0 1 0 9H9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="icon" id="redoBtn" title="Redo (Ctrl+Shift+Z)" aria-label="Redo" disabled>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M12.5 4 16 7.5 12.5 11M15.5 7.5h-7a4.5 4.5 0 0 0 0 9H11" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="sep" aria-hidden="true"></span>
+      <div class="zoom">
+        <button class="icon" id="zoomOut" aria-label="Zoom out">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </button>
+        <span id="zoomLabel" class="zoom-label">100%</span>
+        <button class="icon" id="zoomIn" aria-label="Zoom in">
+          <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 10h10M10 5v10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <label class="tool" id="openBtn" hidden>Open another
+        <input type="file" accept="application/pdf,.pdf" id="openInput" hidden>
+      </label>
+      <button class="primary" id="downloadBtn" hidden>Download PDF</button>
+    </div>
+  </header>
+
+  <main class="desk" id="desk">
+    <section class="empty" id="empty">
+      <label class="drop" id="drop">
+        <span class="drop-sheet" aria-hidden="true">
+          <span></span><span></span><span class="drop-mark"></span><span></span>
+        </span>
+        <strong>Drop a PDF to edit its text</strong>
+        <span class="drop-hint">Click any line to rewrite it, or find and replace across the whole file.</span>
+        <span class="primary as-button">Choose a PDF</span>
+        <input type="file" accept="application/pdf,.pdf" id="fileInput" hidden>
+      </label>
+      <p class="privacy">Files are processed on this computer and never uploaded anywhere.</p>
+    </section>
+
+    <div class="pages" id="pages" hidden></div>
+  </main>
+
+  <aside class="drawer" id="drawer" aria-labelledby="drawerTitle" hidden>
+    <div class="drawer-head">
+      <h2 id="drawerTitle">Find and replace</h2>
+      <button class="icon" id="drawerClose" aria-label="Close">
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5.5 5.5 9 9m0-9-9 9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <form id="replaceForm" class="drawer-body" autocomplete="off">
+      <label class="field">
+        <span>Find</span>
+        <input id="findInput" type="text" spellcheck="false">
+      </label>
+      <label class="field">
+        <span>Replace with</span>
+        <input id="replaceInput" type="text" spellcheck="false">
+      </label>
+      <div class="checks">
+        <label><input type="checkbox" id="caseCheck"> Match case</label>
+        <label><input type="checkbox" id="wordCheck"> Whole words</label>
+        <label><input type="checkbox" id="fitCheck"> Squeeze longer text to fit</label>
+      </div>
+      <p class="match-count" id="matchCount" aria-live="polite">Type something to find.</p>
+      <button class="primary wide" id="replaceAllBtn" type="submit" disabled>Replace all</button>
+      <p class="note">A match has to sit on one line in one text style. Text split across lines or styles is skipped.</p>
+    </form>
+  </aside>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <div class="busy" id="busy" hidden><span></span></div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
