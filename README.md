@@ -130,10 +130,13 @@ cd web && python3 -m http.server 8799    # then open http://localhost:8799
 | PDF till text, Jämför PDF / PDF to text, Compare PDF | pdf.js (text extraction) |
 | Komprimera, Skydda, Lås upp / Compress, Protect, Unlock | PyMuPDF in Pyodide (`/api/compress`, `/api/protect`, `/api/unlock`) |
 | Ta bort metadata, Censurera / Remove metadata, Redact | PyMuPDF in Pyodide |
+| OCR PDF / OCR PDF | tesseract.js (WebAssembly core and language data from jsDelivr, cached by the browser), pdf.js to draw pages, pdf-lib to add invisible text |
+| Fyll i formulär / Fill in form | pdf-lib forms API, fields laid over pdf.js pages |
+| Skanna till PDF / Scan to PDF | canvas image clean-up (shadow removal, black and white), pdf-lib |
 
 The big libraries load only when someone points at a tool or chooses a file, so a page
 is about 100 KB at first. PyMuPDF is about 25 MB and comes from the jsDelivr CDN
-(pinned in `web/worker.js`); pdf-lib, pdf.js and fflate are served from `web/vendor/`
+(pinned in `web/worker.js`); pdf-lib, pdf.js, fflate and the tesseract.js scripts are served from `web/vendor/`
 (MIT and Apache-2.0, see `web/vendor/LICENSES.txt`). Fonts (Inter) are in `web/fonts/`.
 
 ### How the pages are made

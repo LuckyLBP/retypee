@@ -141,7 +141,7 @@ EDITOR["no-upload"] = {
                 "Öppna webbläsarens utvecklarverktyg (F12), gå till fliken Nätverk och redigera en PDF. Du ser att den enda trafiken är motorn som hämtas första gången. Din fil syns inte i någon förfrågan.",
                 "Koden är öppen källkod (AGPL-3.0), så du kan granska den också: <a href=\"https://github.com/LuckyLBP/retypee\">källkoden finns på GitHub</a>."]},
             {"h2": "Vad som ändå hämtas", "p": [
-                "Redigeringsmotorn (PyMuPDF) hämtas från ett CDN (jsDelivr). Typsnittet och sidan kommer från vår egen server. Sidan sätter inga cookies och använder inga spårningsskript."]},
+                "Redigeringsmotorn (PyMuPDF) hämtas från ett CDN (jsDelivr), och det gör även OCR-motorn och språkfilen om du använder OCR PDF. Typsnittet och sidan kommer från vår egen server. Sidan sätter inga cookies och använder inga spårningsskript."]},
         ],
         faq_h2="Vanliga frågor om integritet",
         faq=[("Är det säkert att redigera känsliga dokument här?", "Filen lämnar aldrig din dator, så den kan inte läcka från en server. Du bör ändå följa dina egna regler för känsliga dokument och använda en enhet du litar på."),
@@ -166,7 +166,7 @@ EDITOR["no-upload"] = {
                 "Open your browser's developer tools (F12), go to the Network tab and edit a PDF. The only traffic you will see is the engine being fetched the first time. Your file does not appear in any request.",
                 "The code is open source (AGPL-3.0), so you can read it too: <a href=\"https://github.com/LuckyLBP/retypee\">the source is on GitHub</a>."]},
             {"h2": "What is still downloaded", "p": [
-                "The editing engine (PyMuPDF) is fetched from a CDN (jsDelivr). The font and the page come from our own server. The page sets no cookies and uses no tracking scripts."]},
+                "The editing engine (PyMuPDF) is fetched from a CDN (jsDelivr), and so are the OCR engine and language file if you use OCR PDF. The font and the page come from our own server. The page sets no cookies and uses no tracking scripts."]},
         ],
         faq_h2="Questions about privacy",
         faq=[("Is it safe to edit sensitive documents here?", "The file never leaves your computer, so it cannot leak from a server. You should still follow your own rules for sensitive documents and use a device you trust."),

@@ -3,6 +3,8 @@ Third-party libraries served from this folder
 pdf-lib 1.17.1   MIT          https://github.com/Hopding/pdf-lib
 fflate 0.8.2     MIT          https://github.com/101arrowz/fflate
 pdf.js 3.11.174  Apache-2.0   https://github.com/mozilla/pdf.js
+tesseract.js 5.1.1 Apache-2.0 https://github.com/naptha/tesseract.js  (tesseract.min.js and tesseract-worker.min.js;
+                                 the WebAssembly core and language data are fetched from jsDelivr when OCR is used)
 
 =================== pdf-lib ===================
 MIT License

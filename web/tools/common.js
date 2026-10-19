@@ -287,7 +287,12 @@
       const [x, y] = rot === 0 ? [vx, vy] : rot === 90 ? [W - vy, vx] : rot === 180 ? [W - vx, H - vy] : [vy, H - vx];
       return { x: box.x + x, y: box.y + y };
     };
-    return { vw: sideways ? H : W, vh: sideways ? W : H, rot, map, box };
+    // the other way round: a point in the page's own space -> where it shows up (origin bottom-left)
+    const unmap = (px, py) => {
+      const x = px - box.x, y = py - box.y;
+      return rot === 0 ? { x, y } : rot === 90 ? { x: y, y: W - x } : rot === 180 ? { x: W - x, y: H - y } : { x: H - y, y: x };
+    };
+    return { vw: sideways ? H : W, vh: sideways ? W : H, rot, map, unmap, box };
   }
 
   const hexColor = (hex) => {

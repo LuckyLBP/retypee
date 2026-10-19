@@ -33,15 +33,18 @@ PAGES = {
     "protect":       ("tool",   "skydda-pdf",                    "protect-pdf",                ["pdfjs", "engine"]),
     "unlock":        ("tool",   "las-upp-pdf",                   "unlock-pdf",                 ["pdfjs", "engine"]),
     "compare":       ("tool",   "jamfor-pdf",                    "compare-pdf",                ["pdfjs"]),
+    "ocr":           ("tool",   "ocr-pdf",                       "ocr-pdf",                    ["pdf-lib", "pdfjs", "tesseract"]),
+    "fill-form":     ("tool",   "fyll-i-pdf-formular",           "fill-pdf-form",              ["pdf-lib", "pdfjs"]),
+    "scan":          ("tool",   "skanna-till-pdf",               "scan-to-pdf",                ["pdf-lib"]),
     "tools":         ("hub",    "verktyg",                       "tools",                      []),
 }
 
 # Menu and hub grouping (mirrors the usual PDF-tool menu).
 CATEGORIES = [
-    ("edit",     {"sv": "Redigera PDF",  "en": "Edit PDF"},     ["home", "page-numbers", "watermark", "crop", "sign"]),
+    ("edit",     {"sv": "Redigera PDF",  "en": "Edit PDF"},     ["home", "fill-form", "page-numbers", "watermark", "crop", "sign"]),
     ("common",   {"sv": "Vanliga redigeringar", "en": "Common edits"}, ["change-text", "replace-text", "no-upload", "invoice"]),
     ("organize", {"sv": "Organisera PDF", "en": "Organize PDF"}, ["merge", "split", "delete-pages", "extract-pages", "rotate", "organize"]),
-    ("convert",  {"sv": "Optimera och omvandla", "en": "Optimize and convert"}, ["compress", "jpg-to-pdf", "pdf-to-jpg", "pdf-to-text"]),
+    ("convert",  {"sv": "Optimera och omvandla", "en": "Optimize and convert"}, ["compress", "scan", "ocr", "jpg-to-pdf", "pdf-to-jpg", "pdf-to-text"]),
     ("security", {"sv": "PDF-säkerhet",  "en": "PDF security"}, ["metadata", "redact", "protect", "unlock", "compare"]),
 ]
 

@@ -188,3 +188,18 @@ div.cell { cursor: default; }
 @media (max-width: 640px) { .cmp-slots { grid-template-columns: 1fr; } }
 
 .text-preview { width: min(580px, 100%); max-height: 180px; overflow: auto; margin: 6px 0 0; padding: 12px 14px; text-align: left; white-space: pre-wrap; font: 13px/1.5 ui-monospace, Menlo, monospace; background: var(--paper); border: 1px solid var(--line); border-radius: 12px; }
+
+/* ---- Wave 3: OCR, form filling, scanning */
+.busy-card.stack { flex-direction: column; text-align: center; }
+.ocr-bar { width: min(320px, 100%); height: 8px; accent-color: var(--ink); }
+.ff-pages { display: flex; flex-direction: column; gap: 18px; align-items: center; margin: 12px 0; }
+.ff-page { margin: 0; text-align: center; }
+.ff-page .stage { box-shadow: 0 1px 3px rgba(0,0,0,.15), 0 8px 24px rgba(0,0,0,.08); background: #fff; }
+.ff-input { position: absolute; box-sizing: border-box; margin: 0; padding: 0 3px; font: inherit; color: #111; background: #fff3c4; border: 1px solid rgba(160, 120, 0, .55); border-radius: 2px; }
+.ff-input:focus { outline: 2px solid var(--ink); outline-offset: 0; background: #fffbe6; }
+textarea.ff-input { padding: 3px; resize: none; line-height: 1.25; }
+.ff-tick { padding: 0; accent-color: var(--ink); background: #fff3c4; cursor: pointer; }
+.intake { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
+.intake .camera { text-align: center; cursor: pointer; }
+.scan-thumb { display: block; width: 56px; height: auto; max-height: 76px; object-fit: contain; background: #fff; border: 1px solid var(--line); border-radius: 4px; }
+.scan-turn { display: inline-flex; gap: 4px; margin-top: 4px; }

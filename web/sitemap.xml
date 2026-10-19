@@ -433,6 +433,60 @@
     <priority>0.6</priority>
   </url>
   <url>
+    <loc>https://retypee.se/ocr-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/ocr-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/ocr-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/ocr-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/en/ocr-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/ocr-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/ocr-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/ocr-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/fyll-i-pdf-formular/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/fyll-i-pdf-formular/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/fill-pdf-form/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/fyll-i-pdf-formular/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/en/fill-pdf-form/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/fyll-i-pdf-formular/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/fill-pdf-form/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/fyll-i-pdf-formular/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/skanna-till-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/skanna-till-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/scan-to-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/skanna-till-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://retypee.se/en/scan-to-pdf/</loc>
+    <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/skanna-till-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/scan-to-pdf/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://retypee.se/skanna-till-pdf/"/>
+    <lastmod>2026-10-19</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://retypee.se/verktyg/</loc>
     <xhtml:link rel="alternate" hreflang="sv" href="https://retypee.se/verktyg/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://retypee.se/en/tools/"/>

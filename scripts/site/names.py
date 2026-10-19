@@ -49,6 +49,12 @@ NAMES = {
                       "en": ("Unlock PDF", "Remove the password from your own PDF.")},
     "compare":       {"sv": ("Jämför PDF", "Se vad som ändrats mellan två versioner."),
                       "en": ("Compare PDF", "See what changed between two versions.")},
+    "ocr":           {"sv": ("OCR PDF", "Gör skannade sidor sökbara."),
+                      "en": ("OCR PDF", "Make scanned pages searchable.")},
+    "fill-form":     {"sv": ("Fyll i formulär", "Skriv direkt i PDF-formulär."),
+                      "en": ("Fill in form", "Type straight into PDF forms.")},
+    "scan":          {"sv": ("Skanna till PDF", "Gör foton av papper till en ren PDF."),
+                      "en": ("Scan to PDF", "Turn photos of paper into a clean PDF.")},
     "tools":         {"sv": ("Alla verktyg", ""), "en": ("All tools", "")},
 }
 

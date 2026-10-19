@@ -15,6 +15,7 @@ LIB_SCRIPTS = {
     "pdf-lib": "/vendor/pdf-lib.min.js",
     "fflate": "/vendor/fflate.min.js",
     "pdfjs": "/vendor/pdf.min.js",
+    "tesseract": "/vendor/tesseract.min.js",
     "engine": "/tools/engine.js",
 }
 
