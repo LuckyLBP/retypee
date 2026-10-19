@@ -210,8 +210,8 @@ body.mode-add .unit { pointer-events: none; }
 .menu[open] summary::after { transform: rotate(-135deg) translateY(-2px); }
 .menu summary:hover, .menu[open] summary { background: rgba(27, 23, 19, .06); }
 .menu-panel {
-  position: absolute; left: 0; top: calc(100% + 8px); z-index: 50; width: min(780px, calc(100vw - 24px));
-  display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px 20px; padding: 20px;
+  position: absolute; left: 0; top: calc(100% + 8px); z-index: 50; width: min(960px, calc(100vw - 24px));
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px 20px; padding: 20px;
   background: var(--card); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow-m);
 }
 .menu-col { display: flex; flex-direction: column; gap: 2px; }
@@ -288,6 +288,11 @@ input[type="checkbox"] { accent-color: var(--ink); width: 16px; height: 16px; ma
   .editor-panel { position: fixed !important; left: 10px !important; right: 10px !important; top: auto !important; bottom: 80px; width: auto; max-width: none; }
   .editor-row { flex-wrap: wrap; }
   .editor-meta { flex: 1 1 100%; margin: 0; }
+}
+
+/* The five-column menu needs about 960px beside the logo; below 1100px it is pinned to the window in three columns. */
+@media (max-width: 1100px) {
+  .menu-panel { position: fixed; left: 12px; right: 12px; top: calc(var(--bar-h) + 6px); width: auto; grid-template-columns: repeat(3, 1fr); max-height: calc(100vh - var(--bar-h) - 24px); overflow: auto; }
 }
 
 /* Menu and footer on small screens (these pages all share this file). */

@@ -710,6 +710,132 @@
       "permanent": false
     },
     {
+      "source": "/vand-ordning-pa-sidor-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/reverse-pdf-page-order/",
+      "permanent": false
+    },
+    {
+      "source": "/lagg-till-tomma-sidor-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/add-blank-pages-to-pdf/",
+      "permanent": false
+    },
+    {
+      "source": "/skapa-hafte-av-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/make-booklet-from-pdf/",
+      "permanent": false
+    },
+    {
+      "source": "/beskar-pdf-automatiskt/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/auto-crop-pdf/",
+      "permanent": false
+    },
+    {
+      "source": "/gor-pdf-svartvit/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/convert-pdf-to-grayscale/",
+      "permanent": false
+    },
+    {
+      "source": "/png-till-pdf/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/png-to-pdf/",
+      "permanent": false
+    },
+    {
+      "source": "/pdf-till-png/",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept-language",
+          "value": "^en.*"
+        }
+      ],
+      "missing": [
+        {
+          "type": "query",
+          "key": "lang"
+        }
+      ],
+      "destination": "/en/pdf-to-png/",
+      "permanent": false
+    },
+    {
       "source": "/verktyg/",
       "has": [
         {

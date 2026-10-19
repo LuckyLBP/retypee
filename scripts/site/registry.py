@@ -48,22 +48,37 @@ PAGES = {
     "remove-annots": ("tool",   "ta-bort-kommentarer-pdf",       "remove-comments-from-pdf",   ["pdfjs", "engine"]),
     "annotate":      ("tool",   "markera-och-rita-i-pdf",        "highlight-and-draw-on-pdf",  ["pdf-lib", "pdfjs"]),
     "properties":    ("tool",   "redigera-pdf-egenskaper",       "edit-pdf-properties",        ["pdf-lib", "pdfjs"]),
+    "reverse":       ("tool",   "vand-ordning-pa-sidor-pdf",     "reverse-pdf-page-order",     ["pdf-lib", "pdfjs"]),
+    "add-blank":     ("tool",   "lagg-till-tomma-sidor-pdf",     "add-blank-pages-to-pdf",     ["pdf-lib", "pdfjs"]),
+    "booklet":       ("tool",   "skapa-hafte-av-pdf",            "make-booklet-from-pdf",      ["pdf-lib", "pdfjs"]),
+    "autocrop":      ("tool",   "beskar-pdf-automatiskt",        "auto-crop-pdf",              ["pdf-lib", "pdfjs"]),
+    "grayscale":     ("tool",   "gor-pdf-svartvit",              "convert-pdf-to-grayscale",   ["pdfjs", "engine"]),
+    "png-to-pdf":    ("tool",   "png-till-pdf",                  "png-to-pdf",                 ["pdf-lib", "pdfjs"]),
+    "pdf-to-png":    ("tool",   "pdf-till-png",                  "pdf-to-png",                 ["pdfjs", "fflate"]),
     "tools":         ("hub",    "verktyg",                       "tools",                      []),
 }
 
 # Menu and hub grouping (mirrors the usual PDF-tool menu).
 CATEGORIES = [
-    ("edit",     {"sv": "Redigera PDF",  "en": "Edit PDF"},     ["home", "fill-form", "annotate", "page-numbers", "header-footer", "watermark", "add-image", "crop", "sign"]),
+    ("edit",     {"sv": "Redigera PDF",  "en": "Edit PDF"},     ["home", "fill-form", "annotate", "page-numbers", "header-footer", "watermark", "add-image", "sign"]),
     ("common",   {"sv": "Vanliga redigeringar", "en": "Common edits"}, ["change-text", "replace-text", "no-upload", "invoice"]),
-    ("organize", {"sv": "Organisera PDF", "en": "Organize PDF"}, ["merge", "split", "delete-pages", "blank", "extract-pages", "rotate", "organize", "resize", "nup"]),
-    ("convert",  {"sv": "Optimera och omvandla", "en": "Optimize and convert"}, ["compress", "repair", "scan", "ocr", "jpg-to-pdf", "pdf-to-jpg", "pdf-to-text", "extract-images", "text-to-pdf"]),
-    ("security", {"sv": "PDF-säkerhet",  "en": "PDF security"}, ["metadata", "properties", "redact", "flatten", "remove-annots", "protect", "unlock", "compare"]),
+    ("organize", {"sv": "Organisera PDF", "en": "Organize PDF"}, ["merge", "split", "delete-pages", "blank", "extract-pages", "rotate", "organize", "reverse", "add-blank"]),
+    ("print",    {"sv": "Format och utskrift", "en": "Format and print"}, ["crop", "autocrop", "resize", "nup", "booklet", "grayscale", "compress"]),
+    ("convert",  {"sv": "Omvandla", "en": "Convert"}, ["jpg-to-pdf", "png-to-pdf", "text-to-pdf", "scan", "pdf-to-jpg", "pdf-to-png", "pdf-to-text", "extract-images", "ocr"]),
+    ("security", {"sv": "Skydd och reparation",  "en": "Security and repair"}, ["metadata", "properties", "redact", "flatten", "remove-annots", "protect", "unlock", "compare", "repair"]),
 ]
 
 # Groups that are listed on the hub and in the footer but kept out of the header menu.
 MENU_HIDDEN = {"common"}
 
 OUTPUT_ORDER = list(PAGES)
+
+# Landing pages that run another page's script (the page's own text and strings still differ).
+SCRIPT_OF = {"png-to-pdf": "jpg-to-pdf", "pdf-to-png": "pdf-to-jpg"}
+
+
+def script(pid):
+    return SCRIPT_OF.get(pid, pid)
 
 
 def kind(pid):

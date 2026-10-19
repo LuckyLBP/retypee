@@ -235,3 +235,7 @@ textarea.ff-input { padding: 3px; resize: none; line-height: 1.25; }
 .swatch { width: 26px; height: 26px; padding: 0; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--line); cursor: pointer; }
 .swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ink); }
 .sticky-tools { position: sticky; top: 64px; z-index: 5; background: var(--bg, #faf9f6); padding: 8px 0; flex-wrap: wrap; }
+
+/* ---- Wave 6: auto-crop */
+.ac-box { position: absolute; box-sizing: border-box; border: 2px dashed #b88700; box-shadow: 0 0 0 999px rgba(20, 20, 20, .38); pointer-events: none; }
+.ac-box[hidden] { display: none; }

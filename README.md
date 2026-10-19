@@ -136,6 +136,9 @@ cd web && python3 -m http.server 8799    # then open http://localhost:8799
 | Lägg till bild, Sidhuvud och sidfot, Markera och rita / Add image, Header and footer, Highlight and draw | pdf-lib (marks kept in displayed page points and mapped back per page, so rotated pages stay right) |
 | Text till PDF, Redigera PDF-egenskaper / Text to PDF, PDF properties | pdf-lib (standard fonts; the XMP block is dropped when properties are edited so every program shows the same values) |
 | Ta bort kommentarer / Remove comments | PyMuPDF in Pyodide (`/api/strip-annots`, annotation kinds come from `/api/pdf-info`) |
+| Vänd ordning, Tomma sidor, Skapa häfte, Beskär automatiskt / Reverse order, Add blank pages, Booklet, Auto-crop | pdf-lib (booklet and sheets reuse the displayed-page placement helper; auto-crop finds the ink in a pdf.js render and sets the crop box) |
+| Svartvit PDF / Grayscale | PyMuPDF in Pyodide (`/api/grayscale`, `Page.recolor`) |
+| PNG till PDF, PDF till PNG / PNG to PDF, PDF to PNG | the JPG tools' scripts, started with PNG (`SCRIPT_OF` in `scripts/site/registry.py`) |
 | Fyll i formulär / Fill in form | pdf-lib forms API, fields laid over pdf.js pages |
 | Skanna till PDF / Scan to PDF | canvas image clean-up (shadow removal, black and white), pdf-lib |
 

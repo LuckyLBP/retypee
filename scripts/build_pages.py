@@ -139,7 +139,7 @@ def tool_page(pid, lang, c):
   <script type="application/json" id="rt-strings">{json.dumps(strings, ensure_ascii=False)}</script>
   <script src="/site.js" defer></script>
 {libs}  <script src="/tools/common.js" defer></script>
-  <script src="/tools/{pid}.js" defer></script>
+  <script src="/tools/{R.script(pid)}.js" defer></script>
 </body>
 </html>
 '''

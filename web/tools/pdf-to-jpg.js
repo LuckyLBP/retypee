@@ -19,7 +19,7 @@ RT.run(function start() {
 
   function options(file, pdf, bytes) {
     const count = pdf.numPages;
-    const opt = { format: "jpg", dpi: "150", which: "all" };
+    const opt = { format: RT.S.variant === "png" ? "png" : "jpg", dpi: "150", which: "all" }; // the PNG landing page starts on PNG
     const rangeInput = el("input", { type: "text", class: "range-input", placeholder: "1-3, 5", autocomplete: "off", spellcheck: "false", disabled: true });
     const summary = el("p", { class: "summary", "aria-live": "polite" });
     const go = el("button", { class: "primary big", type: "button", onclick: run });

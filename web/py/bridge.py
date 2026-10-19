@@ -51,6 +51,7 @@ MESSAGES = {
     "redact_empty": ("Draw a box or search for text to redact first.", "Rita en ruta eller sök efter text som ska censureras först."),
     "route": ("Unknown route {method} {path}", "Okänd adress {method} {path}"),
     "no_images": ("No images were found in this PDF.", "Inga bilder hittades i den här PDF-filen."),
+    "gray_fail": ("This file could not be converted to grayscale.", "Filen kunde inte göras svartvit."),
     "repair_fail": ("This file is too damaged to repair.", "Filen är för skadad för att kunna repareras."),
 }
 
@@ -450,6 +451,19 @@ def strip_annots(q, body, upload, upload_name):
     return ("application/pdf", doc.tobytes(garbage=3, deflate=True), None)
 
 
+def grayscale(q, body, upload, upload_name):
+    """Every colour on every page (text, vectors and images) becomes a grey level; the text stays text."""
+    if upload is None:
+        raise ApiError(400, M("no_file"))
+    doc = open_pdf(upload, body.get("password"))
+    try:
+        for page in doc:
+            page.recolor(1)
+    except Exception as exc:
+        raise ApiError(500, M("gray_fail")) from exc
+    return ("application/pdf", doc.tobytes(garbage=3, deflate=True, clean=True), None)
+
+
 def repair(q, body, upload, upload_name):
     """Open the file the lenient way (MuPDF rebuilds a broken structure) and write it out clean."""
     if upload is None:
@@ -544,6 +558,7 @@ ROUTES = [
     ("POST", r"/api/unlock", lambda m, q, b, u, n: unlock(q, b, u, n)),
     ("POST", r"/api/repair", lambda m, q, b, u, n: repair(q, b, u, n)),
     ("POST", r"/api/flatten", lambda m, q, b, u, n: flatten(q, b, u, n)),
+    ("POST", r"/api/grayscale", lambda m, q, b, u, n: grayscale(q, b, u, n)),
     ("POST", r"/api/strip-annots", lambda m, q, b, u, n: strip_annots(q, b, u, n)),
     ("POST", r"/api/images", lambda m, q, b, u, n: images_list(q, b, u, n)),
     ("POST", r"/api/extract-images", lambda m, q, b, u, n: extract_images(q, b, u, n)),
