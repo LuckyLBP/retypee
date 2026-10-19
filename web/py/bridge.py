@@ -7,10 +7,12 @@ this worker and disappear when the tab closes.
 
 from __future__ import annotations
 
+import io
 import json
 import re
 import secrets
 import uuid
+import zipfile
 from pathlib import Path
 from urllib.parse import parse_qs, urlsplit
 
@@ -48,6 +50,8 @@ MESSAGES = {
     "pw_empty": ("Type a password first.", "Skriv ett lösenord först."),
     "redact_empty": ("Draw a box or search for text to redact first.", "Rita en ruta eller sök efter text som ska censureras först."),
     "route": ("Unknown route {method} {path}", "Okänd adress {method} {path}"),
+    "no_images": ("No images were found in this PDF.", "Inga bilder hittades i den här PDF-filen."),
+    "repair_fail": ("This file is too damaged to repair.", "Filen är för skadad för att kunna repareras."),
 }
 
 # Messages raised by the shared engine (pdfedit/core.py), which stays English-only.
@@ -313,8 +317,14 @@ def pdf_info(q, body, upload, upload_name):
         raise ApiError(400, M("open_fail")) from exc
     wanted = pymupdf.PDF_PERM_PRINT | pymupdf.PDF_PERM_COPY | pymupdf.PDF_PERM_MODIFY
     limited = (not doc.needs_pass) and doc.permissions != -1 and (doc.permissions & wanted) != wanted
+    annots = widgets = 0
+    if not doc.needs_pass:
+        for page in doc:
+            annots += sum(1 for a in (page.annots() or []) if a.type[0] not in (pymupdf.PDF_ANNOT_LINK, pymupdf.PDF_ANNOT_WIDGET))
+            widgets += sum(1 for _ in (page.widgets() or []))
     return {"needsPass": bool(doc.needs_pass), "encrypted": bool(doc.is_encrypted), "limited": bool(limited),
-            "pages": 0 if doc.needs_pass else doc.page_count}
+            "pages": 0 if doc.needs_pass else doc.page_count, "repaired": bool(doc.is_repaired),
+            "annots": annots, "widgets": widgets}
 
 
 def compress(q, body, upload, upload_name):
@@ -411,6 +421,85 @@ def add_font(query, body, upload, upload_name):
 # --------------------------------------------------------------------------
 
 DOC = r"/api/docs/(?P<id>[0-9a-f]+)"
+def repair(q, body, upload, upload_name):
+    """Open the file the lenient way (MuPDF rebuilds a broken structure) and write it out clean."""
+    if upload is None:
+        raise ApiError(400, M("no_file"))
+    try:
+        doc = pymupdf.open(stream=upload, filetype="pdf")
+        if doc.needs_pass:
+            raise ApiError(403, M("needs_password"))
+        if doc.page_count == 0:
+            raise ValueError("no pages")
+        for number in range(doc.page_count):
+            doc.load_page(number)
+    except ApiError:
+        raise
+    except Exception as exc:
+        raise ApiError(400, M("repair_fail")) from exc
+    return ("application/pdf", doc.tobytes(garbage=4, clean=True, deflate=True), None)
+
+
+def flatten(q, body, upload, upload_name):
+    """Turn comments, highlights and form fields into ordinary page content."""
+    if upload is None:
+        raise ApiError(400, M("no_file"))
+    doc = open_pdf(upload, body.get("password"))
+    doc.bake(annots=bool(body.get("annots", True)), widgets=bool(body.get("widgets", True)))
+    return ("application/pdf", doc.tobytes(garbage=3, deflate=True), None)
+
+
+def image_refs(doc, smallest):
+    """Every distinct image in the file, once, skipping the ones smaller than `smallest` pixels."""
+    seen, refs = set(), []
+    for page in doc:
+        for img in page.get_images(full=True):
+            xref, smask, w, h = img[0], img[1], img[2], img[3]
+            if xref in seen or min(w, h) < smallest:
+                continue
+            seen.add(xref)
+            refs.append({"xref": xref, "smask": smask, "page": page.number + 1, "w": w, "h": h})
+    return refs
+
+
+def images_list(q, body, upload, upload_name):
+    if upload is None:
+        raise ApiError(400, M("no_file"))
+    doc = open_pdf(upload, body.get("password"))
+    refs = image_refs(doc, int(body.get("min", 0)))
+    return {"count": len(refs), "pages": len({r["page"] for r in refs}), "items": [{"page": r["page"], "w": r["w"], "h": r["h"]} for r in refs]}
+
+
+def extract_images(q, body, upload, upload_name):
+    """All images as a ZIP. JPEGs are copied byte for byte; masks, CMYK and other formats become PNG."""
+    if upload is None:
+        raise ApiError(400, M("no_file"))
+    doc = open_pdf(upload, body.get("password"))
+    prefix = "image" if LANG == "en" else "bild"
+    out, per_page = io.BytesIO(), {}
+    with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
+        for r in image_refs(doc, int(body.get("min", 0))):
+            try:
+                info = doc.extract_image(r["xref"])
+                plain = r["smask"] == 0 and info["ext"] in ("jpeg", "png") and info["colorspace"] in (1, 3)
+                if plain:
+                    data, ext = info["image"], "jpg" if info["ext"] == "jpeg" else "png"
+                else:
+                    pix = pymupdf.Pixmap(doc, r["xref"])
+                    if pix.colorspace is not None and pix.colorspace.n != 3 and pix.colorspace.n != 1:
+                        pix = pymupdf.Pixmap(pymupdf.csRGB, pix)
+                    if r["smask"] and not pix.alpha:
+                        pix = pymupdf.Pixmap(pix, pymupdf.Pixmap(doc, r["smask"]))
+                    data, ext = pix.tobytes("png"), "png"
+            except Exception:
+                continue
+            n = per_page[r["page"]] = per_page.get(r["page"], 0) + 1
+            z.writestr(f"{prefix}-{r['page']}-{n}.{ext}", data)
+    if not per_page:
+        raise ApiError(404, M("no_images"))
+    return ("application/zip", out.getvalue(), None)
+
+
 ROUTES = [
     ("POST", r"/api/docs", lambda m, q, b, u, n: open_document(q, b, u, n)),
     ("DELETE", DOC, lambda m, q, b, u, n: close_document(m["id"])),
@@ -424,6 +513,10 @@ ROUTES = [
     ("POST", r"/api/compress", lambda m, q, b, u, n: compress(q, b, u, n)),
     ("POST", r"/api/protect", lambda m, q, b, u, n: protect(q, b, u, n)),
     ("POST", r"/api/unlock", lambda m, q, b, u, n: unlock(q, b, u, n)),
+    ("POST", r"/api/repair", lambda m, q, b, u, n: repair(q, b, u, n)),
+    ("POST", r"/api/flatten", lambda m, q, b, u, n: flatten(q, b, u, n)),
+    ("POST", r"/api/images", lambda m, q, b, u, n: images_list(q, b, u, n)),
+    ("POST", r"/api/extract-images", lambda m, q, b, u, n: extract_images(q, b, u, n)),
     ("POST", DOC + r"/search-rects", lambda m, q, b, u, n: search_rects(m["id"], b)),
     ("POST", DOC + r"/redact", lambda m, q, b, u, n: redact(m["id"], b)),
     ("POST", DOC + r"/undo", lambda m, q, b, u, n: undo(m["id"])),

@@ -43,7 +43,8 @@ a.primary { text-decoration: none; }
 .primary.big { height: 48px; padding: 0 28px; font-size: 16px; }
 
 .options { display: flex; flex-wrap: wrap; gap: 12px 24px; }
-.field.inline { flex-direction: row; align-items: center; gap: 8px; font-size: 14px; }
+.field.inline { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 8px; max-width: 100%; font-size: 14px; }
+.field.inline select { max-width: 100%; min-width: 0; }
 .field.inline > span { font-weight: 500; }
 .workbench select { height: 40px; border: 1px solid var(--line); border-radius: 8px; padding: 0 10px; background: var(--card); }
 .range-input { width: 220px; height: 40px; padding: 0 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); font-size: 15px; }
@@ -203,3 +204,7 @@ textarea.ff-input { padding: 3px; resize: none; line-height: 1.25; }
 .intake .camera { text-align: center; cursor: pointer; }
 .scan-thumb { display: block; width: 56px; height: auto; max-height: 76px; object-fit: contain; background: #fff; border: 1px solid var(--line); border-radius: 4px; }
 .scan-turn { display: inline-flex; gap: 4px; margin-top: 4px; }
+
+/* ---- Wave 4: pages per sheet */
+.nup-sketch { display: grid; gap: 4px; width: min(100%, 240px); max-height: 320px; margin: 0 auto 8px; padding: 8px; background: #fff; border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.nup-sketch span { display: grid; place-items: center; background: var(--paper); border: 1px solid var(--line); border-radius: 3px; font-size: 12px; color: var(--ink-soft); }

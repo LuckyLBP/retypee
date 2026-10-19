@@ -131,6 +131,8 @@ cd web && python3 -m http.server 8799    # then open http://localhost:8799
 | Komprimera, Skydda, Lås upp / Compress, Protect, Unlock | PyMuPDF in Pyodide (`/api/compress`, `/api/protect`, `/api/unlock`) |
 | Ta bort metadata, Censurera / Remove metadata, Redact | PyMuPDF in Pyodide |
 | OCR PDF / OCR PDF | tesseract.js (WebAssembly core and language data from jsDelivr, cached by the browser), pdf.js to draw pages, pdf-lib to add invisible text |
+| Ta bort tomma sidor, Ändra sidstorlek, Flera sidor per ark / Remove blank pages, Resize pages, Pages per sheet | pdf-lib (embedded pages drawn as displayed, so rotated pages stay right); blank pages are found by counting ink in a small pdf.js render |
+| Extrahera bilder, Reparera, Platta ut / Extract images, Repair, Flatten | PyMuPDF in Pyodide (`/api/images`, `/api/extract-images`, `/api/repair`, `/api/flatten`) |
 | Fyll i formulär / Fill in form | pdf-lib forms API, fields laid over pdf.js pages |
 | Skanna till PDF / Scan to PDF | canvas image clean-up (shadow removal, black and white), pdf-lib |
 

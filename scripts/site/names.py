@@ -55,6 +55,18 @@ NAMES = {
                       "en": ("Fill in form", "Type straight into PDF forms.")},
     "scan":          {"sv": ("Skanna till PDF", "Gör foton av papper till en ren PDF."),
                       "en": ("Scan to PDF", "Turn photos of paper into a clean PDF.")},
+    "blank":         {"sv": ("Ta bort tomma sidor", "Hitta och ta bort tomma sidor automatiskt."),
+                      "en": ("Remove blank pages", "Find and remove blank pages automatically.")},
+    "nup":           {"sv": ("Flera sidor per ark", "Lägg 2, 4, 6 eller 9 sidor på varje ark."),
+                      "en": ("Pages per sheet", "Put 2, 4, 6 or 9 pages on each sheet.")},
+    "resize":        {"sv": ("Ändra sidstorlek", "Gör om alla sidor till A4, Letter eller annan storlek."),
+                      "en": ("Resize pages", "Turn every page into A4, Letter or another size.")},
+    "extract-images": {"sv": ("Extrahera bilder", "Hämta alla bilder ur en PDF som en ZIP."),
+                      "en": ("Extract images", "Get every image out of a PDF as a ZIP.")},
+    "repair":        {"sv": ("Reparera PDF", "Rädda en PDF som inte går att öppna."),
+                      "en": ("Repair PDF", "Rescue a PDF that will not open.")},
+    "flatten":       {"sv": ("Platta ut PDF", "Gör kommentarer och formulärfält till fast innehåll."),
+                      "en": ("Flatten PDF", "Make comments and form fields part of the page.")},
     "tools":         {"sv": ("Alla verktyg", ""), "en": ("All tools", "")},
 }
 

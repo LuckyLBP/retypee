@@ -295,6 +295,33 @@
     return { vw: sideways ? H : W, vh: sideways ? W : H, rot, map, unmap, box };
   }
 
+  // Source pages made ready to be placed on other pages (n-up, resize): each one's visible size and
+  // everything needed to draw it the right way up whatever its rotation.
+  async function embedAll(out, doc) {
+    const pages = doc.getPages();
+    const boxes = pages.map((p) => {
+      const b = p.getCropBox();
+      return { left: b.x, bottom: b.y, right: b.x + b.width, top: b.y + b.height };
+    });
+    const embedded = await out.embedPages(pages, boxes);
+    return pages.map((p, i) => ({ embedded: embedded[i], sp: pageSpace(p) }));
+  }
+
+  // Draws an embedded page as it is DISPLAYED, with its bottom-left corner at (x, y), scaled by k.
+  function drawVisible(page, { embedded, sp }, x, y, k) {
+    const w = sp.box.width * k, h = sp.box.height * k; // size before any rotation
+    const at = sp.rot === 0 ? { x, y, r: 0 } : sp.rot === 90 ? { x, y: y + w, r: -90 } : sp.rot === 180 ? { x: x + w, y: y + h, r: 180 } : { x: x + h, y, r: 90 };
+    page.drawPage(embedded, { x: at.x, y: at.y, width: w, height: h, rotate: PDFLib.degrees(at.r) });
+  }
+
+  const SHEETS = { a5: [419.53, 595.28], a4: [595.28, 841.89], a3: [841.89, 1190.55], letter: [612, 792], legal: [612, 1008] };
+  // "A4", "Letter" ... when a page is that size (either way up), otherwise millimetres.
+  function sizeName(w, h) {
+    const [a, b] = w < h ? [w, h] : [h, w];
+    for (const [name, [sw, sh]] of Object.entries(SHEETS)) if (Math.abs(a - sw) < 3 && Math.abs(b - sh) < 3) return name === "letter" ? "Letter" : name === "legal" ? "Legal" : name.toUpperCase();
+    return `${Math.round((a * 25.4) / 72)} × ${Math.round((b * 25.4) / 72)} mm`;
+  }
+
   const hexColor = (hex) => {
     const n = parseInt(hex.replace("#", ""), 16);
     return PDFLib.rgb(((n >> 16) & 255) / 255, ((n >> 8) & 255) / 255, (n & 255) / 255);
@@ -561,7 +588,7 @@
   window.RT = {
     t, el, S, root, mount, reset, message, busy, fail, friendly, formatSize, isPdf, baseName, pagesLabel,
     dropzone, showResult, fileCard, fileThumb, saveBlob, readBytes, loadDoc, newDoc, pdfjs, openForRender, renderPage,
-    parseRanges, expand, compact, pageGrid, rangeInput, reorderList, libs, pageSpace, hexColor, previewStage, field, selectField, rangeField, pdfFlow, actionsRow, restartButton,
+    parseRanges, expand, compact, pageGrid, rangeInput, reorderList, libs, pageSpace, embedAll, drawVisible, SHEETS, sizeName, hexColor, previewStage, field, selectField, rangeField, pdfFlow, actionsRow, restartButton,
     setDropHandler: (fn) => (dropHandler = fn),
     run(fn) {
       startFn = fn;

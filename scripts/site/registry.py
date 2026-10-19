@@ -36,6 +36,12 @@ PAGES = {
     "ocr":           ("tool",   "ocr-pdf",                       "ocr-pdf",                    ["pdf-lib", "pdfjs", "tesseract"]),
     "fill-form":     ("tool",   "fyll-i-pdf-formular",           "fill-pdf-form",              ["pdf-lib", "pdfjs"]),
     "scan":          ("tool",   "skanna-till-pdf",               "scan-to-pdf",                ["pdf-lib"]),
+    "blank":         ("tool",   "ta-bort-tomma-sidor-pdf",       "remove-blank-pages-from-pdf", ["pdf-lib", "pdfjs"]),
+    "nup":           ("tool",   "flera-sidor-per-ark-pdf",       "multiple-pages-per-sheet-pdf", ["pdf-lib", "pdfjs"]),
+    "resize":        ("tool",   "andra-sidstorlek-pdf",          "resize-pdf-pages",           ["pdf-lib", "pdfjs"]),
+    "extract-images": ("tool",  "extrahera-bilder-ur-pdf",       "extract-images-from-pdf",    ["pdfjs", "engine"]),
+    "repair":        ("tool",   "reparera-pdf",                  "repair-pdf",                 ["pdfjs", "engine"]),
+    "flatten":       ("tool",   "platta-ut-pdf",                 "flatten-pdf",                ["pdfjs", "engine"]),
     "tools":         ("hub",    "verktyg",                       "tools",                      []),
 }
 
@@ -43,9 +49,9 @@ PAGES = {
 CATEGORIES = [
     ("edit",     {"sv": "Redigera PDF",  "en": "Edit PDF"},     ["home", "fill-form", "page-numbers", "watermark", "crop", "sign"]),
     ("common",   {"sv": "Vanliga redigeringar", "en": "Common edits"}, ["change-text", "replace-text", "no-upload", "invoice"]),
-    ("organize", {"sv": "Organisera PDF", "en": "Organize PDF"}, ["merge", "split", "delete-pages", "extract-pages", "rotate", "organize"]),
-    ("convert",  {"sv": "Optimera och omvandla", "en": "Optimize and convert"}, ["compress", "scan", "ocr", "jpg-to-pdf", "pdf-to-jpg", "pdf-to-text"]),
-    ("security", {"sv": "PDF-säkerhet",  "en": "PDF security"}, ["metadata", "redact", "protect", "unlock", "compare"]),
+    ("organize", {"sv": "Organisera PDF", "en": "Organize PDF"}, ["merge", "split", "delete-pages", "blank", "extract-pages", "rotate", "organize", "resize", "nup"]),
+    ("convert",  {"sv": "Optimera och omvandla", "en": "Optimize and convert"}, ["compress", "repair", "scan", "ocr", "jpg-to-pdf", "pdf-to-jpg", "pdf-to-text", "extract-images"]),
+    ("security", {"sv": "PDF-säkerhet",  "en": "PDF security"}, ["metadata", "redact", "flatten", "protect", "unlock", "compare"]),
 ]
 
 # Groups that are listed on the hub and in the footer but kept out of the header menu.
