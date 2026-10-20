@@ -212,7 +212,8 @@ def sitemap(ids):
             ) + f'\n    <xhtml:link rel="alternate" hreflang="x-default" href="{R.url(pid, "sv")}"/>'
             prio = "1.0" if (pid == "home" and lang == "sv") else ("0.8" if pid in ("home", "tools") else "0.6")
             urls.append(f"  <url>\n    <loc>{R.url(pid, lang)}</loc>{alts}\n    <lastmod>{R.LASTMOD}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>{prio}</priority>\n  </url>")
-    return ('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
+    return ('<?xml version="1.0" encoding="UTF-8"?>\n<?xml-stylesheet type="text/xsl" href="/sitemap.xsl"?>\n'
+            '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
             'xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + "\n".join(urls) + "\n</urlset>\n")
 
 
