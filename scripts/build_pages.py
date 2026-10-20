@@ -48,13 +48,14 @@ def drop_block(lang):
           <span class="primary as-button">{t["choose"]}</span>
           <input type="file" accept="application/pdf,.pdf" id="fileInput" class="file-input">
         </label>
+        {L.free_row(lang)}
         <p class="engine-status idle" id="engineStatus" role="status" aria-live="polite">{t["status_idle"]}</p>
 '''
 
 
 def editor_page(pid, lang, c):
     t = SHELL[lang]
-    info = [L.steps_html(c), L.sections_html(c["sections"]), L.related_html(pid, lang, c.get("related", [])),
+    info = [L.steps_html(c), L.sections_html(c["sections"]), L.free_html(lang), L.reviews_html(pid, lang), L.related_html(pid, lang, c.get("related", [])),
             L.faq_html(c), L.footer(pid, lang)]
     return f'''<!doctype html>
 <html lang="{lang}">
@@ -102,6 +103,7 @@ def editor_page(pid, lang, c):
   <div class="busy" id="busy" hidden><span></span></div>
 
   <script src="/site.js" defer></script>
+  <script src="/reviews.js" defer></script>
   <script src="/app.js"></script>
 </body>
 </html>
@@ -115,7 +117,7 @@ def tool_page(pid, lang, c):
     strings = {**TOOL_UI[lang], **c.get("ui", {}), "lang": lang, "libs": heavy,
                "next": [{"href": R.path(i, lang), "label": L.short(i, lang)} for i in c.get("related", []) if i != pid][:3]}
     libs = "".join(f'  <script src="{L.LIB_SCRIPTS[x]}" defer></script>\n' for x in R.libs(pid) if x == "engine")
-    info = [L.steps_html(c), L.sections_html(c["sections"]), L.privacy_html(lang),
+    info = [L.steps_html(c), L.sections_html(c["sections"]), L.free_html(lang), L.reviews_html(pid, lang), L.privacy_html(lang),
             L.related_html(pid, lang, c.get("related", [])), L.faq_html(c), L.footer(pid, lang)]
     return f'''<!doctype html>
 <html lang="{lang}">
@@ -124,6 +126,7 @@ def tool_page(pid, lang, c):
   <main id="main">
     <div class="hero compact">
       {L.crumbs_html(pid, lang)}
+      <span class="page-ic">{L.svg_icon(pid)}</span>
       <h1>{L.mark(c["h1"])}</h1>
       <p class="lede">{c["lede"]}</p>
     </div>
@@ -131,6 +134,7 @@ def tool_page(pid, lang, c):
     <section class="workbench" id="workbench" aria-live="polite" data-tool="{pid}">
       <noscript><p class="noscript">{t["noscript"]}</p></noscript>
     </section>
+    {L.free_row(lang)}
 
     <div class="info">
 {chr(10).join(info)}    </div>
@@ -138,6 +142,7 @@ def tool_page(pid, lang, c):
 
   <script type="application/json" id="rt-strings">{json.dumps(strings, ensure_ascii=False)}</script>
   <script src="/site.js" defer></script>
+  <script src="/reviews.js" defer></script>
 {libs}  <script src="/tools/common.js" defer></script>
   <script src="/tools/{R.script(pid)}.js" defer></script>
 </body>
@@ -149,8 +154,7 @@ def hub_page(pid, lang, c):
     t = SHELL[lang]
     groups = []
     for _cid, label, ids in R.CATEGORIES:
-        cards = "".join(
-            f'\n          <a class="card" href="{R.path(i, lang)}"><strong>{L.esc(L.short(i, lang))}</strong><span>{L.esc(L.blurb(i, lang))}</span></a>' for i in ids)
+        cards = "".join(L.card_html(i, lang, "          ") for i in ids)
         groups.append(f'''        <section>
           <h2>{L.esc(label[lang])}</h2>
           <div class="cards">{cards}
@@ -164,12 +168,15 @@ def hub_page(pid, lang, c):
   <main id="main">
     <div class="hero compact">
       {L.crumbs_html(pid, lang)}
+      <span class="page-ic">{L.svg_icon(pid)}</span>
       <h1>{L.mark(c["h1"])}</h1>
       <p class="lede">{c["lede"]}</p>
+      {L.free_row(lang)}
     </div>
 
     <div class="info">
 {chr(10).join(groups)}
+{L.free_html(lang)}
 {L.privacy_html(lang)}
 {L.footer(pid, lang)}    </div>
   </main>
@@ -236,6 +243,8 @@ def build():
         for lang in LANGS:
             files[out_path(pid, lang)] = RENDER[R.kind(pid)](pid, lang, resolve(CONTENT[pid][lang], lang))
     files[os.path.join(WEB, "sitemap.xml")] = sitemap(ids)
+    # The pages that may take reviews; api/reviews.js refuses any other tool id.
+    files[os.path.join(ROOT, "api", "_tools.json")] = json.dumps([i for i in ids if R.kind(i) != "hub"]) + "\n"
     vpath = os.path.join(ROOT, "vercel.json")
     vercel = json.load(open(vpath))
     vercel["redirects"] = redirects(ids)

@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
   "buildCommand": null,
-  "installCommand": null,
+  "installCommand": "npm install --omit=dev",
   "outputDirectory": "web",
   "cleanUrls": true,
   "trailingSlash": true,
@@ -895,7 +895,7 @@
       ]
     },
     {
-      "source": "/(wordmark.svg|favicon.svg|apple-touch-icon.png|og-image.png|og-image-en.png)",
+      "source": "/(wordmark.svg|favicon.svg|icons.svg|apple-touch-icon.png|og-image.png|og-image-en.png)",
       "headers": [
         {
           "key": "Cache-Control",

@@ -73,6 +73,21 @@ MENU_HIDDEN = {"common"}
 
 OUTPUT_ORDER = list(PAGES)
 
+# Icons: Lucide (https://lucide.dev, ISC licence), fetched at this version into web/icons.svg by scripts/fetch_icons.py.
+LUCIDE = "1.52.0"
+ICON_OF = {
+    "home": "file-pen-line", "change-text": "type", "replace-text": "replace", "no-upload": "shield-check", "invoice": "receipt",
+    "merge": "merge", "split": "split", "delete-pages": "file-minus", "extract-pages": "file-output", "rotate": "rotate-cw",
+    "jpg-to-pdf": "image-up", "png-to-pdf": "image-up", "pdf-to-jpg": "image-down", "pdf-to-png": "image-down",
+    "metadata": "tags", "redact": "eraser", "page-numbers": "hash", "watermark": "droplets", "crop": "crop", "sign": "signature",
+    "organize": "layout-grid", "compress": "shrink", "pdf-to-text": "text-select", "protect": "lock", "unlock": "lock-open",
+    "compare": "diff", "ocr": "scan-text", "fill-form": "text-cursor-input", "scan": "camera", "blank": "file-x", "nup": "grid-2x2",
+    "resize": "scaling", "extract-images": "images", "repair": "wrench", "flatten": "layers", "add-image": "image-plus",
+    "header-footer": "panel-top", "text-to-pdf": "file-text", "remove-annots": "message-square-x", "annotate": "highlighter",
+    "properties": "file-cog", "reverse": "arrow-down-up", "add-blank": "file-plus", "booklet": "book-open", "autocrop": "scan",
+    "grayscale": "contrast", "tools": "blocks",
+}
+
 # Landing pages that run another page's script (the page's own text and strings still differ).
 SCRIPT_OF = {"png-to-pdf": "jpg-to-pdf", "pdf-to-png": "pdf-to-jpg"}
 

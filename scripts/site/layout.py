@@ -1,11 +1,13 @@
 """HTML building blocks shared by every page."""
 import html
 import json
+import hashlib
 import re
+from pathlib import Path
 
 import registry as R
 from names import blurb, short
-from ui import PRIVACY, SHELL
+from ui import FREE, PRIVACY, REVIEWS, SHELL
 
 GITHUB = "https://github.com/LuckyLBP/retypee"
 SITE_ID = R.BASE + "/#site"
@@ -32,6 +34,12 @@ def plain(s):
 def mark(s):
     """*word* in a heading becomes the yellow highlighter."""
     return re.sub(r"\*(.+?)\*", r'<span class="mark">\1</span>', s)
+
+
+def asset(name):
+    """A stylesheet URL carrying a content hash, so a browser never pairs new markup with a cached old file."""
+    digest = hashlib.sha1((Path(__file__).resolve().parents[2] / "web" / name).read_bytes()).hexdigest()[:8]
+    return f"/{name}?v={digest}"
 
 
 def other(lang):
@@ -74,7 +82,7 @@ def json_ld(pid, lang, c):
     if kind in ("editor", "tool"):
         app = {"@type": "WebApplication", "@id": url + "#app", "name": "Retypee" if pid == "home" else f"{short(pid, lang)} – Retypee",
                "url": url, "description": c["desc"], "inLanguage": lang,
-               "applicationCategory": "BusinessApplication",
+               "applicationCategory": "UtilitiesApplication",
                "operatingSystem": "Valfri modern webbläsare" if lang == "sv" else "Any modern web browser",
                "isAccessibleForFree": True, "publisher": {"@id": ORG_ID}, "isPartOf": {"@id": SITE_ID},
                "offers": {"@type": "Offer", "price": "0", "priceCurrency": cur}}
@@ -102,7 +110,7 @@ def head(pid, lang, c):
     og_desc = c.get("og_desc") or c["desc"]
     og_title = c.get("og_title") or c["title"].split(" | ")[0]
     img = og_image(lang)
-    css = '  <link rel="stylesheet" href="/styles.css">\n' + ('' if kind == "editor" else '  <link rel="stylesheet" href="/tools.css">\n')
+    css = f'  <link rel="stylesheet" href="{asset("styles.css")}">\n' + ('' if kind == "editor" else f'  <link rel="stylesheet" href="{asset("tools.css")}">\n')
     return f'''<head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -138,31 +146,48 @@ def head(pid, lang, c):
 
 # ---------------------------------------------------------------- header / menu / footer
 
+# A 3x3 grid of dots: the tools menu button.
+GRID_ICON = ('<svg class="grid-ic" width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false" fill="currentColor">'
+             + "".join(f'<circle cx="{4 + 6 * x}" cy="{4 + 6 * y}" r="1.55"/>' for y in range(3) for x in range(3))
+             + '</svg>')
+GLOBE_ICON = ('<svg class="globe-ic" width="17" height="17" viewBox="0 0 20 20" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" '
+              'stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="10" r="7.25"/>'
+              '<path d="M2.75 10h14.5M10 2.75c2 2.1 3 4.5 3 7.25s-1 5.15-3 7.25c-2-2.1-3-4.5-3-7.25s1-5.15 3-7.25z"/></svg>')
+
+
+CHECK_ICON = ('<svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" '
+              'stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4.5 10.5 3.5 3.5 7.5-8"/></svg>')
+
+# The GitHub mark (Octicons), linking the repository.
+GITHUB_ICON = ('<svg class="gh-ic" width="20" height="20" viewBox="0 0 16 16" aria-hidden="true" focusable="false" fill="currentColor">'
+               '<path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>')
+
+
 def menu_html(lang):
     t = SHELL[lang]
     cols = []
     for _cid, label, ids in R.CATEGORIES:
         if _cid in R.MENU_HIDDEN:
             continue
-        links = "".join(f'<a href="{R.path(i, lang)}">{esc(short(i, lang))}</a>' for i in ids)
+        links = "".join(f'<a href="{R.path(i, lang)}">{svg_icon(i)}<span>{esc(short(i, lang))}</span></a>' for i in ids)
         cols.append(f'<div class="menu-col"><p class="menu-h">{esc(label[lang])}</p>{links}</div>')
-    return (f'<details class="menu" id="menu"><summary>{esc(t["menu"])}</summary>'
+    return (f'<details class="menu" id="menu"><summary title="{esc(t["menu"])}" aria-label="{esc(t["menu"])}">{GRID_ICON}</summary>'
             f'<div class="menu-panel">{"".join(cols)}'
-            f'<a class="menu-all" href="{R.path("tools", lang)}">{esc(t["all_tools"])} →</a></div></details>')
+            f'<a class="menu-all" href="{R.path("tools", lang)}">{esc(t["all_tools"])}<span aria-hidden="true">→</span></a></div></details>')
 
 
 def brand(pid, lang, with_file_name):
     fn = '\n      <span class="file-name" id="fileName"></span>' if with_file_name else ""
     return f'''    <div class="brand">
       <a class="brand-link" href="{R.path("home", lang)}"><img class="wordmark" src="/wordmark.svg" alt="Retypee" width="103" height="26"></a>
-      {menu_html(lang)}{fn}
+      {fn}
     </div>'''
 
 
 def lang_link(pid, lang):
     t = SHELL[lang]
     o = other(lang)
-    return f'<a class="lang" href="{switch_href(pid, lang)}" hreflang="{o}" lang="{o}" title="{esc(t["lang_title"])}">{esc(t["lang_name"])}</a>'
+    return f'<a class="lang" href="{switch_href(pid, lang)}" hreflang="{o}" lang="{o}" title="{esc(t["lang_title"])}">{GLOBE_ICON}<span>{esc(t["lang_name"])}</span></a>'
 
 
 ICONS = {
@@ -177,6 +202,9 @@ ICONS = {
     "fit": '<path d="M3.5 10h13M6.5 7 3.5 10l3 3M13.5 7l3 3-3 3"/>',
     "prev": '<path d="m12 5-5 5 5 5"/>',
     "next": '<path d="m8 5 5 5-5 5"/>',
+    "font": '<path d="M2.5 16 7 4.5 11.5 16M4.2 12.2h5.6M13.5 16l2.5-6 2.5 6M14.4 14h3.2"/>',
+    "open": '<path d="M3.5 7V5.5A1.5 1.5 0 0 1 5 4h3l1.5 2H15A1.5 1.5 0 0 1 16.5 7.5v7A1.5 1.5 0 0 1 15 16H5a1.5 1.5 0 0 1-1.5-1.5z"/>',
+    "download": '<path d="M10 3.5v9M6.5 9.5 10 13l3.5-3.5M4 16.5h12"/>',
     "close": '<path d="m5.5 5.5 9 9m0-9-9 9"/>',
 }
 
@@ -190,14 +218,13 @@ def header_editor(pid, lang):
     return f'''  <header class="bar">
 {brand(pid, lang, True)}
     <div class="actions">
-      {lang_link(pid, lang)}
-      <label class="tool" id="fontBtn" title="{esc(t["add_font_title"])}">{esc(t["add_font"])}
-        <input type="file" accept=".ttf,.otf,.ttc,font/ttf,font/otf" id="fontInput" class="file-input">
-      </label>
-      <label class="tool" id="openBtn" hidden>{esc(t["open_another"])}
+      <label class="tool" id="openBtn" hidden>{icon("open")}<span>{esc(t["open_another"])}</span>
         <input type="file" accept="application/pdf,.pdf" id="openInput" class="file-input">
       </label>
-      <button class="primary" id="downloadBtn" hidden>{esc(t["download"])}</button>
+      <button class="primary" id="downloadBtn" hidden>{icon("download")}<span>{esc(t["download"])}</span></button>
+      <span class="sep bar-sep" aria-hidden="true"></span>
+      {lang_link(pid, lang)}
+      {menu_html(lang)}
     </div>
   </header>
 '''
@@ -215,6 +242,9 @@ def toolbar(lang):
             <button class="seg" role="radio" aria-checked="false" data-mode="add" title="{esc(t["add_title"])}">{icon("add")}<span class="label">{esc(t["add_text"])}</span></button>
           </div>
           <button class="tool" id="findBtn" title="{esc(t["find_title"])}">{icon("search")}<span class="label">{esc(t["find"])}</span></button>
+          <label class="icon" id="fontBtn" title="{esc(t["add_font_title"])}">{icon("font")}<span class="sr-only">{esc(t["add_font"])}</span>
+            <input type="file" accept=".ttf,.otf,.ttc,font/ttf,font/otf" id="fontInput" class="file-input">
+          </label>
           <span class="sep" aria-hidden="true"></span>
           <button class="icon" id="undoBtn" title="{esc(t["undo_title"])}" aria-label="{esc(t["undo"])}" disabled>{icon("undo")}</button>
           <button class="icon" id="redoBtn" title="{esc(t["redo_title"])}" aria-label="{esc(t["redo"])}" disabled>{icon("redo")}</button>
@@ -249,29 +279,33 @@ def header_plain(pid, lang):
 {brand(pid, lang, False)}
     <div class="actions">
       {lang_link(pid, lang)}
+      {menu_html(lang)}
     </div>
   </header>
 '''
 
 
+FOOT_LINKS = ["merge", "split", "compress", "sign", "change-text"]
+
+
 def footer(pid, lang):
     t = SHELL[lang]
-    cols = []
-    for _cid, label, ids in R.CATEGORIES:
-        lis = "".join(f'<li><a href="{R.path(i, lang)}">{esc(short(i, lang))}</a></li>' for i in ids)
-        cols.append(f'<div class="foot-col"><p class="foot-h">{esc(label[lang])}</p><ul>{lis}</ul></div>')
+    links = "".join(f'<a href="{R.path(i, lang)}">{esc(short(i, lang))}</a>' for i in FOOT_LINKS)
     return f'''        <footer class="site-foot">
           <div class="foot-top">
             <div class="foot-brand">
               <a href="{R.path("home", lang)}"><img class="wordmark" src="/wordmark.svg" alt="Retypee" width="83" height="21"></a>
               <p>{esc(t["footer_tag"])}</p>
             </div>
-            <nav class="foot-cols" aria-label="{esc(t["menu"])}">{"".join(cols)}</nav>
+            <a class="badge" href="https://pohlare.com" rel="noopener"><img src="/pohlare.png" alt="" width="44" height="44"><span><small>{esc(t["made_by"])}</small><strong>{esc(t["made_by_name"])}</strong></span></a>
           </div>
+          <nav class="foot-links" aria-label="{esc(t["menu"])}">{links}<a class="all" href="{R.path("tools", lang)}">{esc(t["all_tools_link"])} →</a></nav>
           <div class="foot-line">
             <span>{esc(t["free_open"])}</span>
-            <a href="{GITHUB}">{esc(t["source"])}</a>
-            {lang_link(pid, lang)}
+            <div class="foot-actions">
+              <a class="gh" href="{GITHUB}" rel="noopener" title="GitHub" aria-label="{esc(t["source"])} (GitHub)">{GITHUB_ICON}</a>
+              {lang_link(pid, lang)}
+            </div>
           </div>
         </footer>
 '''
@@ -313,6 +347,54 @@ def faq_html(c):
 '''
 
 
+def free_row(lang):
+    """The three promises as a row of yellow ticks, shown right under the drop zone."""
+    items = "".join(f"<li>{CHECK_ICON}{esc(c)}</li>" for c in FREE[lang]["chips"])
+    return f'<ul class="free-row">{items}</ul>'
+
+
+def free_html(lang):
+    f = FREE[lang]
+    chips = "".join(f"<li>{CHECK_ICON}{esc(c)}</li>" for c in f["chips"])
+    return f'''        <section class="free">
+          <h2>{f["h2"]}</h2>
+          <p>{f["p"]}</p>
+          <ul class="chips">{chips}</ul>
+        </section>
+'''
+
+
+def reviews_html(pid, lang):
+    r = REVIEWS[lang]
+    stars_input = "".join(f'<input type="radio" class="sr-only" name="stars" id="rv-s{n}" value="{n}"><label for="rv-s{n}" title="{esc(r["star"].format(n=n))}"><span class="sr-only">{esc(r["star"].format(n=n))}</span>★</label>' for n in (5, 4, 3, 2, 1))
+    bars = "".join(f'<li><span class="rv-bar-track"><span class="rv-bar-fill" id="rvBar{n}"></span></span><span class="rv-bar-label">{n}.0 ★</span></li>' for n in (5, 4, 3, 2, 1))
+    strings = json.dumps({**r, "tool": pid, "lang": lang}, ensure_ascii=False)
+    return f'''        <section class="reviews" id="reviews" data-tool="{pid}">
+          <h2>{esc(r["h2"])}</h2>
+          <p class="rv-none" id="rvNone" hidden>{esc(r["none"])}</p>
+          <div class="rv-summary" id="rvSummary" hidden>
+            <div class="rv-score">
+              <span class="rv-avg" id="rvAvg"></span>
+              <div class="rv-score-side">
+                <span class="rv-stars-out" id="rvStarsOut" role="img"></span>
+                <p class="rv-count" id="rvCount"></p>
+              </div>
+            </div>
+            <ul class="rv-bars" id="rvBars">{bars}</ul>
+          </div>
+          <button type="button" class="rv-toggle" id="rvToggle" aria-expanded="false" aria-controls="rvForm">{esc(r["form_h"])}</button>
+          <form class="rv-form" id="rvForm" novalidate hidden>
+            <fieldset class="rv-stars"><legend>{esc(r["stars"])}</legend>{stars_input}</fieldset>
+            <label class="field"><span>{esc(r["name"])}</span><input type="text" name="name" maxlength="40" autocomplete="off"></label>
+            <input class="rv-trap" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+            <div class="rv-actions"><button class="primary" type="submit">{esc(r["submit"])}</button><p class="rv-msg" id="rvMsg" role="status" aria-live="polite"></p></div>
+            <p class="note">{esc(r["note"])}</p>
+          </form>
+          <script type="application/json" id="rv-strings">{strings}</script>
+        </section>
+'''
+
+
 def privacy_html(lang):
     p = PRIVACY[lang]
     return f'''        <section>
@@ -322,11 +404,19 @@ def privacy_html(lang):
 '''
 
 
+def svg_icon(pid, cls="ic"):
+    """A tool's icon from the sprite (web/icons.svg); decorative, so hidden from assistive tech."""
+    return f'<svg class="{cls}" aria-hidden="true" focusable="false"><use href="/icons.svg#i-{pid}"/></svg>'
+
+
+def card_html(i, lang, indent):
+    return (f'\n{indent}<a class="card" href="{R.path(i, lang)}"><span class="card-ic">{svg_icon(i)}</span>'
+            f'<strong>{esc(short(i, lang))}</strong><span>{esc(blurb(i, lang))}</span></a>')
+
+
 def related_html(pid, lang, ids):
     t = SHELL[lang]
-    cards = "".join(
-        f'\n            <a class="card" href="{R.path(i, lang)}"><strong>{esc(short(i, lang))}</strong><span>{esc(blurb(i, lang))}</span></a>'
-        for i in ids if i != pid)
+    cards = "".join(card_html(i, lang, "            ") for i in ids if i != pid)
     return f'''        <section class="related">
           <h2>{esc(t["related"])}</h2>
           <p>{esc(t["related_lead"])}</p>

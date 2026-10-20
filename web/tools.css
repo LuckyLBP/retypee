@@ -239,3 +239,10 @@ textarea.ff-input { padding: 3px; resize: none; line-height: 1.25; }
 /* ---- Wave 6: auto-crop */
 .ac-box { position: absolute; box-sizing: border-box; border: 2px dashed #b88700; box-shadow: 0 0 0 999px rgba(20, 20, 20, .38); pointer-events: none; }
 .ac-box[hidden] { display: none; }
+
+/* colour pickers: a clear, finger-sized swatch instead of the browser's narrow bar */
+input[type="color"].colorbox { width: 48px; height: 34px; padding: 3px; background: #fff; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+input[type="color"].colorbox::-webkit-color-swatch-wrapper { padding: 0; }
+input[type="color"].colorbox::-webkit-color-swatch { border: 0; border-radius: 5px; }
+input[type="color"].colorbox::-moz-color-swatch { border: 0; border-radius: 5px; }
+input[type="color"].colorbox:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }

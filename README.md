@@ -168,6 +168,15 @@ between tools), write `web/tools/<id>.js` using the helpers in `web/tools/common
 `python3 scripts/build_pages.py` (`--check` fails when the committed pages are stale). If it needs PyMuPDF, add a route to `web/py/bridge.py`
 (and to `app.py` if the local app should have it too).
 
+### Icons
+
+Every page has an icon from [Lucide](https://lucide.dev) (ISC licence), shown in the menu, on the
+hub and related-tool cards, and above each tool's title. `ICON_OF` in `scripts/site/registry.py` names
+the Lucide icon for each page; `python3 scripts/fetch_icons.py` downloads those icons (at the pinned
+`LUCIDE` version) into one sprite, `web/icons.svg`, which is committed and cached. Pages reference it
+with `<use href="/icons.svg#i-<page id>">`, so the icons follow the text colour. A new page needs an
+`ICON_OF` entry (the script stops if one is missing), then rerun the script and the page generator.
+
 ### Languages
 
 Swedish is the main language (`/`), English lives at `/en/`. Every page has a twin in the

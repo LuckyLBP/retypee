@@ -17,7 +17,7 @@ SHELL = {
         case="Matcha versaler", word="Hela ord", fit="Pressa ihop längre text så den ryms",
         find_hint="Skriv något att söka efter.", replace_all="Ersätt alla",
         drawer_note="En träff måste ligga på en rad och i en och samma textstil. Text som är uppdelad på flera rader eller stilar hoppas över.",
-        free_open="Gratis och öppen källkod (AGPL-3.0)", source="Källkod",
+        free_open="Gratis och öppen källkod (AGPL-3.0)", source="Källkod", made_by="Skapad av", made_by_name="din Pohlare", all_tools_link="Alla verktyg",
         related="Fler PDF-verktyg", related_lead="Fortsätt med ett av de andra verktygen.",
         noscript="Det här verktyget kräver JavaScript. Aktivera det i din webbläsare för att fortsätta.",
         footer_tag="PDF-verktyg som körs i din webbläsare. Dina filer laddas aldrig upp.",
@@ -40,7 +40,7 @@ SHELL = {
         case="Match case", word="Whole words", fit="Squeeze longer text to fit",
         find_hint="Type something to find.", replace_all="Replace all",
         drawer_note="A match has to sit on one line in one text style. Text split across lines or styles is skipped.",
-        free_open="Free and open source (AGPL-3.0)", source="Source code",
+        free_open="Free and open source (AGPL-3.0)", source="Source code", made_by="Made by", made_by_name="your Pohlare", all_tools_link="All tools",
         related="More PDF tools", related_lead="Carry on with one of the other tools.",
         noscript="This tool needs JavaScript. Turn it on in your browser to continue.",
         footer_tag="PDF tools that run in your browser. Your files are never uploaded.",
@@ -85,9 +85,33 @@ TOOL_UI = {
     ),
 }
 
+FREE = {
+    "sv": dict(h2="100 % gratis, för alltid",
+               p="Alla verktyg på Retypee är gratis och förblir det. Inget kreditkort, ingen registrering och inget konto – du öppnar verktyget och använder det. Du kan dessutom använda dem hur mycket du vill, utan gräns.",
+               chips=["Inget kreditkort", "Ingen registrering", "Obegränsad användning"]),
+    "en": dict(h2="100% free, forever",
+               p="Every tool on Retypee is free and stays that way. No credit card, no sign-up and no account – you open a tool and use it. You can also use them as much as you like, with no limits.",
+               chips=["No credit card", "No sign-up", "Unlimited use"]),
+}
+
+REVIEWS = {
+    "sv": dict(h2="Omdömen", none="Inga omdömen än. Bli den första!", count_label="{n} omdömen", count_label_1="1 omdöme",
+               form_h="Skriv ett omdöme", stars="Betyg", star="{n} av 5 stjärnor",
+               name="Namn (valfritt)", submit="Skicka betyg", sending="Skickar…",
+               need_stars="Välj ett betyg först.",
+               thanks="Tack för ditt betyg! Det visas här när det har godkänts.", error="Något gick fel. Försök igen om en stund.",
+               note="Vi sparar bara betyget och namnet om du fyller i det. Inget om dig i övrigt."),
+    "en": dict(h2="Reviews", none="No reviews yet. Be the first!", count_label="{n} reviews", count_label_1="1 review",
+               form_h="Write a review", stars="Rating", star="{n} out of 5 stars",
+               name="Name (optional)", submit="Send rating", sending="Sending…",
+               need_stars="Choose a rating first.",
+               thanks="Thanks for your rating! It will appear here once it has been approved.", error="Something went wrong. Please try again in a moment.",
+               note="We only store the rating and your name if you add one. Nothing else about you."),
+}
+
 PRIVACY = {
     "sv": dict(h2="Dina filer lämnar aldrig din enhet",
-               p="Verktyget körs i din webbläsare. Filen läses in i enhetens minne, bearbetas där och sparas som en ny fil hos dig. Ingenting skickas till en server."),
+               p="Verktyget körs i din webbläsare. Filen läses in i enhetens minne, bearbetas där och sparas som en ny fil hos dig. Dina filer skickas aldrig till en server. Det enda som sparas är ett omdöme, om du väljer att skriva ett."),
     "en": dict(h2="Your files never leave your device",
-               p="This tool runs in your browser. The file is read into your device's memory, processed there and saved as a new file on your computer. Nothing is sent to a server."),
+               p="This tool runs in your browser. The file is read into your device's memory, processed there and saved as a new file on your computer. Your files are never sent to a server. The only thing stored is a rating, if you choose to leave one."),
 }
