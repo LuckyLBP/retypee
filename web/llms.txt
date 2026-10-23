@@ -1,0 +1,78 @@
+# Retypee
+
+> Edit text in a PDF right in your browser. Click a line, type, download. Find and replace across the whole file. Free, and your PDF is never uploaded.
+
+Every tool runs client-side in the browser (WebAssembly); no file is ever uploaded to a server. Free, with no account, no credit card and no usage limit. Open source (AGPL-3.0).
+
+## Edit PDF
+
+- [Edit PDF](https://retypee.se/en/): Click a line and change the text right in the PDF.
+- [Fill in form](https://retypee.se/en/fill-pdf-form/): Type straight into PDF forms.
+- [Highlight and draw](https://retypee.se/en/highlight-and-draw-on-pdf/): Highlight text, draw and write notes.
+- [Page numbers](https://retypee.se/en/add-page-numbers-to-pdf/): Add page numbers to every page.
+- [Header and footer](https://retypee.se/en/add-header-and-footer-to-pdf/): Text at the top and bottom of every page.
+- [Watermark](https://retypee.se/en/watermark-pdf/): Put text across the pages.
+- [Add image](https://retypee.se/en/add-image-to-pdf/): Put a logo or picture on the pages.
+- [Sign PDF](https://retypee.se/en/sign-pdf/): Draw or type your signature.
+
+## Common edits
+
+- [Change text in PDF](https://retypee.se/en/change-text-in-pdf/): Swap words, numbers and dates in an existing PDF.
+- [Replace text in PDF](https://retypee.se/en/replace-text-in-pdf/): Find and replace text across a whole PDF in one go.
+- [Edit without uploading](https://retypee.se/en/edit-pdf-without-uploading/): Edit a PDF without the file leaving your computer.
+- [Edit invoice PDF](https://retypee.se/en/edit-invoice-pdf/): Fix mistakes in your own invoices and quotes.
+
+## Organize PDF
+
+- [Merge PDF](https://retypee.se/en/merge-pdf/): Combine several PDF files into one.
+- [Split PDF](https://retypee.se/en/split-pdf/): Split one PDF into several files.
+- [Delete pages](https://retypee.se/en/delete-pdf-pages/): Remove the pages you do not want.
+- [Remove blank pages](https://retypee.se/en/remove-blank-pages-from-pdf/): Find and remove blank pages automatically.
+- [Extract pages](https://retypee.se/en/extract-pdf-pages/): Pull selected pages into a new PDF.
+- [Rotate PDF](https://retypee.se/en/rotate-pdf/): Turn pages that face the wrong way.
+- [Organize PDF](https://retypee.se/en/organize-pdf/): Reorder, rotate and delete pages.
+- [Reverse order](https://retypee.se/en/reverse-pdf-page-order/): Reverse the pages or collate scans.
+- [Add blank pages](https://retypee.se/en/add-blank-pages-to-pdf/): Insert blank pages where you want them.
+
+## Format and print
+
+- [Crop PDF](https://retypee.se/en/crop-pdf/): Trim the margins you do not want.
+- [Auto-crop](https://retypee.se/en/auto-crop-pdf/): Trim the white margins around the content.
+- [Resize pages](https://retypee.se/en/resize-pdf-pages/): Turn every page into A4, Letter or another size.
+- [Pages per sheet](https://retypee.se/en/multiple-pages-per-sheet-pdf/): Put 2, 4, 6 or 9 pages on each sheet.
+- [Make booklet](https://retypee.se/en/make-booklet-from-pdf/): Order the pages so they print as a booklet.
+- [Grayscale PDF](https://retypee.se/en/convert-pdf-to-grayscale/): Turn every colour into grey.
+- [Compress PDF](https://retypee.se/en/compress-pdf/): Make the PDF smaller to send.
+
+## Convert
+
+- [JPG to PDF](https://retypee.se/en/jpg-to-pdf/): Turn your images into a PDF.
+- [PNG to PDF](https://retypee.se/en/png-to-pdf/): Turn PNG images into a PDF.
+- [Text to PDF](https://retypee.se/en/text-to-pdf/): Turn typed or pasted text into a PDF.
+- [Scan to PDF](https://retypee.se/en/scan-to-pdf/): Turn photos of paper into a clean PDF.
+- [PDF to JPG](https://retypee.se/en/pdf-to-jpg/): Save PDF pages as images.
+- [PDF to PNG](https://retypee.se/en/pdf-to-png/): Save PDF pages as PNG images.
+- [PDF to text](https://retypee.se/en/pdf-to-text/): Get the text out of a PDF.
+- [Extract images](https://retypee.se/en/extract-images-from-pdf/): Get every image out of a PDF as a ZIP.
+- [OCR PDF](https://retypee.se/en/ocr-pdf/): Make scanned pages searchable.
+
+## Security and repair
+
+- [Remove metadata](https://retypee.se/en/remove-pdf-metadata/): Clear author, app and dates from a PDF.
+- [PDF properties](https://retypee.se/en/edit-pdf-properties/): Change title, author and keywords.
+- [Redact PDF](https://retypee.se/en/redact-pdf/): Black out sensitive text and areas for good.
+- [Flatten PDF](https://retypee.se/en/flatten-pdf/): Make comments and form fields part of the page.
+- [Remove comments](https://retypee.se/en/remove-comments-from-pdf/): Clear notes, highlights and drawings.
+- [Protect PDF](https://retypee.se/en/protect-pdf/): Lock the file with a password.
+- [Unlock PDF](https://retypee.se/en/unlock-pdf/): Remove the password from your own PDF.
+- [Compare PDF](https://retypee.se/en/compare-pdf/): See what changed between two versions.
+- [Repair PDF](https://retypee.se/en/repair-pdf/): Rescue a PDF that will not open.
+
+## Docs
+
+- [All tools](https://retypee.se/en/tools/): Full index of every PDF tool on the site.
+- [Source code](https://github.com/LuckyLBP/retypee): AGPL-3.0, the same engine that runs in the browser.
+
+## Optional
+
+- [Svenska](https://retypee.se/): Swedish version of the site, same tools.

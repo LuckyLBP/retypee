@@ -19,6 +19,7 @@ sys.path.insert(0, os.path.join(HERE, "site"))
 import layout as L          # noqa: E402
 import registry as R        # noqa: E402
 from content import CONTENT  # noqa: E402
+from names import blurb, short  # noqa: E402
 from ui import SHELL, TOOL_UI  # noqa: E402
 
 LANGS = ("sv", "en")
@@ -217,6 +218,26 @@ def sitemap(ids):
             'xmlns:xhtml="http://www.w3.org/1999/xhtml">\n' + "\n".join(urls) + "\n</urlset>\n")
 
 
+def llms_txt(ids):
+    """A plain-English index of the site for LLMs (https://llmstxt.org), in the one canonical
+    language the convention expects. Built from the same tool list as the sitemap and the menu,
+    so it can't drift out of sync with what the site actually has."""
+    home = CONTENT["home"]["en"]
+    lines = ["# Retypee", "", f"> {home['desc']}", "",
+              "Every tool runs client-side in the browser (WebAssembly); no file is ever uploaded to a server. "
+              "Free, with no account, no credit card and no usage limit. Open source (AGPL-3.0)."]
+    for _cid, label, pids in R.CATEGORIES:
+        rows = [f"- [{short(pid, 'en')}]({R.url(pid, 'en')}): {blurb(pid, 'en')}" for pid in pids if pid in ids]
+        if rows:
+            lines += ["", f"## {label['en']}", ""] + rows
+    lines += ["", "## Docs", "",
+              f"- [All tools]({R.url('tools', 'en')}): Full index of every PDF tool on the site.",
+              f"- [Source code]({L.GITHUB}): AGPL-3.0, the same engine that runs in the browser.",
+              "", "## Optional", "",
+              f"- [Svenska]({R.url('home', 'sv')}): Swedish version of the site, same tools."]
+    return "\n".join(lines) + "\n"
+
+
 def redirects(ids):
     """English-language browsers landing on a Swedish page go to its English twin (?lang=sv opts out)."""
     rules = []
@@ -244,6 +265,7 @@ def build():
         for lang in LANGS:
             files[out_path(pid, lang)] = RENDER[R.kind(pid)](pid, lang, resolve(CONTENT[pid][lang], lang))
     files[os.path.join(WEB, "sitemap.xml")] = sitemap(ids)
+    files[os.path.join(WEB, "llms.txt")] = llms_txt(ids)
     # The pages that may take reviews; api/reviews.js refuses any other tool id.
     files[os.path.join(ROOT, "api", "_tools.json")] = json.dumps([i for i in ids if R.kind(i) != "hub"]) + "\n"
     vpath = os.path.join(ROOT, "vercel.json")
