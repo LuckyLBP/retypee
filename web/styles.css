@@ -256,6 +256,8 @@ body.mode-add .unit { pointer-events: none; }
 .free-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; font-weight: 650; color: var(--ink); }
 .free-list svg { flex: none; width: 18px; height: 18px; margin-top: 1px; color: rgba(27, 23, 19, .6); }
 .free-note { margin: 4px 0 0; font-size: 12.5px; color: rgba(27, 23, 19, .55); }
+.free-note a.free-face { display: inline-flex; align-items: center; gap: 4px; }
+.free-note a.free-face img { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; }
 .free-row { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 22px; }
 .free-row li { display: inline-flex; align-items: center; gap: 7px; color: var(--ink); font-size: 14px; font-weight: 600; line-height: 1.5; }
 .free-row svg { width: 18px; height: 18px; flex: none; color: var(--yellow); stroke-width: 2.6; }

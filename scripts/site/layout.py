@@ -360,7 +360,7 @@ def free_html(lang):
           <h2>{f["h2"]}</h2>
           <p>{f["p"]}</p>
           <ul class="free-list">{items}</ul>
-          <p class="free-note">{esc(f["note"])} <a href="https://pohlare.com" rel="noopener">Pohlare</a></p>
+          <p class="free-note">{esc(f["note"])} <a class="free-face" href="https://pohlare.com" rel="noopener">Pohlare<img src="/pohlare.png" alt="" width="18" height="18" loading="lazy"></a></p>
         </section>
 '''
 
