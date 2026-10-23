@@ -126,7 +126,7 @@ def tool_page(pid, lang, c):
   <main id="main">
     <div class="hero compact">
       {L.crumbs_html(pid, lang)}
-      <span class="page-ic">{L.svg_icon(pid)}</span>
+      <span class="page-ic" {L.tape_vars(pid)}>{L.svg_icon(pid)}</span>
       <h1>{L.mark(c["h1"])}</h1>
       <p class="lede">{c["lede"]}</p>
     </div>
@@ -168,7 +168,7 @@ def hub_page(pid, lang, c):
   <main id="main">
     <div class="hero compact">
       {L.crumbs_html(pid, lang)}
-      <span class="page-ic">{L.svg_icon(pid)}</span>
+      <span class="page-ic" {L.tape_vars(pid)}>{L.svg_icon(pid)}</span>
       <h1>{L.mark(c["h1"])}</h1>
       <p class="lede">{c["lede"]}</p>
       {L.free_row(lang)}

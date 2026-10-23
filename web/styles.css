@@ -9,6 +9,13 @@
   src: url("/fonts/inter-latin-ext.woff2") format("woff2");
   unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
+/* Caveat (SIL Open Font License), self-hosted. See fonts/caveat-OFL.txt.
+   Subset to digits, A-Z/a-z and the Swedish diacritics it's actually used for (step numerals, the odd handwritten aside). */
+@font-face {
+  font-family: "Caveat"; font-style: normal; font-weight: 700; font-display: swap;
+  src: url("/fonts/caveat.woff2") format("woff2");
+  unicode-range: U+30-39, U+41-5A, U+61-7A, U+C4-C5, U+CB, U+CF, U+D6, U+DC, U+E4-E5, U+EB, U+EF, U+F6, U+FC, U+FF, U+16E-16F, U+178, U+308, U+30A, U+1E26-1E27, U+1E84-1E85, U+1E8C-1E8D, U+1E97-1E99;
+}
 
 /* Retypee: calm and simple. Warm paper, black ink, one yellow highlighter.
    The PDF page itself is always plain white paper. */
@@ -23,8 +30,13 @@
   --line: rgba(27, 23, 19, 0.14);
   --yellow: #f6c945;
   --yellow-wash: rgba(246, 201, 69, 0.45);
+  --yellow-soft: #fbe196;
   --blue: #2748d8;
   --danger: #c4291c;
+
+  /* Index-card tan for icon tiles; distinct from --card so the tile reads as a separate scrap of paper. */
+  --index-paper: #f1e8d2;
+  --index-line: rgba(27, 23, 19, 0.16);
 
   --shadow-s: 0 1px 2px rgba(27, 23, 19, 0.08), 0 2px 8px rgba(27, 23, 19, 0.06);
   --shadow-m: 0 2px 4px rgba(27, 23, 19, 0.06), 0 12px 28px rgba(27, 23, 19, 0.12);
@@ -32,6 +44,7 @@
   --canvas: #e5e3dd;
 
   --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-hand: "Caveat", "Segoe Script", cursive;
 }
 
 * { box-sizing: border-box; }
@@ -178,18 +191,31 @@ body.mode-add .unit { pointer-events: none; }
 .info code { padding: 1px 6px; border-radius: 6px; background: rgba(27, 23, 19, .07); color: var(--ink); font-size: 13.5px; }
 .info ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
 
-.steps { list-style: none; counter-reset: step; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
+/* Steps as sticky notes: rotated a little per position, with a peeled corner, instead of numbered cards. */
+.steps { list-style: none; counter-reset: step; margin: 0; padding: 8px 4px 16px; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 30px 22px; }
 .steps li {
-  counter-increment: step; position: relative; display: flex; flex-direction: column; gap: 6px; padding: 18px 20px 20px;
-  background: var(--card); border: 1px solid var(--line); border-radius: 16px; overflow: hidden;
+  counter-increment: step; position: relative; display: flex; flex-direction: column; gap: 6px; padding: 18px 18px 20px;
+  background: var(--yellow-soft); box-shadow: 0 1px 1px rgba(27, 23, 19, .08), 0 12px 20px rgba(27, 23, 19, .14);
+  transform: rotate(var(--rot, 0deg));
 }
+.steps li:nth-child(3n+1) { --rot: -2.2deg; }
+.steps li:nth-child(3n+2) { --rot: 1.6deg; margin-top: 10px; }
+.steps li:nth-child(3n+3) { --rot: -1.2deg; }
 .steps li::before {
-  content: counter(step); display: grid; place-items: center; width: 32px; height: 32px; margin-bottom: 8px;
-  border-radius: 10px; background: var(--yellow); color: var(--ink); font-weight: 700; font-size: 15px;
+  content: counter(step); display: block; margin-bottom: -4px;
+  font-family: var(--font-hand); font-weight: 700; font-size: 38px; line-height: 1; color: var(--ink);
+  transform: rotate(-4deg); transform-origin: left bottom;
 }
-.info .steps strong { display: block; margin: 0; font-size: 16px; line-height: 1.35; color: var(--ink); }
-.info .steps p { margin: 0; font-size: 14.5px; line-height: 1.55; }
+.steps li::after {
+  content: ""; position: absolute; right: 0; bottom: 0; width: 20px; height: 20px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, .65) 45%, transparent 46%); clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+.info .steps strong { display: block; margin: 0; font-size: 15.5px; line-height: 1.35; color: var(--ink); }
+.info .steps p { margin: 0; font-size: 13px; line-height: 1.5; color: rgba(27, 23, 19, .72); }
 .info .steps li { font-size: 14.5px; }
+@media (max-width: 480px) {
+  .steps li { transform: none; margin-top: 0; }
+}
 
 .faq details { border-top: 1px solid var(--line); }
 .faq details:last-child { border-bottom: 1px solid var(--line); }
@@ -213,12 +239,23 @@ body.mode-add .unit { pointer-events: none; }
 .badge span { display: flex; flex-direction: column; line-height: 1.15; }
 .badge small { font-size: 12.5px; color: rgba(27, 23, 19, .72); }
 .badge strong { font-size: 17px; font-weight: 700; letter-spacing: -.005em; }
-.free { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 24px; padding: 16px 22px; border-radius: 14px; background: var(--ink); color: #fff; }
-.info .free h2 { flex: 1 1 100%; margin: 0; font-size: 17px; letter-spacing: -0.01em; color: var(--yellow); }
-.info .free p { flex: 1 1 320px; margin: 0; color: rgba(255, 255, 255, .78); font-size: 14px; line-height: 1.55; }
-.info .chips { flex: 0 1 auto; list-style: none; margin: 0; padding: 0; flex-direction: row; flex-wrap: wrap; gap: 6px; }
-.chips li { display: inline-flex; align-items: center; gap: 5px; padding: 3px 11px 3px 8px; border-radius: 999px; background: var(--yellow); color: var(--ink); font-size: 13px; font-weight: 650; line-height: 1.5; }
-.chips svg { width: 14px; height: 14px; }
+/* The "100% free" promise as one more sticky note, instead of a flat dark CTA box. */
+.free {
+  position: relative; display: flex; flex-direction: column; gap: 14px; padding: 26px 28px 28px;
+  background: var(--yellow-soft); color: var(--ink);
+  box-shadow: 0 1px 1px rgba(27, 23, 19, .08), 0 16px 26px rgba(27, 23, 19, .16);
+  transform: rotate(-.7deg);
+}
+.free::after {
+  content: ""; position: absolute; right: 0; bottom: 0; width: 26px; height: 26px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, .65) 45%, transparent 46%); clip-path: polygon(100% 0, 100% 100%, 0 100%);
+}
+.info .free h2 { margin: 0; font-size: 19px; letter-spacing: -.01em; color: var(--ink); }
+.info .free p { margin: 0; color: rgba(27, 23, 19, .78); font-size: 14px; line-height: 1.6; max-width: 56ch; }
+.free-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.free-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; font-weight: 650; color: var(--ink); }
+.free-list svg { flex: none; width: 18px; height: 18px; margin-top: 1px; color: rgba(27, 23, 19, .6); }
+.free-note { margin: 4px 0 0; font-size: 12.5px; color: rgba(27, 23, 19, .55); }
 .free-row { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 6px 22px; }
 .free-row li { display: inline-flex; align-items: center; gap: 7px; color: var(--ink); font-size: 14px; font-weight: 600; line-height: 1.5; }
 .free-row svg { width: 18px; height: 18px; flex: none; color: var(--yellow); stroke-width: 2.6; }
@@ -274,11 +311,31 @@ a.card span { font-size: 13.5px; color: var(--ink-soft); line-height: 1.45; }
 .menu-panel a .ic { box-sizing: content-box; width: 17px; height: 17px; padding: 6px; border-radius: 9px; background: var(--yellow-wash); color: var(--ink); transition: background-color .12s; }
 .menu-panel a:hover .ic { background: var(--yellow); }
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-a.card span.card-ic { display: inline-grid; place-items: center; width: 38px; height: 38px; margin-bottom: 8px; border-radius: 10px; background: var(--yellow-wash); color: var(--ink); line-height: 0; }
-a.card span.card-ic .ic { width: 20px; height: 20px; }
-a.card:hover span.card-ic { background: var(--yellow); }
-.page-ic { display: inline-grid; place-items: center; width: 56px; height: 56px; border-radius: 16px; background: var(--yellow-wash); color: var(--ink); box-shadow: inset 0 0 0 1px rgba(27, 23, 19, .06); }
-.page-ic .ic { width: 28px; height: 28px; }
+/* Tool icon tiles: a small taped index card (paper grain + a strip of tape), not a flat colored square.
+   Rotation comes from --rot/--tr custom properties set inline per tool, so it stays stable across rebuilds. */
+.card-ic, .page-ic {
+  position: relative; display: inline-grid; place-items: center; line-height: 0; color: var(--ink);
+  background: var(--index-paper); border: 1px solid var(--index-line); border-radius: 3px;
+  box-shadow: 0 1px 2px rgba(27, 23, 19, .1), 0 8px 14px rgba(27, 23, 19, .1);
+  transform: rotate(var(--rot, 0deg));
+}
+.card-ic::before, .page-ic::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; mix-blend-mode: multiply; opacity: .5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 90px 90px;
+}
+.card-ic::after, .page-ic::after {
+  content: ""; position: absolute; top: -8px; left: 50%; z-index: 1;
+  background: var(--yellow); opacity: .78; mix-blend-mode: multiply; box-shadow: 0 2px 3px rgba(27, 23, 19, .18);
+  transform: translateX(-50%) rotate(var(--tr, -4deg));
+}
+.card-ic { width: 38px; height: 38px; margin-bottom: 8px; }
+.card-ic .ic { position: relative; z-index: 1; width: 19px; height: 19px; }
+.card-ic::after { width: 22px; height: 10px; top: -6px; }
+a.card:hover span.card-ic::after { opacity: .92; }
+.page-ic { width: 56px; height: 56px; }
+.page-ic .ic { position: relative; z-index: 1; width: 27px; height: 27px; }
+.page-ic::after { width: 32px; height: 14px; }
 .crumbs { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 8px; font-size: 13px; color: var(--ink-soft); }
 .crumbs a { color: var(--ink-soft); }
 .hero.compact { padding: 36px 20px 24px; gap: 14px; }

@@ -87,9 +87,11 @@ TOOL_UI = {
 
 FREE = {
     "sv": dict(h2="100 % gratis, för alltid",
+               note="Gjord för skojs skull av din",
                p="Alla verktyg på Retypee är gratis och förblir det. Inget kreditkort, ingen registrering och inget konto – du öppnar verktyget och använder det. Du kan dessutom använda dem hur mycket du vill, utan gräns.",
                chips=["Inget kreditkort", "Ingen registrering", "Obegränsad användning"]),
     "en": dict(h2="100% free, forever",
+               note="Made just for fun by your",
                p="Every tool on Retypee is free and stays that way. No credit card, no sign-up and no account – you open a tool and use it. You can also use them as much as you like, with no limits.",
                chips=["No credit card", "No sign-up", "Unlimited use"]),
 }

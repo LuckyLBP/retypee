@@ -355,11 +355,12 @@ def free_row(lang):
 
 def free_html(lang):
     f = FREE[lang]
-    chips = "".join(f"<li>{CHECK_ICON}{esc(c)}</li>" for c in f["chips"])
+    items = "".join(f"<li>{CHECK_ICON}{esc(c)}</li>" for c in f["chips"])
     return f'''        <section class="free">
           <h2>{f["h2"]}</h2>
           <p>{f["p"]}</p>
-          <ul class="chips">{chips}</ul>
+          <ul class="free-list">{items}</ul>
+          <p class="free-note">{esc(f["note"])} <a href="https://pohlare.com" rel="noopener">Pohlare</a></p>
         </section>
 '''
 
@@ -409,8 +410,17 @@ def svg_icon(pid, cls="ic"):
     return f'<svg class="{cls}" aria-hidden="true" focusable="false"><use href="/icons.svg#i-{pid}"/></svg>'
 
 
+def tape_vars(pid):
+    """Small, stable per-tool rotation for the taped-index-card icon tile (--rot the card, --tr the tape),
+    derived from the tool id so it stays the same across rebuilds instead of jittering."""
+    h = hashlib.md5(pid.encode()).digest()
+    rot = (h[0] % 90 - 45) / 10
+    tr = (h[1] % 100 - 50) / 10
+    return f'style="--rot:{rot:.1f}deg;--tr:{tr:.1f}deg"'
+
+
 def card_html(i, lang, indent):
-    return (f'\n{indent}<a class="card" href="{R.path(i, lang)}"><span class="card-ic">{svg_icon(i)}</span>'
+    return (f'\n{indent}<a class="card" href="{R.path(i, lang)}"><span class="card-ic" {tape_vars(i)}>{svg_icon(i)}</span>'
             f'<strong>{esc(short(i, lang))}</strong><span>{esc(blurb(i, lang))}</span></a>')
 
 
