@@ -40,6 +40,7 @@ After each edit a message tells you which font was used:
 |---|---|
 | taken from the PDF | The embedded font had every letter you typed. Perfect match. |
 | installed on this computer | Same font found in your system fonts or in `fonts/`. Perfect match. |
+| a close match | A metric-compatible stand-in bundled in `fonts-bundled/` for a font the app can't read from your system (Arial, Times New Roman, Courier New, Calibri, Cambria and Georgia all have one). Same letter widths as the original, so spacing still lines up, but not a pixel-identical match. |
 | standard fallback | Original font not found, so Helvetica, Times or Courier was used in the closest style. Drop the real `.ttf`/`.otf` into `fonts/` to fix it. |
 
 ## Metadata
@@ -147,7 +148,9 @@ PNG to PDF and PDF to PNG are landing pages that run the JPG tools' scripts (`SC
 The big libraries load only when someone points at a tool or chooses a file, so a page
 is about 100 KB at first. PyMuPDF is about 25 MB and comes from the jsDelivr CDN
 (pinned in `web/worker.js`); pdf-lib, pdf.js, fflate and the tesseract.js scripts are served from `web/vendor/`
-(MIT and Apache-2.0, see `web/vendor/LICENSES.txt`). Fonts (Inter) are in `web/fonts/`.
+(MIT and Apache-2.0, see `web/vendor/LICENSES.txt`). Fonts (Inter, Caveat) for the site itself are
+in `web/fonts/`; the font-matching stand-ins the editor can draw with (Arimo, Tinos, Cousine, Carlito,
+Caladea, Gelasio — all SIL Open Font License) are in `fonts-bundled/`, one licence file per family.
 
 ### How the pages are made
 
@@ -235,9 +238,10 @@ crawlers always get Swedish. Messages in the editor are in `STRINGS` in `web/app
 app.py            web server + API (FastAPI)
 cli.py            command line automation
 pdfedit/core.py   editing engine (extract, redact, rewrite, undo)
-pdfedit/fonts.py  font matching (embedded, local, fallback)
+pdfedit/fonts.py  font matching (embedded, local, bundled, fallback)
 static/           the local app's web interface
 fonts/            put extra font files here (local app)
+fonts-bundled/    metric-compatible stand-ins shipped with the app (OFL)
 web/              the static site (generated pages, tools, vendored libraries)
 scripts/          page generator (build_pages.py, site/) and sync-web.sh
 ```

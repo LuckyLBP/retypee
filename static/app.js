@@ -7,6 +7,7 @@ const ZOOM_STEPS = [0.5, 0.75, 1, 1.25, 1.5, 2, 2.5, 3];
 const FONT_SOURCE = {
   embedded: "taken from the PDF",
   local: "installed on this computer",
+  bundled: "a close match",
   standard: "standard fallback",
 };
 
@@ -534,9 +535,9 @@ function announceFont(font, deleted) {
   if (!font || font.source === "unchanged") return;
   const where = FONT_SOURCE[font.source] || font.source;
   const detail =
-    font.source === "standard"
-      ? "The original font was not found. Put its .ttf or .otf file in the fonts folder for an exact match."
-      : "";
+    font.source === "standard" ? "The original font was not found. Put its .ttf or .otf file in the fonts folder for an exact match."
+    : font.source === "bundled" ? "Not the original font, but one with matching letter widths, so spacing should still line up."
+    : "";
   toast(`Saved with ${font.label} (${where}).`, { detail });
 }
 

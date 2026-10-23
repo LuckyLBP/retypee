@@ -4,7 +4,11 @@ Order of preference when writing new text:
   1. The font embedded in the PDF, if it has every glyph we need
      (often it does not, because PDFs embed only the letters they use).
   2. A font file with the same name in ./fonts or in the system font folders.
-  3. A built-in standard font (Helvetica, Times or Courier) in the right style.
+  3. A metric-compatible stand-in bundled in ./fonts-bundled, for the handful
+     of proprietary fonts that show up in most real-world PDFs but are rarely
+     installed on the machine doing the editing (and never present in the
+     browser build, which has no access to the host OS's fonts at all).
+  4. A built-in standard font (Helvetica, Times or Courier) in the right style.
 """
 
 from __future__ import annotations
@@ -22,6 +26,7 @@ import pymupdf
 
 APP_DIR = Path(__file__).resolve().parent.parent
 USER_FONT_DIR = APP_DIR / "fonts"
+BUNDLED_FONT_DIR = APP_DIR / "fonts-bundled"
 CACHE_FILE = APP_DIR / ".font-index.json"
 FONT_EXTS = {".ttf", ".otf", ".ttc", ".otc"}
 
@@ -121,7 +126,7 @@ class FontIndex:
 
     def _signature(self) -> str:
         parts = []
-        for d in [USER_FONT_DIR, *system_font_dirs()]:
+        for d in [USER_FONT_DIR, BUNDLED_FONT_DIR, *system_font_dirs()]:
             try:
                 parts.append(f"{d}:{d.stat().st_mtime_ns}")
             except OSError:
@@ -144,8 +149,8 @@ class FontIndex:
             if data is None:
                 entries = []
                 user_fonts = []
-                # User folder first so it wins over system fonts with the same name.
-                for is_user, dirs in ((True, [USER_FONT_DIR]), (False, system_font_dirs())):
+                # User folder first so it wins over bundled or system fonts with the same name.
+                for is_user, dirs in ((True, [USER_FONT_DIR]), (False, [BUNDLED_FONT_DIR]), (False, system_font_dirs())):
                     for path in self._font_files(dirs):
                         for idx, cands, display in self._names(path):
                             entries.append([str(path), idx, cands])
@@ -170,9 +175,13 @@ class FontIndex:
             return hit
         # Metric-compatible stand-ins: same letter widths, near-identical look.
         key = loose(pdf_font_name)
+        # Rebuilt from scratch rather than sliced off the matched prefix: loose() treats
+        # "Roman" as style noise (for names like "Helvetica-Roman"), which also eats the
+        # "Roman" in "Times New Roman" and leaves a bogus leftover suffix behind it.
+        suffix = ("bold" if "bold" in key else "") + ("italic" if "italic" in key or "oblique" in key else "")
         for original, alias in METRIC_ALIASES:
             if key.startswith(original):
-                return self._loose.get(alias + key[len(original):])
+                return self._loose.get(alias + suffix)
         return None
 
     def user_fonts(self) -> list[dict]:
@@ -192,9 +201,16 @@ class FontIndex:
 
 
 METRIC_ALIASES = [
-    ("arial", "liberationsans"), ("helvetica", "liberationsans"),
-    ("timesnewroman", "liberationserif"), ("times", "liberationserif"),
-    ("couriernew", "liberationmono"), ("courier", "liberationmono"),
+    # Metric-compatible stand-ins (same letter widths as the original, so edited
+    # text keeps the same line breaks) for fonts bundled in ./fonts-bundled.
+    # Arial/Times/Courier New are what nearly every PDF from a real application
+    # ends up using; Calibri and Cambria have been Word's own defaults since 2007.
+    ("arial", "arimo"), ("helvetica", "arimo"),
+    ("timesnewroman", "tinos"), ("times", "tinos"),
+    ("couriernew", "cousine"), ("courier", "cousine"),
+    ("calibri", "carlito"),
+    ("cambria", "caladea"),
+    ("georgia", "gelasio"),
 ]
 
 FONT_INDEX = FontIndex()
@@ -359,7 +375,8 @@ class FontResolver:
         else:
             names = styled_names(span_font, bold, italic)
 
-        # 2. A local font file with the same name (or the same family in the new style).
+        # 2. A local font file with the same name (or the same family in the new style),
+        #    or a metric-compatible stand-in bundled with the app for a close substitute.
         for name in names:
             hit = FONT_INDEX.lookup(name)
             if not hit:
@@ -367,7 +384,9 @@ class FontResolver:
             try:
                 font = load_font_file(*hit)
                 if covers(font, new_text):
-                    return ResolvedFont(font, strip_subset(name), "local")
+                    path, _ = hit
+                    source = "bundled" if path.startswith(str(BUNDLED_FONT_DIR)) else "local"
+                    return ResolvedFont(font, strip_subset(name), source)
             except Exception:
                 pass
 

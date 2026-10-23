@@ -8,6 +8,13 @@ const PYODIDE_VERSION = "0.29.0";
 const PYODIDE_BASE = `https://cdn.jsdelivr.net/pyodide/v${PYODIDE_VERSION}/full/`;
 const PY_FILES = ["pdfedit/__init__.py", "pdfedit/core.py", "pdfedit/fonts.py", "bridge.py"];
 
+// Metric-compatible stand-ins for fonts most real PDFs use (Arial, Times New Roman, Courier
+// New, Calibri, Cambria, Georgia) but the browser has no way to read from the host OS, unlike
+// the local app. Kept in sync with fonts-bundled/ by scripts/sync-web.sh.
+const BUNDLED_FONTS = Object.entries({
+  arimo: "Arimo", tinos: "Tinos", cousine: "Cousine", carlito: "Carlito", caladea: "Caladea", gelasio: "Gelasio",
+}).flatMap(([dir, family]) => ["Regular", "Bold", "Italic", "BoldItalic"].map((style) => `${dir}/${family}-${style}.ttf`));
+
 importScripts(`${PYODIDE_BASE}pyodide.js`);
 
 let dispatch = null;
@@ -21,13 +28,20 @@ async function boot() {
   const home = pyodide.FS.cwd();
   pyodide.FS.mkdirTree(`${home}/pdfedit`);
   pyodide.FS.mkdirTree(`${home}/fonts`);
-  await Promise.all(
-    PY_FILES.map(async (file) => {
+  pyodide.FS.mkdirTree(`${home}/fonts-bundled`);
+  await Promise.all([
+    ...PY_FILES.map(async (file) => {
       const res = await fetch(new URL(`py/${file}`, self.location.href));
       if (!res.ok) throw new Error(`Could not load ${file}.`);
       pyodide.FS.writeFile(`${home}/${file}`, await res.text());
-    })
-  );
+    }),
+    ...BUNDLED_FONTS.map(async (rel) => {
+      const res = await fetch(new URL(`py/fonts-bundled/${rel}`, self.location.href));
+      if (!res.ok) throw new Error(`Could not load font ${rel}.`);
+      const bytes = new Uint8Array(await res.arrayBuffer());
+      pyodide.FS.writeFile(`${home}/fonts-bundled/${rel.split("/")[1]}`, bytes);
+    }),
+  ]);
   dispatch = pyodide.pyimport("bridge").dispatch;
   post({ type: "ready" });
 }

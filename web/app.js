@@ -49,7 +49,9 @@ const STRINGS = {
   text_deleted: ["Text deleted.", "Text borttagen."],
   fs_embedded: ["taken from the PDF", "hämtat från PDF-filen"],
   fs_local: ["a font you added", "ett typsnitt du lagt till"],
+  fs_bundled: ["a close match", "en nära matchning"],
   fs_standard: ["standard fallback", "standardreserv"],
+  bundled_detail: ["Not the original font, but one with matching letter widths, so spacing should still line up.", "Inte originaltypsnittet, men ett med matchande teckenbredd, så mellanrummen bör ändå stämma."],
   std_detail: ["The original font was not found. Use Add font to give the editor its .ttf or .otf file for an exact match.", "Originaltypsnittet hittades inte. Använd Lägg till typsnitt för att ge redigeraren dess .ttf- eller .otf-fil för en exakt matchning."],
   saved_with: ["Saved with {label} ({where}).", "Sparad med {label} ({where})."],
   undone: ["Undone.", "Ångrat."],
@@ -76,7 +78,7 @@ function t(key, vars = {}) {
   return text.replace(/\{(\w+)\}/g, (_, name) => (name in vars ? vars[name] : `{${name}}`));
 }
 const ZOOM_STEPS = [0.5, 0.75, 1, 1.25, 1.5, 2, 2.5, 3];
-const FONT_SOURCE = { embedded: t("fs_embedded"), local: t("fs_local"), standard: t("fs_standard") };
+const FONT_SOURCE = { embedded: t("fs_embedded"), local: t("fs_local"), bundled: t("fs_bundled"), standard: t("fs_standard") };
 
 const state = {
   id: null,
@@ -774,9 +776,9 @@ function announceFont(font, deleted) {
   if (!font || font.source === "unchanged") return;
   const where = FONT_SOURCE[font.source] || font.source;
   const detail =
-    font.source === "standard"
-      ? t("std_detail")
-      : "";
+    font.source === "standard" ? t("std_detail")
+    : font.source === "bundled" ? t("bundled_detail")
+    : "";
   toast(t("saved_with", { label: font.label, where }), { detail });
 }
 
